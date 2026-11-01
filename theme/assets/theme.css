@@ -1,0 +1,31 @@
+/* theme.css: Anvil puts this file in the page itself, so it applies before the app has loaded.
+   It styles Anvil's loading spinner (shown while the app starts and during server calls) as the app icon
+   (url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2213%22 fill=%22%23E2611E%22/%3E%3Crect x=%229%22 y=%2213%22 width=%2246%22 height=%227%22 rx=%222%22 fill=%22%231A1712%22/%3E%3Crect x=%2229%22 y=%2220%22 width=%226%22 height=%226%22 fill=%22%231A1712%22/%3E%3Ccircle cx=%2220.5%22 cy=%2235%22 r=%2212.5%22 fill=%22%231A1712%22/%3E%3Ccircle cx=%2243.5%22 cy=%2235%22 r=%2212.5%22 fill=%22%231A1712%22/%3E%3Crect x=%2220%22 y=%2229%22 width=%2224%22 height=%2212%22 fill=%22%231A1712%22/%3E%3Ccircle cx=%2220.5%22 cy=%2235%22 r=%227%22 fill=%22%23F4EEDD%22/%3E%3Ccircle cx=%2243.5%22 cy=%2235%22 r=%227%22 fill=%22%23F4EEDD%22/%3E%3Ccircle cx=%2220.5%22 cy=%2235%22 r=%223.2%22 fill=%22%231A1712%22/%3E%3Ccircle cx=%2243.5%22 cy=%2235%22 r=%223.2%22 fill=%22%231A1712%22/%3E%3Ccircle cx=%2218.6%22 cy=%2233%22 r=%221.3%22 fill=%22%23F4EEDD%22/%3E%3Ccircle cx=%2241.6%22 cy=%2233%22 r=%221.3%22 fill=%22%23F4EEDD%22/%3E%3Crect x=%2226%22 y=%2249%22 width=%2212%22 height=%229%22 rx=%221.5%22 fill=%22%231A1712%22/%3E%3C/svg%3E") is replaced by assets/icon.svg when syncing). Keep the colours in step with web/core.css.
+   Anvil substitutes its theme-colour tokens (percent sign, "color:", a name, percent sign) in this file,
+   so never write that pattern here. */
+html, body { background: #ece6d6; }
+@media (prefers-color-scheme: dark) { html:not([data-theme="light"]), html:not([data-theme="light"]) body { background: #15170f; } }
+html[data-theme="dark"], html[data-theme="dark"] body { background: #15170f; }
+
+html .anvil-spinner, #loadingSpinner {
+  --anvil-spinner-size: 88px;
+  width: 88px !important; height: 88px !important; top: calc(50% - 44px); left: calc(50% - 44px);
+  border-radius: 18px !important; background: #fffcf4 !important; background-image: none !important; color: transparent;
+  box-shadow: 4px 5px 0 rgba(34, 36, 30, .16), 0 0 0 1px rgba(34, 36, 30, .10) !important;
+  animation: app-breathe 1.4s ease-in-out infinite;
+}
+html .anvil-spinner .anvil-spinner-svg, #loadingSpinner > svg, #loadingSpinner > img { display: none !important; }
+html .anvil-spinner::after, #loadingSpinner::after {
+  content: ""; position: absolute; inset: 12px; border-radius: 10px;
+  background: url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22%3E%3Crect width=%2264%22 height=%2264%22 rx=%2213%22 fill=%22%23E2611E%22/%3E%3Crect x=%229%22 y=%2213%22 width=%2246%22 height=%227%22 rx=%222%22 fill=%22%231A1712%22/%3E%3Crect x=%2229%22 y=%2220%22 width=%226%22 height=%226%22 fill=%22%231A1712%22/%3E%3Ccircle cx=%2220.5%22 cy=%2235%22 r=%2212.5%22 fill=%22%231A1712%22/%3E%3Ccircle cx=%2243.5%22 cy=%2235%22 r=%2212.5%22 fill=%22%231A1712%22/%3E%3Crect x=%2220%22 y=%2229%22 width=%2224%22 height=%2212%22 fill=%22%231A1712%22/%3E%3Ccircle cx=%2220.5%22 cy=%2235%22 r=%227%22 fill=%22%23F4EEDD%22/%3E%3Ccircle cx=%2243.5%22 cy=%2235%22 r=%227%22 fill=%22%23F4EEDD%22/%3E%3Ccircle cx=%2220.5%22 cy=%2235%22 r=%223.2%22 fill=%22%231A1712%22/%3E%3Ccircle cx=%2243.5%22 cy=%2235%22 r=%223.2%22 fill=%22%231A1712%22/%3E%3Ccircle cx=%2218.6%22 cy=%2233%22 r=%221.3%22 fill=%22%23F4EEDD%22/%3E%3Ccircle cx=%2241.6%22 cy=%2233%22 r=%221.3%22 fill=%22%23F4EEDD%22/%3E%3Crect x=%2226%22 y=%2249%22 width=%2212%22 height=%229%22 rx=%221.5%22 fill=%22%231A1712%22/%3E%3C/svg%3E") center / contain no-repeat;
+}
+html .anvil-spinner::before, #loadingSpinner::before {
+  content: ""; position: absolute; inset: -7px; border-radius: 24px; border: 4px solid transparent;
+  border-top-color: #e2611e; border-right-color: #56652f; animation: app-turn 1s linear infinite;
+}
+@keyframes app-turn { to { transform: rotate(360deg); } }
+@keyframes app-breathe { 50% { transform: scale(.94); } }
+@media (prefers-reduced-motion: reduce) {
+  html .anvil-spinner, #loadingSpinner { animation: none; }
+  html .anvil-spinner::before, #loadingSpinner::before { animation-duration: 3s; }
+}

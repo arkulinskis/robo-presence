@@ -1,0 +1,5 @@
+# The robot's Python packages (the installer puts them in /opt/robopresence/venv).
+# Camera (picamera2), GPIO (gpiozero, lgpio), serial and I2C come from Raspberry Pi OS packages (apt).
+aiortc>=1.9
+pyserial>=3.5
+smbus2>=0.4
