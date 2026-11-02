@@ -6,7 +6,7 @@ adapt to whatever parts the robot reports. For makers, and for families who want
 garage-built 80s robot: khaki and olive, safety-orange keys, stencil headings. Built on [Anvil](https://anvil.works).
 
 - **App repo:** github.com/arkulinskis/robo-presence (branch `master`). Anvil pulls `master`.
-- **Live:** not published yet (https://robopresence.anvil.app is the planned address).
+- **Live:** https://robo-presence.anvil.app
 - **Robot code:** [`robot/`](robot/) in this repo (Python + aiortc, the installer, the Arduino sketch, a plugin example).
 
 ## How it works
