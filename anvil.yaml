@@ -468,7 +468,7 @@ metadata:
   title: 'Robo Presence: DIY telepresence robot in your browser'
 name: Robo Presence
 native_deps:
-  head_html: "<script src=\"_/theme/legal-kit.js?v=99daa41f63\"></script>\n<!-- seo:start (APP_MAKER/seo: edit seo/apps/robopresence.json\
+  head_html: "<script src=\"_/theme/legal-kit.js?v=82a9e823b2\"></script>\n<!-- seo:start (APP_MAKER/seo: edit seo/apps/robopresence.json\
     \ and run seo.py, not here) -->\n<link rel=\"canonical\" href=\"https://robo-presence.anvil.app/\">\n<meta name=\"robots\"\
     \ content=\"index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1\">\n<meta name=\"keywords\" content=\"\
     telepresence robot, Raspberry Pi robot, DIY telepresence robot, WebRTC robot control, remote control robot browser, Arduino\
@@ -513,7 +513,7 @@ native_deps:
     })();\n</script>\n\n<!-- Prepsto feedback panel: every \"Submit feedback\" link and button opens it (it is the only feedback\
     \ channel). No floating button, no cookies, nothing loads until it is opened. Codes: APP_MAKER/prepsto-links.json -->\n\
     <script src=\"https://prepsto.com/_/theme/widget.js\" data-prepsto=\"jb924jc\" data-button=\"false\" data-label=\"Submit\
-    \ feedback\" async></script>\n<link rel=\"stylesheet\" href=\"_/theme/app.css?v=7ed3d69f0d\">\n<script src=\"_/theme/app.js?v=e147eb4cd2\"\
+    \ feedback\" async></script>\n<link rel=\"stylesheet\" href=\"_/theme/app.css?v=f3a194ceb8\">\n<script src=\"_/theme/app.js?v=14cde3c157\"\
     ></script>\n"
 package_name: Robo_Presence
 runtime_options:
