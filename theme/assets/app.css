@@ -740,7 +740,7 @@ html.ui-dark .rp-art { filter: drop-shadow(0 0 .6px rgba(237, 231, 214, .55)) dr
 .rb-events li.stop .ui-ic, .rb-events li.warn .ui-ic { color: var(--c-bad); }
 .rb-events li.online .ui-ic, .rb-events li.paired .ui-ic { color: var(--c-good); }
 .rb-events time { font: 500 .78rem/1.4 var(--font-mono); color: var(--c-muted); white-space: nowrap; }
-.rb-pass { padding: 14px; border-radius: var(--radius); background: var(--c-good-soft); border: 1px solid var(--c-good); margin-bottom: 14px; }
+.rb-pass { min-width: 0; padding: 14px; border-radius: var(--radius); background: var(--c-good-soft); border: 1px solid var(--c-good); margin-bottom: 14px; }
 .rb-form-row { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr) auto; gap: 10px; align-items: end; }
 .rb-form-row.three { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) minmax(0, 1fr) auto; }
 @media (max-width: 900px) { .rb-cols { grid-template-columns: 1fr; } }

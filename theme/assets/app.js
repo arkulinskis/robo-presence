@@ -3161,7 +3161,7 @@
               (s.joined ? '' : ' <span class="small muted">invited</span>') + '</td><td style="text-align:right"><button class="ui-btn sm ghost danger" type="button" data-unshare="' + esc(s.id) + '">Remove</button></td></tr>'; }).join('') + '</tbody></table>'
             : '<p class="small muted" style="margin:0">Not shared with anyone yet.</p>') + '</form></div><div>' +
         '<form class="ui-card ui-stack" data-pass><h3>Guest passes</h3><p class="muted small" style="margin:0">A link that lets someone drive or watch without an account, until it runs out. Good for a video call with grandparents, or a demo.</p>' +
-          (link ? '<div class="rb-pass"><b>Here is the link.</b> Copy it now: for safety it is only shown once.' + RP.cmdBox(link, 'Guest link').replace('<span class="p">$ </span>', '') + '</div>' : '') +
+          (link ? '<div class="rb-pass"><b>Here is the link.</b> Copy it now: for safety it is only shown once.' + RP.cmdBox(link, 'Guest link').replace('<span class="p">$ </span>', '').replace('class="rp-code"', 'class="rp-code wrap"') + '</div>' : '') +
           '<div class="rb-form-row three"><label class="ui-field"><span>For</span><input type="text" name="label" maxlength="40" placeholder="Grandma"></label>' +
           '<label class="ui-field"><span>Can</span><select name="role"><option value="pilot">Drive</option><option value="viewer">Watch</option></select></label>' +
           '<label class="ui-field"><span>For how long</span><select name="hours"><option value="1">1 hour</option><option value="4">4 hours</option><option value="24" selected>1 day</option><option value="72">3 days</option><option value="168">1 week</option></select></label>' +
