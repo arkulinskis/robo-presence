@@ -468,7 +468,7 @@ metadata:
   title: 'Robo Presence: DIY telepresence robot in your browser'
 name: Robo Presence
 native_deps:
-  head_html: "<script src=\"_/theme/legal-kit.js?v=82a9e823b2\"></script>\n<!-- seo:start (APP_MAKER/seo: edit seo/apps/robopresence.json\
+  head_html: "<script src=\"_/theme/legal-kit.js?v=6f47cd852e\"></script>\n<!-- seo:start (APP_MAKER/seo: edit seo/apps/robopresence.json\
     \ and run seo.py, not here) -->\n<link rel=\"canonical\" href=\"https://robo-presence.anvil.app/\">\n<meta name=\"robots\"\
     \ content=\"index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1\">\n<meta name=\"keywords\" content=\"\
     telepresence robot, Raspberry Pi robot, DIY telepresence robot, WebRTC robot control, remote control robot browser, Arduino\
