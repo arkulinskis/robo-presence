@@ -305,7 +305,10 @@ db_schema:
     indexes: []
     server: full
     title: Users
-metadata: {description: 'Build a camera robot on wheels with a Raspberry Pi, an Arduino or an old phone, install it with one command, and drive it live from any browser over WebRTC.', logo_img: 'asset:icon-512.png', title: 'Robo Presence: DIY telepresence robot in your browser'}
+metadata:
+  description: "Build a camera robot on wheels with a Raspberry Pi, an Arduino or an old phone, install it with one command, and drive it live from any browser over WebRTC."
+  logo_img: "asset:icon-512.png"
+  title: "Robo Presence: DIY telepresence robot in your browser"
 name: Robo Presence
 native_deps:
   head_html: |
@@ -329,7 +332,7 @@ native_deps:
     <meta name="twitter:description" content="Build a camera robot on wheels with a Raspberry Pi, an Arduino or an old phone, install it with one command, and drive it live from any browser over WebRTC.">
     <meta name="twitter:image" content="https://robo-presence.anvil.app/_/theme/og-image.png">
     <link rel="alternate" type="text/plain" title="Robo Presence for AI assistants" href="https://robo-presence.anvil.app/llms.txt">
-    <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Service", "@id": "https://robo-presence.anvil.app/#app", "name": "Robo Presence", "url": "https://robo-presence.anvil.app/", "description": "Build a camera robot on wheels with a Raspberry Pi, an Arduino or an old phone, install it with one command, and drive it live from any browser over WebRTC.", "image": "https://robo-presence.anvil.app/_/theme/og-image.png", "serviceType": "Build a camera robot. Drive it from anywhere.", "provider": {"@id": "https://arkvital.com/#org"}, "areaServed": "Worldwide", "availableChannel": {"@type": "ServiceChannel", "serviceUrl": "https://robo-presence.anvil.app/", "name": "Web browser"}, "availableLanguage": "en", "audience": {"@type": "Audience", "audienceType": "Makers, and families who want a robot to visit through"}}, {"@type": "WebSite", "@id": "https://robo-presence.anvil.app/#site", "url": "https://robo-presence.anvil.app/", "name": "Robo Presence", "publisher": {"@id": "https://arkvital.com/#org"}}, {"@type": "Organization", "@id": "https://arkvital.com/#org", "name": "Arkvital", "url": "https://arkvital.com", "email": "arkvital@outlook.com", "address": {"@type": "PostalAddress", "addressLocality": "Montreal", "addressRegion": "QC", "addressCountry": "CA"}}]}</script>
+    <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Service", "@id": "https://robo-presence.anvil.app/#app", "name": "Robo Presence", "url": "https://robo-presence.anvil.app/", "description": "Build a camera robot on wheels with a Raspberry Pi, an Arduino or an old phone, install it with one command, and drive it live from any browser over WebRTC.", "image": "https://robo-presence.anvil.app/_/theme/og-image.png", "serviceType": "Build a camera robot. Drive it from anywhere.", "provider": {"@id": "https://arkvital.com/#org"}, "areaServed": "Worldwide", "availableChannel": {"@type": "ServiceChannel", "serviceUrl": "https://robo-presence.anvil.app/", "name": "Web browser", "availableLanguage": "en"}, "audience": {"@type": "Audience", "audienceType": "Makers, and families who want a robot to visit through"}}, {"@type": "WebSite", "@id": "https://robo-presence.anvil.app/#site", "url": "https://robo-presence.anvil.app/", "name": "Robo Presence", "publisher": {"@id": "https://arkvital.com/#org"}}, {"@type": "Organization", "@id": "https://arkvital.com/#org", "name": "Arkvital", "url": "https://arkvital.com", "email": "arkvital@outlook.com", "address": {"@type": "PostalAddress", "addressLocality": "Montreal", "addressRegion": "QC", "addressCountry": "CA"}}]}</script>
     <!-- seo:end -->
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#ECE6D6">
