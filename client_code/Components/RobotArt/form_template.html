@@ -1,40 +1,40 @@
 ---
 custom_component: true
-properties:
-  - name: color
-    type: string
-    default_value: orange
-    description: Paint (orange, olive, yellow, blue, red, steel)
-    default_binding_prop: true
-  - name: pan
-    type: number
-    default_value: 0
-    description: Head turn in degrees (-80 to 80)
-  - name: tilt
-    type: number
-    default_value: 0
-    description: Head tilt in degrees (-40 to 60)
-  - name: eyes_on
-    type: boolean
-    default_value: true
-    description: Eyes lit (online) or dark
-  - name: lights
-    type: boolean
-    default_value: false
-    description: Headlight beams
-  - name: arms
-    type: boolean
-    default_value: true
-    description: Draw the arms
-  - name: small
-    type: boolean
-    default_value: false
-    description: No floor shadow (for cards)
-toolbox_item:
-  title: Robot picture
-  group: Robo Presence
-help_text: |
+help_text: |-
   The tracked robot with binocular eyes (RP.robotArt in rp-core.js), drawn as inline SVG. Fixed colours in both
   themes: it is an object.
+properties:
+- default_binding_prop: true
+  default_value: orange
+  description: Paint (orange, olive, yellow, blue, red, steel)
+  name: color
+  type: string
+- default_value: 0
+  description: Head turn in degrees (-80 to 80)
+  name: pan
+  type: number
+- default_value: 0
+  description: Head tilt in degrees (-40 to 60)
+  name: tilt
+  type: number
+- default_value: true
+  description: Eyes lit (online) or dark
+  name: eyes_on
+  type: boolean
+- default_value: false
+  description: Headlight beams
+  name: lights
+  type: boolean
+- default_value: true
+  description: Draw the arms
+  name: arms
+  type: boolean
+- default_value: false
+  description: No floor shadow (for cards)
+  name: small
+  type: boolean
+toolbox_item:
+  group: Robo Presence
+  title: Robot picture
 ---
 <div class="rp-art-host"><div anvil:dom-node="box"></div></div>

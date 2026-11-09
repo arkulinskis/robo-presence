@@ -1,16 +1,15 @@
 ---
 custom_component: true
+help_text: The six robot paints as radio swatches (New robot, the robot page's Name and paint).
 properties:
-  - name: value
-    type: string
-    default_value: orange
-    description: The chosen paint (orange, olive, yellow, blue, red, steel)
-    default_binding_prop: true
+- default_binding_prop: true
+  default_value: orange
+  description: The chosen paint (orange, olive, yellow, blue, red, steel)
+  name: value
+  type: string
 toolbox_item:
-  title: Paint swatches
   group: Robo Presence
-help_text: |
-  The six robot paints as radio swatches (New robot, the robot page's Name and paint).
+  title: Paint swatches
 ---
 <div class="gr-swatches-host"><div class="gr-swatches" role="radiogroup" aria-label="Paint">
   <label title="Safety orange"><input type="radio" value="orange" anvil:dom-node="c_orange" aria-label="Safety orange"><i style="background:#e2611e"></i></label>

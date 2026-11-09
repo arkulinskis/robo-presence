@@ -1,13 +1,13 @@
 ---
 custom_component: true
 events:
-  - name: changed
-    description: Any edit in the part cards (typing, a new driver, move, remove)
-toolbox_item:
-  title: Part cards
-  group: Robo Presence
-help_text: |
+- description: Any edit in the part cards (typing, a new driver, move, remove)
+  name: changed
+help_text: |-
   The Parts tab's editable part cards (RP.partsEditor in rp-builder.js): set(config), read(), add(catalog index),
   mark(problems). The page around it owns the brain, camera, catalog, preview and Save.
+toolbox_item:
+  group: Robo Presence
+  title: Part cards
 ---
 <div class="rb-parts-host"><div class="rb-parts" anvil:dom-node="host"></div></div>

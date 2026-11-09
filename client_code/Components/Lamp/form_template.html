@@ -1,19 +1,18 @@
 ---
 custom_component: true
+help_text: 'A robot''s status lamp: a dot and a word (Online, Offline · 3 minutes ago, Showroom). show_robot(robot) sets both.'
 properties:
-  - name: text
-    type: string
-    default_value: Offline
-    description: What the lamp says
-    default_binding_prop: true
-  - name: state
-    type: string
-    default_value: "off"
-    description: "on (green, blinking), off or demo"
+- default_binding_prop: true
+  default_value: Offline
+  description: What the lamp says
+  name: text
+  type: string
+- default_value: 'off'
+  description: on (green, blinking), off or demo
+  name: state
+  type: string
 toolbox_item:
-  title: Status lamp
   group: Robo Presence
-help_text: |
-  A robot's status lamp: a dot and a word (Online, Offline · 3 minutes ago, Showroom). show_robot(robot) sets both.
+  title: Status lamp
 ---
 <div class="rp-lamp-host"><span class="rp-lamp off" anvil:name="lamp"><i></i><anvil-component type="Label" name="label" prop:text="Offline"></anvil-component></span></div>

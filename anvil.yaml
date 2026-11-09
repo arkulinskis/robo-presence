@@ -3,14 +3,10 @@ db_schema:
   app_settings:
     client: none
     columns:
-    - admin_ui:
-        order: 0
-        width: 200
+    - admin_ui: {order: 0, width: 200}
       name: key
       type: string
-    - admin_ui:
-        order: 1
-        width: 200
+    - admin_ui: {order: 1, width: 200}
       name: value
       type: simpleObject
     indexes: []
@@ -19,30 +15,20 @@ db_schema:
   events:
     client: none
     columns:
-    - admin_ui:
-        order: 0
-        width: 200
+    - admin_ui: {order: 0, width: 200}
       name: robot
       target: robots
       type: link_single
-    - admin_ui:
-        order: 1
-        width: 200
+    - admin_ui: {order: 1, width: 200}
       name: kind
       type: string
-    - admin_ui:
-        order: 2
-        width: 200
+    - admin_ui: {order: 2, width: 200}
       name: text
       type: string
-    - admin_ui:
-        order: 3
-        width: 200
+    - admin_ui: {order: 3, width: 200}
       name: at
       type: datetime
-    - admin_ui:
-        order: 4
-        width: 200
+    - admin_ui: {order: 4, width: 200}
       name: is_demo
       type: bool
     indexes: []
@@ -51,50 +37,32 @@ db_schema:
   feedback:
     client: none
     columns:
-    - admin_ui:
-        order: 0
-        width: 200
+    - admin_ui: {order: 0, width: 200}
       name: user
       target: users
       type: link_single
-    - admin_ui:
-        order: 1
-        width: 200
+    - admin_ui: {order: 1, width: 200}
       name: name
       type: string
-    - admin_ui:
-        order: 2
-        width: 200
+    - admin_ui: {order: 2, width: 200}
       name: email
       type: string
-    - admin_ui:
-        order: 3
-        width: 200
+    - admin_ui: {order: 3, width: 200}
       name: kind
       type: string
-    - admin_ui:
-        order: 4
-        width: 200
+    - admin_ui: {order: 4, width: 200}
       name: message
       type: string
-    - admin_ui:
-        order: 5
-        width: 200
+    - admin_ui: {order: 5, width: 200}
       name: context
       type: simpleObject
-    - admin_ui:
-        order: 6
-        width: 200
+    - admin_ui: {order: 6, width: 200}
       name: status
       type: string
-    - admin_ui:
-        order: 7
-        width: 200
+    - admin_ui: {order: 7, width: 200}
       name: note
       type: string
-    - admin_ui:
-        order: 8
-        width: 200
+    - admin_ui: {order: 8, width: 200}
       name: created
       type: datetime
     indexes: []
@@ -103,50 +71,32 @@ db_schema:
   passes:
     client: none
     columns:
-    - admin_ui:
-        order: 0
-        width: 200
+    - admin_ui: {order: 0, width: 200}
       name: robot
       target: robots
       type: link_single
-    - admin_ui:
-        order: 1
-        width: 200
+    - admin_ui: {order: 1, width: 200}
       name: token_hash
       type: string
-    - admin_ui:
-        order: 2
-        width: 200
+    - admin_ui: {order: 2, width: 200}
       name: label
       type: string
-    - admin_ui:
-        order: 3
-        width: 200
+    - admin_ui: {order: 3, width: 200}
       name: role
       type: string
-    - admin_ui:
-        order: 4
-        width: 200
+    - admin_ui: {order: 4, width: 200}
       name: expires
       type: datetime
-    - admin_ui:
-        order: 5
-        width: 200
+    - admin_ui: {order: 5, width: 200}
       name: created
       type: datetime
-    - admin_ui:
-        order: 6
-        width: 200
+    - admin_ui: {order: 6, width: 200}
       name: last_used
       type: datetime
-    - admin_ui:
-        order: 7
-        width: 200
+    - admin_ui: {order: 7, width: 200}
       name: uses
       type: number
-    - admin_ui:
-        order: 8
-        width: 200
+    - admin_ui: {order: 8, width: 200}
       name: is_demo
       type: bool
     indexes: []
@@ -155,100 +105,62 @@ db_schema:
   robots:
     client: none
     columns:
-    - admin_ui:
-        order: 0
-        width: 200
+    - admin_ui: {order: 0, width: 200}
       name: owner
       target: users
       type: link_single
-    - admin_ui:
-        order: 1
-        width: 200
+    - admin_ui: {order: 1, width: 200}
       name: name
       type: string
-    - admin_ui:
-        order: 2
-        width: 200
+    - admin_ui: {order: 2, width: 200}
       name: color
       type: string
-    - admin_ui:
-        order: 3
-        width: 200
+    - admin_ui: {order: 3, width: 200}
       name: notes
       type: string
-    - admin_ui:
-        order: 4
-        width: 200
+    - admin_ui: {order: 4, width: 200}
       name: preset
       type: string
-    - admin_ui:
-        order: 5
-        width: 200
+    - admin_ui: {order: 5, width: 200}
       name: config
       type: simpleObject
-    - admin_ui:
-        order: 6
-        width: 200
+    - admin_ui: {order: 6, width: 200}
       name: config_rev
       type: number
-    - admin_ui:
-        order: 7
-        width: 200
+    - admin_ui: {order: 7, width: 200}
       name: manifest
       type: simpleObject
-    - admin_ui:
-        order: 8
-        width: 200
+    - admin_ui: {order: 8, width: 200}
       name: info
       type: simpleObject
-    - admin_ui:
-        order: 9
-        width: 200
+    - admin_ui: {order: 9, width: 200}
       name: telemetry
       type: simpleObject
-    - admin_ui:
-        order: 10
-        width: 200
+    - admin_ui: {order: 10, width: 200}
       name: last_seen
       type: datetime
-    - admin_ui:
-        order: 11
-        width: 200
+    - admin_ui: {order: 11, width: 200}
       name: wanted_until
       type: datetime
-    - admin_ui:
-        order: 12
-        width: 200
+    - admin_ui: {order: 12, width: 200}
       name: token_hash
       type: string
-    - admin_ui:
-        order: 13
-        width: 200
+    - admin_ui: {order: 13, width: 200}
       name: tab_token_hash
       type: string
-    - admin_ui:
-        order: 14
-        width: 200
+    - admin_ui: {order: 14, width: 200}
       name: install_code
       type: string
-    - admin_ui:
-        order: 15
-        width: 200
+    - admin_ui: {order: 15, width: 200}
       name: install_code_expires
       type: datetime
-    - admin_ui:
-        order: 16
-        width: 200
+    - admin_ui: {order: 16, width: 200}
       name: paired_at
       type: datetime
-    - admin_ui:
-        order: 17
-        width: 200
+    - admin_ui: {order: 17, width: 200}
       name: created
       type: datetime
-    - admin_ui:
-        order: 18
-        width: 200
+    - admin_ui: {order: 18, width: 200}
       name: is_demo
       type: bool
     indexes: []
@@ -257,77 +169,49 @@ db_schema:
   sessions:
     client: none
     columns:
-    - admin_ui:
-        order: 0
-        width: 200
+    - admin_ui: {order: 0, width: 200}
       name: robot
       target: robots
       type: link_single
-    - admin_ui:
-        order: 1
-        width: 200
+    - admin_ui: {order: 1, width: 200}
       name: user
       target: users
       type: link_single
-    - admin_ui:
-        order: 2
-        width: 200
+    - admin_ui: {order: 2, width: 200}
       name: guest_pass
       target: passes
       type: link_single
-    - admin_ui:
-        order: 3
-        width: 200
+    - admin_ui: {order: 3, width: 200}
       name: pilot_name
       type: string
-    - admin_ui:
-        order: 4
-        width: 200
+    - admin_ui: {order: 4, width: 200}
       name: role
       type: string
-    - admin_ui:
-        order: 5
-        width: 200
+    - admin_ui: {order: 5, width: 200}
       name: secret_hash
       type: string
-    - admin_ui:
-        order: 6
-        width: 200
+    - admin_ui: {order: 6, width: 200}
       name: offer
       type: string
-    - admin_ui:
-        order: 7
-        width: 200
+    - admin_ui: {order: 7, width: 200}
       name: answer
       type: string
-    - admin_ui:
-        order: 8
-        width: 200
+    - admin_ui: {order: 8, width: 200}
       name: state
       type: string
-    - admin_ui:
-        order: 9
-        width: 200
+    - admin_ui: {order: 9, width: 200}
       name: created
       type: datetime
-    - admin_ui:
-        order: 10
-        width: 200
+    - admin_ui: {order: 10, width: 200}
       name: answered_at
       type: datetime
-    - admin_ui:
-        order: 11
-        width: 200
+    - admin_ui: {order: 11, width: 200}
       name: ended_at
       type: datetime
-    - admin_ui:
-        order: 12
-        width: 200
+    - admin_ui: {order: 12, width: 200}
       name: stats
       type: simpleObject
-    - admin_ui:
-        order: 13
-        width: 200
+    - admin_ui: {order: 13, width: 200}
       name: is_demo
       type: bool
     indexes: []
@@ -336,36 +220,24 @@ db_schema:
   shares:
     client: none
     columns:
-    - admin_ui:
-        order: 0
-        width: 200
+    - admin_ui: {order: 0, width: 200}
       name: robot
       target: robots
       type: link_single
-    - admin_ui:
-        order: 1
-        width: 200
+    - admin_ui: {order: 1, width: 200}
       name: email
       type: string
-    - admin_ui:
-        order: 2
-        width: 200
+    - admin_ui: {order: 2, width: 200}
       name: user
       target: users
       type: link_single
-    - admin_ui:
-        order: 3
-        width: 200
+    - admin_ui: {order: 3, width: 200}
       name: role
       type: string
-    - admin_ui:
-        order: 4
-        width: 200
+    - admin_ui: {order: 4, width: 200}
       name: created
       type: datetime
-    - admin_ui:
-        order: 5
-        width: 200
+    - admin_ui: {order: 5, width: 200}
       name: is_demo
       type: bool
     indexes: []
@@ -374,98 +246,66 @@ db_schema:
   users:
     client: none
     columns:
-    - admin_ui:
-        order: 0
-        width: 200
+    - admin_ui: {order: 0, width: 200}
       client_hidden: false
       name: email
       type: string
-    - admin_ui:
-        order: 1
-        width: 200
+    - admin_ui: {order: 1, width: 200}
       client_hidden: true
       name: enabled
       type: bool
-    - admin_ui:
-        order: 2
-        width: 200
+    - admin_ui: {order: 2, width: 200}
       client_hidden: true
       name: last_login
       type: datetime
-    - admin_ui:
-        order: 3
-        width: 200
+    - admin_ui: {order: 3, width: 200}
       client_hidden: true
       name: password_hash
       type: string
-    - admin_ui:
-        order: 4
-        width: 200
+    - admin_ui: {order: 4, width: 200}
       client_hidden: true
       name: n_password_failures
       type: number
-    - admin_ui:
-        order: 5
-        width: 200
+    - admin_ui: {order: 5, width: 200}
       client_hidden: true
       name: confirmed_email
       type: bool
-    - admin_ui:
-        order: 6
-        width: 200
+    - admin_ui: {order: 6, width: 200}
       client_hidden: true
       name: signed_up
       type: datetime
-    - admin_ui:
-        order: 7
-        width: 200
+    - admin_ui: {order: 7, width: 200}
       client_hidden: false
       name: display_name
       type: string
-    - admin_ui:
-        order: 8
-        width: 200
+    - admin_ui: {order: 8, width: 200}
       client_hidden: false
       name: is_admin
       type: bool
-    - admin_ui:
-        order: 9
-        width: 200
+    - admin_ui: {order: 9, width: 200}
       client_hidden: false
       name: is_demo
       type: bool
-    - admin_ui:
-        order: 10
-        width: 200
+    - admin_ui: {order: 10, width: 200}
       client_hidden: false
       name: last_seen
       type: datetime
-    - admin_ui:
-        order: 11
-        width: 200
+    - admin_ui: {order: 11, width: 200}
       client_hidden: false
       name: legal_version
       type: string
-    - admin_ui:
-        order: 12
-        width: 200
+    - admin_ui: {order: 12, width: 200}
       client_hidden: false
       name: legal_accepted_at
       type: datetime
-    - admin_ui:
-        order: 13
-        width: 200
+    - admin_ui: {order: 13, width: 200}
       client_hidden: false
       name: legal_source
       type: string
     indexes: []
     server: full
     title: Users
-metadata:
-  description: Build a camera robot on wheels with a Raspberry Pi, an Arduino or an old phone, install it with one command,
-    and drive it live from any browser over WebRTC.
-  logo_img: asset:icon-512.png
-  title: 'Robo Presence: DIY telepresence robot in your browser'
+metadata: {description: 'Build a camera robot on wheels with a Raspberry Pi, an Arduino or an old phone, install it with one command, and drive it live from any browser over WebRTC.', logo_img: 'asset:icon-512.png', title: 'Robo Presence: DIY telepresence robot in your browser'}
 name: Robo Presence
 native_deps:
   head_html: |
@@ -528,25 +368,23 @@ native_deps:
 package_name: Robo_Presence
 runtime_options:
   client_version: '3'
-  server_spec:
-    base: python314
+  server_spec: {base: python314}
   version: 3
+secrets:
+  cf_turn_api_token:
+    type: secret
+    value:
+      GHHIPWJACKMSSAA2: {? '' : 5V4WpxEjxKISZtlRktj/hMtIFk86QlXbpfPHo8fIc29etVAmI2kI1YgoUc2m1PFVeb61iZDqWawOlsgGpEN8kRFfBJhEFf/oIr0j4PSmOg1aBvtJ39JnY9PnBN7avbcSn9aOLL3iPgJfQPnD2JHQZm5ERL5XMRB4PPLpQ+vt9UQDxHL53EtwL9taXr0EE+5vTkVjfNTZUdGG+nf00g4Hlj5aj2EkH6DKQIYKxowaQBQCSqICgxRDe80yCc+Plhi4yjJUZzsSr19BMQ2ewYFJXL00}
+  cf_turn_key_id:
+    type: secret
+    value:
+      GHHIPWJACKMSSAA2: {? '' : aw+wtSvROklGplWEc/v5ue2QnwcNG7P+KGqdF66lMZTdpx6cmg5sLzGb9N68PmEyVGmVCOAsmIyuqPDXXlHDhtZZjMSMeITMuu2xX22VVKZgjLvEABiDBRoa8aRpftEO/1HFTpcxI/Y+ISVCFnZbWdfMO9F/X9hsjj0VHxw+tKBPlPht9StQ4d2Wh9K7TDGxdJEkUkWrWlnSsXPnO/qQjkLaMcuyeGeV0lHv6pKI9w==}
 services:
-- client_config:
-    enable_v2: true
+- client_config: {enable_v2: true}
   server_config: {}
   source: /runtime/services/tables.yml
-- client_config:
-    allow_remember_me: true
-    allow_signup: true
-    confirm_email: false
-    enable_automatically: true
-    remember_me_days: 30
-    require_secure_passwords: true
-    use_email: true
-    use_google: true
-  server_config:
-    user_table: users
+- client_config: {allow_remember_me: true, allow_signup: true, confirm_email: false, enable_automatically: true, remember_me_days: 30, require_secure_passwords: true, use_email: true, use_google: true}
+  server_config: {user_table: users}
   source: /runtime/services/anvil/users.yml
 - client_config: {}
   server_config: {}
@@ -554,6 +392,4 @@ services:
 - client_config: {}
   server_config: {}
   source: /runtime/services/google.yml
-startup:
-  module: startup
-  type: module
+startup: {module: startup, type: module}

@@ -1,24 +1,23 @@
 ---
 custom_component: true
+help_text: A dark terminal line with a Copy button (RP.cmdBox in the JavaScript version).
 properties:
-  - name: command
-    type: string
-    default_value: ""
-    description: The command (or link) to show and copy
-    default_binding_prop: true
-  - name: what
-    type: string
-    default_value: Command
-    description: What the toast calls it ("Install command copied to the clipboard")
-  - name: prompt
-    type: boolean
-    default_value: true
-    description: Show a "$ " prompt in front (off for links)
+- default_binding_prop: true
+  default_value: ''
+  description: The command (or link) to show and copy
+  name: command
+  type: string
+- default_value: Command
+  description: What the toast calls it ("Install command copied to the clipboard")
+  name: what
+  type: string
+- default_value: true
+  description: Show a "$ " prompt in front (off for links)
+  name: prompt
+  type: boolean
 toolbox_item:
-  title: Command box
   group: Robo Presence
-help_text: |
-  A dark terminal line with a Copy button (RP.cmdBox in the JavaScript version).
+  title: Command box
 ---
 <div class="rp-cmd-host"><div class="rp-cmd">
   <div class="rp-code" anvil:name="code"><span class="p" anvil:name="prompt_part">$ </span><anvil-component type="Label" name="cmd_label" prop:role='["cmd-text"]'></anvil-component></div>
