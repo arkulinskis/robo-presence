@@ -55,6 +55,9 @@ class Admin(AdminTemplate):
         self.fast_box.text = str(n["poll_fast_ms"])
         self.idle_box.text = str(n["poll_idle_ms"])
         self.source_box.text = n["source"]
+        self.relay_label.text = {"ok": "Cloudflare relay: on. Pilots and robots get 24-hour relay logins, so strict networks (5G, offices) still connect.",
+                                 "not set": "Cloudflare relay: off (the app secrets cf_turn_key_id and cf_turn_api_token aren't set). Direct connections only.",
+                                 }.get(n.get("relay"), "Cloudflare relay: the last request failed (check the two secrets). The app tries again in 2 minutes.")
         for box, label in ((self.ice_box, "ICE servers"), (self.fast_box, "Check-in while driving (ms)"),
                            (self.idle_box, "Check-in when idle (ms)"), (self.source_box, "Robot code download")):
             state.set_control_attr(box, "aria-label", label)

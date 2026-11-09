@@ -385,6 +385,27 @@ ok(call("delete_robot", rid))
 assert call("get_robot", rid)["ok"] is False and not [s for s in T.sessions.search() if s["robot"] is None]
 assert len(call("get_garage")["mine"]) == 9
 
+# ---------------------------------------------------------------------------------- Cloudflare TURN relay
+import anvil.secrets as _sec  # noqa: E402
+import anvil.http as _http  # noqa: E402
+R = M["Robots"]
+T.app_settings.get(key="turn_cache") and T.app_settings.get(key="turn_cache").delete()
+assert R.turn_servers() == ([], "not set") and R.ice_servers() == R.network()["ice_servers"], "no secrets: STUN only"
+T.app_settings.get(key="turn_cache").delete()
+_sec.SECRETS.update(cf_turn_key_id=" KEY ", cf_turn_api_token="TOK")
+_http.REPLIES["https://rtc.live.cloudflare.com/"] = {"iceServers": [{"urls": ["stun:stun.cloudflare.com:3478", "turn:turn.cloudflare.com:3478?transport=udp",
+                                                                       "turn:turn.cloudflare.com:53?transport=udp", "turns:turn.cloudflare.com:5349?transport=tcp"],
+                                                              "username": "u", "credential": "c"}]}
+n_calls = len(_http.CALLS)
+ice = R.ice_servers()
+relay = ice[-1]
+assert relay["username"] == "u" and len(relay["urls"]) == 3 and not [u for u in relay["urls"] if ":53?" in u], ice
+assert _http.CALLS[-1]["url"].endswith("/keys/KEY/credentials/generate-ice-servers"), "key id is trimmed"
+assert _http.CALLS[-1]["headers"]["Authorization"] == "Bearer TOK"
+R.ice_servers(); assert len(_http.CALLS) == n_calls + 1, "relay login is cached, not fetched on every poll"
+_sec.SECRETS.pop("cf_turn_key_id"); _sec.SECRETS.pop("cf_turn_api_token"); _http.REPLIES.pop("https://rtc.live.cloudflare.com/")
+T.app_settings.get(key="turn_cache").delete()
+
 # ---------------------------------------------------------------------------------- Privacy & Terms
 if "legal_server" in M:
     as_user(ana)

@@ -48,7 +48,7 @@ def drive_open(robot_id, pass_token=None):
     return C.ok(robot={"id": r.get_id(), "name": r["name"], "color": r["color"] or "orange", "online": Robots.is_online(r),
                        "demo": bool(r["is_demo"]), "manifest": m, "reported": bool(r["manifest"]),
                        "owner": C.name_of(r["owner"]), "last_seen": C.iso(r["last_seen"])},
-                role=role, ice_servers=Robots.network()["ice_servers"],
+                role=role, ice_servers=Robots.ice_servers(),
                 pilot=C.name_of(me) if me is not None else (p["label"] if p is not None else "Guest"),
                 guest=p is not None)
 

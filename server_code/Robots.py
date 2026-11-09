@@ -11,6 +11,8 @@ import datetime as dt
 import hashlib
 import secrets
 
+import anvil.http
+import anvil.secrets
 import anvil.server
 from anvil.tables import app_tables
 import anvil.tables as tables
@@ -52,6 +54,61 @@ def network():
     n = C.get_setting("network") or {}
     return {"ice_servers": n.get("ice_servers") or DEFAULT_ICE, "poll_fast_ms": int(n.get("poll_fast_ms") or 600),
             "poll_idle_ms": int(n.get("poll_idle_ms") or 2500), "source": n.get("source") or DEFAULT_SOURCE}
+
+
+# Cloudflare Realtime TURN: the app secrets cf_turn_key_id + cf_turn_api_token (Cloudflare dashboard > Realtime > TURN)
+# buy relay logins that last 24 h. They are cached for 12 h in app_settings ("turn_cache"), so robots and pilots share
+# one login. Without the secrets, connections are direct only (STUN), which fails on strict networks such as 5G.
+TURN_TTL_S = 86400
+TURN_REUSE_S = 12 * 3600
+TURN_RETRY_S = 120
+
+
+def _fetch_turn():
+    try:
+        key_id = anvil.secrets.get_secret("cf_turn_key_id")
+        token = anvil.secrets.get_secret("cf_turn_api_token")
+    except Exception:
+        return None, "not set"
+    try:
+        r = anvil.http.request(
+            "https://rtc.live.cloudflare.com/v1/turn/keys/%s/credentials/generate-ice-servers" % key_id.strip(),
+            method="POST", json=True, data={"ttl": TURN_TTL_S}, timeout=8,
+            headers={"Authorization": "Bearer " + token.strip()})
+    except Exception as e:
+        print("[ice] Cloudflare TURN request failed:", repr(e)[:300])
+        return None, "failed"
+    servers = r.get("iceServers") if isinstance(r, dict) else None
+    servers = [servers] if isinstance(servers, dict) else servers if isinstance(servers, list) else []
+    out = []
+    for s in servers:
+        if not isinstance(s, dict):
+            continue
+        urls = s.get("urls")
+        urls = [urls] if isinstance(urls, str) else urls if isinstance(urls, list) else []
+        # Browsers balk at port 53 (DNS) relay addresses; leave those out.
+        urls = [u for u in urls if isinstance(u, str) and ":53?" not in u and not u.endswith(":53")]
+        if urls:
+            out.append(dict(s, urls=urls))
+    return (out, "ok") if out else (None, "failed")
+
+
+def turn_servers():
+    """(Cloudflare relay ICE servers or [], status: ok | not set | failed)."""
+    stamp = C.now()
+    cache = C.get_setting("turn_cache") or {}
+    if cache.get("until") and cache["until"] > C.iso(stamp):
+        return cache.get("servers") or [], cache.get("status") or "failed"
+    servers, status = _fetch_turn()
+    wait = TURN_REUSE_S if servers else TURN_RETRY_S
+    C.set_setting("turn_cache", {"servers": servers or [], "status": status,
+                                 "until": C.iso(stamp + dt.timedelta(seconds=wait))})
+    return servers or [], status
+
+
+def ice_servers():
+    """What pilots and robots get: the Admin -> Network list plus the Cloudflare relay (when its secrets are set)."""
+    return list(network()["ice_servers"]) + turn_servers()[0]
 
 
 def is_online(r):

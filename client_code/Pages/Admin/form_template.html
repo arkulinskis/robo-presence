@@ -35,7 +35,8 @@
       <div anvil:name="network_part">
         <div class="ui-card ui-stack ad-net">
           <h3>Connection servers</h3>
-          <p class="muted small">Browsers and robots use these to find a path to each other. STUN is enough on most networks. Strict networks (some offices, some mobile carriers) need a <b>TURN relay</b>: add one (urls starting with turn: or turns:, with a username and credential), from your own coturn server or a hosted service.</p>
+          <p class="muted small">Browsers and robots use these to find a path to each other. STUN is enough on most networks. Strict networks (some offices, some mobile carriers) need a <b>TURN relay</b>. The app adds a Cloudflare relay by itself when the app secrets <code>cf_turn_key_id</code> and <code>cf_turn_api_token</code> are set (Cloudflare dashboard &gt; Realtime &gt; TURN); you can also list your own (urls starting with turn: or turns:, with a username and credential).</p>
+          <anvil-component type="Label" name="relay_label" prop:role='["fine-print"]'></anvil-component>
           <label class="ui-field"><span>ICE servers <em>(JSON list, sent to every pilot and robot)</em></span>
             <anvil-component type="TextArea" name="ice_box" prop:height="150" prop:role='["mono-box"]'></anvil-component></label>
           <div class="ui-grid two">

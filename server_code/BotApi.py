@@ -143,7 +143,7 @@ def bot_hello(**q):
     _came_online(r)
     n = Robots.network()
     return _reply({"ok": True, "robot_id": r.get_id(), "name": r["name"], "config": r["config"], "config_rev": r["config_rev"] or 1,
-                   "ice_servers": n["ice_servers"], "poll_ms": _next_ms(r)})
+                   "ice_servers": Robots.ice_servers(), "poll_ms": _next_ms(r)})
 
 
 @anvil.server.http_endpoint("/bot/poll", methods=["POST"])
@@ -178,7 +178,7 @@ def bot_poll(**q):
             s["state"] = "ended"
             ended.append(sid)  # a guest pass ran out mid-drive
     out = {"ok": True, "offers": offers, "ended": ended, "next_ms": _next_ms(r), "config_rev": r["config_rev"] or 1,
-           "ice_servers": Robots.network()["ice_servers"] if offers else None}
+           "ice_servers": Robots.ice_servers() if offers else None}
     try:
         have = int(b.get("config_rev") or 0)
     except (TypeError, ValueError):

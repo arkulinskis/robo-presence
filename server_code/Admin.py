@@ -114,7 +114,7 @@ def _clean_ice(servers):
 def get_network():
     C.require_admin()
     n = Robots.network()
-    return dict(n, default_source=Robots.DEFAULT_SOURCE, default_ice=Robots.DEFAULT_ICE)
+    return dict(n, default_source=Robots.DEFAULT_SOURCE, default_ice=Robots.DEFAULT_ICE, relay=Robots.turn_servers()[1])
 
 
 @anvil.server.callable(require_user=True)
