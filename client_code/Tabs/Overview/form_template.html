@@ -1,0 +1,35 @@
+<div class="rb-tab">
+  <div class="rb-cols">
+    <div>
+      <div class="ui-card">
+        <anvil-component type="Label" name="reports_title" prop:role='["card-h"]'></anvil-component>
+        <anvil-component type="Label" name="reports_text" prop:role='["fine-print"]'></anvil-component>
+        <anvil-component type="RepeatingPanel" name="gets_panel" prop:item_template="Robo_Presence.Items.GetRow" prop:role='["rb-gets"]'></anvil-component>
+      </div>
+      <div class="ui-card" anvil:name="sensors_card">
+        <div class="ui-row rb-card-head"><h3>Sensors</h3><anvil-component type="Robo_Presence.Components.Lamp" name="live_lamp" prop:state="on" prop:text="live"></anvil-component></div>
+        <anvil-component type="RepeatingPanel" name="gauges_panel" prop:item_template="Robo_Presence.Items.GaugeRow" prop:role='["rp-gauges"]'></anvil-component>
+        <anvil-component type="Label" name="last_readings" prop:role='["fine-print", "rb-after"]'></anvil-component>
+      </div>
+    </div>
+    <div>
+      <div class="ui-card">
+        <h3>Facts</h3>
+        <anvil-component type="RepeatingPanel" name="facts_panel" prop:item_template="Robo_Presence.Items.KvRow" prop:role='["rp-kv"]'></anvil-component>
+      </div>
+      <div class="ui-card ui-stack" anvil:name="edit_card">
+        <h3>Name and paint</h3>
+        <label class="ui-field"><span>Name</span><anvil-component type="TextBox" name="name_box"></anvil-component></label>
+        <div class="ui-field"><span>Paint</span><anvil-component type="Robo_Presence.Components.Swatches" name="paint"></anvil-component></div>
+        <label class="ui-field"><span>Notes <em>(what it does, where it lives)</em></span><anvil-component type="TextArea" name="notes_box" prop:height="70"></anvil-component></label>
+        <div class="ui-row between">
+          <anvil-component type="Button" name="save_button" prop:text="Save" prop:role='["btn", "btn-primary", "ic-check"]'></anvil-component>
+          <span class="ui-row">
+            <anvil-component type="Button" name="unpair_button" prop:text="Unpair" prop:role='["btn", "btn-sm", "btn-danger"]'></anvil-component>
+            <anvil-component type="Button" name="delete_button" prop:text="Delete" prop:role='["btn", "btn-sm", "btn-danger", "ic-trash"]'></anvil-component>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

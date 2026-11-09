@@ -1,0 +1,99 @@
+<div class="rb-tab">
+  <div class="rb-cols">
+    <div class="rb-steps">
+      <div class="ui-card rb-step" anvil:name="step_browser">
+        <anvil-component type="Label" name="n_browser" prop:role='["stepnum"]'></anvil-component>
+        <div><h3>Run it in a browser</h3>
+          <p>This robot's brain is a phone or laptop. Open <b>robot mode</b> on that device (signed in as you), point the camera ahead and press Start. Keep the screen on.</p>
+          <a class="ui-btn primary" href="#bot" anvil:name="bot_link"><i class="ic ic-phone"></i>Open robot mode</a>
+          <p class="small muted rb-after">Prefer a Raspberry Pi after all? Switch the brain in the Parts tab and follow the steps below.</p>
+        </div>
+      </div>
+      <div class="ui-card rb-step">
+        <anvil-component type="Label" name="n_flash" prop:role='["stepnum"]'></anvil-component>
+        <div><h3>Flash the SD card</h3>
+          <p>Install <a href="https://www.raspberrypi.com/software/" target="_blank" rel="noopener">Raspberry Pi Imager</a>, choose your Pi model and <b>Raspberry Pi OS Lite (64-bit)</b>. In the settings (the gear, or "Edit settings") set:</p>
+          <ul class="rb-list">
+            <li><i class="ic ic-check"></i><span><b>Host name:</b> <anvil-component type="Label" name="host_label" prop:role='["inline"]'></anvil-component></span></li>
+            <li><i class="ic ic-check"></i><span><b>User name and password:</b> yours to choose</span></li>
+            <li><i class="ic ic-check"></i><span><b>Wi-Fi:</b> your network and its password</span></li>
+            <li><i class="ic ic-check"></i><span><b>Services:</b> enable SSH</span></li>
+          </ul>
+        </div>
+      </div>
+      <div class="ui-card rb-step">
+        <anvil-component type="Label" name="n_ssh" prop:role='["stepnum"]'></anvil-component>
+        <div><h3>Connect to the Pi</h3>
+          <p>Put the card in the Pi, switch it on and wait a minute. From a computer on the same Wi-Fi:</p>
+          <anvil-component type="Robo_Presence.Components.CmdBox" name="ssh_cmd" prop:what="SSH command"></anvil-component>
+          <p class="small muted rb-after">Windows 10/11, macOS and Linux all have ssh built in (Windows: PowerShell).</p>
+        </div>
+      </div>
+      <div class="ui-card rb-step">
+        <anvil-component type="Label" name="n_install" prop:role='["stepnum"]'></anvil-component>
+        <div><h3>Install the robot code</h3>
+          <div anvil:name="with_code">
+            <anvil-component type="Label" name="code_text" prop:role='["rb-p"]'></anvil-component>
+            <anvil-component type="Robo_Presence.Components.CmdBox" name="install_cmd" prop:what="Install command"></anvil-component>
+            <div class="ui-row rb-after">
+              <anvil-component type="Button" name="newcode_button" prop:text="New code" prop:role='["btn", "btn-sm", "ic-refresh"]'></anvil-component>
+              <a class="small" href="https://github.com/arkulinskis/robo-presence/blob/master/robot/install.sh" target="_blank" rel="noopener">Read the installer first</a>
+            </div>
+          </div>
+          <div anvil:name="paired_part">
+            <anvil-component type="Label" name="paired_text" prop:role='["rb-p"]'></anvil-component>
+            <anvil-component type="Robo_Presence.Components.CmdBox" name="update_cmd" prop:what="Update command" prop:command="robopresence update"></anvil-component>
+          </div>
+          <div class="rb-wait" anvil:name="wait_box">
+            <div class="art"><anvil-component type="Robo_Presence.Components.RobotArt" name="wait_art" prop:arms="false" prop:small="true"></anvil-component></div>
+            <div>
+              <anvil-component type="Label" name="wait_title" prop:role='["strong"]'></anvil-component>
+              <span class="small"><anvil-component type="Label" name="wait_text" prop:role='["inline", "rb-wait-text"]'></anvil-component> <a href="#drive" anvil:name="wait_drive">Drive it now</a></span>
+            </div>
+          </div>
+          <p class="small muted rb-after" anvil:name="new_card_line">Moving to a new SD card? <anvil-component type="Button" name="newcard_button" prop:text="Make a new install code" prop:role='["btn", "btn-sm", "ic-key"]'></anvil-component></p>
+          <div anvil:name="no_code">
+            <p>Make an install code: it goes into a one-line command for the Pi.</p>
+            <anvil-component type="Button" name="makecode_button" prop:text="Make an install code" prop:role='["btn", "btn-primary", "ic-key"]'></anvil-component>
+          </div>
+        </div>
+      </div>
+      <div class="ui-card rb-step" anvil:name="step_arduino">
+        <anvil-component type="Label" name="n_arduino" prop:role='["stepnum"]'></anvil-component>
+        <div><h3>Upload the Arduino bridge</h3>
+          <p>In the <a href="https://www.arduino.cc/en/software" target="_blank" rel="noopener">Arduino IDE</a>: new sketch, paste this (its CONFIG block matches your Parts tab), pick your board and port, Upload. Then plug the Arduino into the Pi's USB. The Pi asks it what it has when it starts.</p>
+          <div class="ui-row rb-before">
+            <anvil-component type="Button" name="copysketch_button" prop:text="Copy the sketch" prop:role='["btn", "btn-sm", "ic-copy"]'></anvil-component>
+            <anvil-component type="Button" name="dlsketch_button" prop:text="Download robopresence_bridge.ino" prop:role='["btn", "btn-sm", "ic-download"]'></anvil-component>
+          </div>
+          <pre class="rp-code rb-sketch" anvil:dom-node="sketch" tabindex="0" aria-label="The Arduino sketch">Loading the sketch…</pre>
+        </div>
+      </div>
+      <div class="ui-card rb-step">
+        <anvil-component type="Label" name="n_wire" prop:role='["stepnum"]'></anvil-component>
+        <div><h3>Wire it, then test</h3>
+          <p>The <a href="#robot" anvil:name="parts_link">Parts tab</a> shows which pin goes where. Give the motors and servos their own battery (not the Pi's 5 V), and join all the grounds (GND). Then, on the Pi:</p>
+          <anvil-component type="Robo_Presence.Components.CmdBox" name="test_cmd" prop:what="Test command" prop:command="robopresence test"></anvil-component>
+          <p class="small muted rb-after">It sweeps the servos, flashes the switches and reads the sensors. Add <code>--wheels</code> to spin the wheels too (lift the robot first). Other commands: <code>robopresence status | logs | restart | update</code>.</p>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="ui-card"><h3>Shopping list</h3>
+        <ul class="rb-list">
+          <li><i class="ic ic-chip"></i><span>Raspberry Pi 4 or 5 (a Zero 2 W works at 320 × 240)</span></li>
+          <li><i class="ic ic-camera"></i><span>Camera Module 3, or any USB webcam</span></li>
+          <li><i class="ic ic-wheel"></i><span>A 2WD/4WD chassis or tank tracks with two motors</span></li>
+          <li><i class="ic ic-bolt"></i><span>Motor driver: TB6612FNG (recommended), L298N or DRV8833</span></li>
+          <li><i class="ic ic-servo"></i><span>Two SG90/MG90S servos + a pan-tilt bracket</span></li>
+          <li><i class="ic ic-battery"></i><span>Battery pack (2S Li-ion, 7.4 V) + a 5 V 3 A step-down for the Pi</span></li>
+          <li><i class="ic ic-plug"></i><span>Optional: Arduino Nano/Uno, HC-SR04 sonar, LEDs, a buzzer, a small speaker</span></li>
+        </ul>
+        <p class="small rb-after"><a href="#guide/build">The full build guide</a></p>
+      </div>
+      <div class="ui-card"><h3>How the connection works</h3>
+        <p class="small muted">The robot checks in with Robo Presence every second or two. When you press Drive, your browser leaves a connection offer, the robot answers, and from then on video and controls go <b>directly</b> between you (WebRTC, the same tech as video calls), typically 50 to 200 ms. If a network blocks direct connections, an admin can add a TURN relay in Admin → Network.</p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,13 @@
+<div class="ad-table ad-robot-row">
+  <div>
+    <div class="ui-row rb-tight"><anvil-component type="Label" name="name" prop:role='["strong"]' bind:text="self.item['name']"></anvil-component><anvil-component type="Label" name="demo" prop:role='["badge"]' prop:text="demo"></anvil-component></div>
+    <anvil-component type="Label" name="sub" prop:role='["fine-print"]'></anvil-component>
+  </div>
+  <div>
+    <anvil-component type="Label" name="owner" bind:text="self.item['owner']" prop:role='["ad-email"]'></anvil-component>
+    <anvil-component type="Label" name="email" bind:text="self.item['email']" prop:role='["fine-print", "ad-email"]'></anvil-component>
+  </div>
+  <anvil-component type="Robo_Presence.Components.Lamp" name="lamp"></anvil-component>
+  <anvil-component type="Label" name="brain" prop:role='["ad-brain"]'></anvil-component>
+  <anvil-component type="Label" name="drives"></anvil-component>
+</div>

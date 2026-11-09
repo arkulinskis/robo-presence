@@ -1,0 +1,53 @@
+<div class="rb-tab">
+  <div class="ui-card" anvil:name="readonly_card">
+    <h3>Parts</h3>
+    <anvil-component type="Label" name="readonly_text" prop:role='["rb-muted"]'></anvil-component>
+    <anvil-component type="RepeatingPanel" name="readonly_gets" prop:item_template="Robo_Presence.Items.GetRow" prop:role='["rb-gets"]'></anvil-component>
+    <p class="rb-after" anvil:name="readonly_sim"><a class="ui-btn" href="#drive" anvil:name="readonly_sim_link"><i class="ic ic-play"></i>Try these parts in the simulator</a></p>
+  </div>
+  <div anvil:name="editor">
+    <div class="rb-cols">
+      <div>
+        <div class="ui-card ui-stack">
+          <h3>Brain</h3>
+          <div class="ui-seg" role="group" aria-label="Brain">
+            <button type="button" anvil:name="b_pi" data-v="pi" anvil:on-dom:click="self.board_click">Raspberry Pi</button>
+            <button type="button" anvil:name="b_pi_arduino" data-v="pi_arduino" anvil:on-dom:click="self.board_click">Pi + Arduino</button>
+            <button type="button" anvil:name="b_browser" data-v="browser" anvil:on-dom:click="self.board_click">Phone or laptop</button>
+          </div>
+          <anvil-component type="Label" name="board_text" prop:role='["fine-print"]'></anvil-component>
+        </div>
+        <div class="ui-card">
+          <h3>Camera</h3>
+          <div class="rb-cam">
+            <label class="ui-field"><span>Source</span><anvil-component type="DropDown" name="cam_source"></anvil-component></label>
+            <label class="ui-field"><span>Size</span><anvil-component type="DropDown" name="cam_size"></anvil-component></label>
+            <label class="ui-field"><span>Frames / s</span><anvil-component type="TextBox" name="cam_fps" prop:type="number"></anvil-component></label>
+            <label class="ui-field"><span>Codec</span><anvil-component type="DropDown" name="cam_codec"></anvil-component></label>
+            <anvil-component type="CheckBox" name="cam_flip" prop:text="Upside down"></anvil-component>
+            <anvil-component type="CheckBox" name="cam_audio" prop:text="Send the microphone"></anvil-component>
+          </div>
+        </div>
+        <anvil-component type="Robo_Presence.Components.PartsList" name="parts_list"></anvil-component>
+        <div class="ui-card">
+          <h3>Add a part</h3>
+          <anvil-component type="RepeatingPanel" name="catalog_panel" prop:item_template="Robo_Presence.Items.CatalogItem" prop:role='["pb-catalog"]'></anvil-component>
+          <p class="small muted rb-after">Something else? A <b>plugin part</b> runs your own Python on the robot (see <a href="#guide/parts">the guide</a>), and an Arduino can report parts of its own: they appear in the cockpit by themselves.</p>
+        </div>
+      </div>
+      <div>
+        <div class="ui-card"><h3>What the pilot gets</h3>
+          <anvil-component type="RepeatingPanel" name="gets_panel" prop:item_template="Robo_Presence.Items.GetRow" prop:role='["rb-gets"]'></anvil-component>
+        </div>
+        <div class="ui-card"><h3>Wiring</h3><div class="rb-pins" anvil:dom-node="pins"></div></div>
+      </div>
+    </div>
+    <div class="rb-sticky">
+      <anvil-component type="Label" name="msg" prop:role='["rb-msg"]' prop:text="Saved parts reach the robot within a few seconds, even while it runs."></anvil-component>
+      <span class="ui-row">
+        <anvil-component type="Button" name="reset_button" prop:text="Start over" prop:role='["btn", "btn-sm"]'></anvil-component>
+        <anvil-component type="Button" name="save_button" prop:text="Save parts" prop:role='["btn", "btn-primary", "ic-check"]'></anvil-component>
+      </span>
+    </div>
+  </div>
+</div>

@@ -80,7 +80,7 @@ def drive_offer(robot_id, sdp, pass_token=None, pilot_name=None):
     s = app_tables.sessions.add_row(robot=r, user=me, guest_pass=p, pilot_name=name or "Guest", role=role,
                                     secret_hash=Robots.hash_token(secret), offer=sdp, answer=None, state="waiting",
                                     created=stamp, stats={}, is_demo=False)
-    anvil.server.session["rp_waiting"] = s.get_id()
+    getattr(anvil.server, "session")["rp_waiting"] = s.get_id()
     if p is not None:
         p.update(uses=(p["uses"] or 0) + 1, last_used=stamp)
     r["wanted_until"] = stamp + dt.timedelta(seconds=90)

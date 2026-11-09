@@ -1,0 +1,21 @@
+<div class="ui dv-page">
+  <anvil-component type="Robo_Presence.Components.Cockpit" name="cockpit"></anvil-component>
+  <div class="dv-guest" anvil:name="guest_part">
+    <div class="ui-card rp-plate">
+      <div class="art"><anvil-component type="Robo_Presence.Components.RobotArt" name="guest_art" prop:tilt="8"></anvil-component></div>
+      <anvil-component type="Label" name="guest_title" prop:role='["page-title", "dv-title"]'></anvil-component>
+      <anvil-component type="Label" name="guest_text" prop:role='["dv-text"]'></anvil-component>
+      <div anvil:name="guest_form">
+        <anvil-component type="Robo_Presence.Components.Lamp" name="guest_lamp"></anvil-component>
+        <div class="dv-form">
+          <label class="ui-field"><span>Your name <em>(the owner sees it in the robot's log)</em></span>
+            <anvil-component type="TextBox" name="guest_name" prop:placeholder="e.g. Grandma Lin"></anvil-component>
+          </label>
+          <anvil-component type="Button" name="start_button" prop:text="Start driving" prop:role='["btn", "btn-primary", "btn-lg", "ic-joystick"]'></anvil-component>
+          <p class="small muted dv-note">Video and controls go straight between your browser and the robot. Nothing is recorded by Robo Presence.</p>
+        </div>
+      </div>
+      <a class="ui-btn primary" href="#drive" anvil:name="sim_link">Try the simulator instead</a>
+    </div>
+  </div>
+</div>

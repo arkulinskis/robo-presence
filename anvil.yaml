@@ -468,53 +468,63 @@ metadata:
   title: 'Robo Presence: DIY telepresence robot in your browser'
 name: Robo Presence
 native_deps:
-  head_html: "<script src=\"_/theme/legal-kit.js?v=6f47cd852e\"></script>\n<!-- seo:start (APP_MAKER/seo: edit seo/apps/robopresence.json\
-    \ and run seo.py, not here) -->\n<link rel=\"canonical\" href=\"https://robo-presence.anvil.app/\">\n<meta name=\"robots\"\
-    \ content=\"index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1\">\n<meta name=\"keywords\" content=\"\
-    telepresence robot, Raspberry Pi robot, DIY telepresence robot, WebRTC robot control, remote control robot browser, Arduino\
-    \ robot car, Raspberry Pi camera robot, robot simulator, pan tilt camera robot\">\n<meta name=\"author\" content=\"Arkvital\"\
-    >\n<meta property=\"og:type\" content=\"website\">\n<meta property=\"og:site_name\" content=\"Robo Presence\">\n<meta\
-    \ property=\"og:title\" content=\"Robo Presence: DIY telepresence robot in your browser\">\n<meta property=\"og:description\"\
-    \ content=\"Build a camera robot on wheels with a Raspberry Pi, an Arduino or an old phone, install it with one command,\
-    \ and drive it live from any browser over WebRTC.\">\n<meta property=\"og:locale\" content=\"en_CA\">\n<meta property=\"\
-    og:url\" content=\"https://robo-presence.anvil.app/\">\n<meta property=\"og:image\" content=\"https://robo-presence.anvil.app/_/theme/og-image.png\"\
-    >\n<meta property=\"og:image:width\" content=\"1200\"><meta property=\"og:image:height\" content=\"630\">\n<meta property=\"\
-    og:image:alt\" content=\"Robo Presence: Build a camera robot. Drive it from anywhere.\">\n<meta name=\"twitter:card\"\
-    \ content=\"summary_large_image\">\n<meta name=\"twitter:title\" content=\"Robo Presence: DIY telepresence robot in your\
-    \ browser\">\n<meta name=\"twitter:description\" content=\"Build a camera robot on wheels with a Raspberry Pi, an Arduino\
-    \ or an old phone, install it with one command, and drive it live from any browser over WebRTC.\">\n<meta name=\"twitter:image\"\
-    \ content=\"https://robo-presence.anvil.app/_/theme/og-image.png\">\n<link rel=\"alternate\" type=\"text/plain\" title=\"\
-    Robo Presence for AI assistants\" href=\"https://robo-presence.anvil.app/llms.txt\">\n<script type=\"application/ld+json\"\
-    >{\"@context\": \"https://schema.org\", \"@graph\": [{\"@type\": \"WebApplication\", \"@id\": \"https://robo-presence.anvil.app/#app\"\
-    , \"name\": \"Robo Presence\", \"url\": \"https://robo-presence.anvil.app/\", \"description\": \"Build a camera robot\
-    \ on wheels with a Raspberry Pi, an Arduino or an old phone, install it with one command, and drive it live from any browser\
-    \ over WebRTC.\", \"image\": \"https://robo-presence.anvil.app/_/theme/og-image.png\", \"inLanguage\": \"en\", \"publisher\"\
-    : {\"@id\": \"https://arkvital.com/#org\"}, \"keywords\": \"telepresence robot, Raspberry Pi robot, DIY telepresence robot,\
-    \ WebRTC robot control, remote control robot browser, Arduino robot car, Raspberry Pi camera robot, robot simulator, pan\
-    \ tilt camera robot\", \"applicationCategory\": \"UtilitiesApplication\", \"operatingSystem\": \"Any (web browser)\",\
-    \ \"browserRequirements\": \"Requires JavaScript and a modern web browser\", \"featureList\": [\"Live WebRTC video and\
-    \ controls, peer to peer\", \"One-line installer for Raspberry Pi robots\", \"Parts builder: wheels, servos, sonar, switches,\
-    \ voice and more\", \"Arduino bridge sketch generated from your parts\", \"Use an old phone or laptop as the robot\",\
-    \ \"Share drive or watch access, or send a time-limited guest pass\", \"A 3D garage simulator to practise driving\", \"\
-    Step-by-step build guide with shopping list and wiring\"], \"audience\": {\"@type\": \"Audience\", \"audienceType\": \"\
-    Makers, and families who want a robot to visit through\"}}, {\"@type\": \"WebSite\", \"@id\": \"https://robo-presence.anvil.app/#site\"\
-    , \"url\": \"https://robo-presence.anvil.app/\", \"name\": \"Robo Presence\", \"publisher\": {\"@id\": \"https://arkvital.com/#org\"\
-    }}, {\"@type\": \"Organization\", \"@id\": \"https://arkvital.com/#org\", \"name\": \"Arkvital\", \"url\": \"https://arkvital.com\"\
-    , \"email\": \"arkvital@outlook.com\", \"address\": {\"@type\": \"PostalAddress\", \"addressLocality\": \"Montreal\",\
-    \ \"addressRegion\": \"QC\", \"addressCountry\": \"CA\"}}]}</script>\n<!-- seo:end -->\n<meta name=\"viewport\" content=\"\
-    width=device-width, initial-scale=1, viewport-fit=cover\">\n<meta name=\"theme-color\" content=\"#ECE6D6\">\n<meta name=\"\
-    apple-mobile-web-app-capable\" content=\"yes\">\n<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link\
-    \ rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>\n<link href=\"https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Saira+Stencil+One&display=swap\"\
-    \ rel=\"stylesheet\">\n<link id=\"ui-favicon\" rel=\"icon\" type=\"image/svg+xml\" href=\"_/theme/icon.svg?v=7e490e0e36\"\
-    >\n<link rel=\"apple-touch-icon\" href=\"_/theme/icon-180.png?v=7e490e0e36\">\n<script>\n/* Keep our tab icon: Anvil adds\
-    \ its own <link rel=\"icon\">, so drop any other icon link. */\n(function () {\n  function keep() {\n    var ours = document.getElementById('ui-favicon');\n\
-    \    if (!ours) return;\n    document.querySelectorAll('link[rel~=\"icon\"]').forEach(function (l) { if (l !== ours) l.remove();\
-    \ });\n  }\n  keep();\n  document.addEventListener('DOMContentLoaded', keep);\n  window.addEventListener('load', keep);\n\
-    })();\n</script>\n\n<!-- Prepsto feedback panel: every \"Submit feedback\" link and button opens it (it is the only feedback\
-    \ channel). No floating button, no cookies, nothing loads until it is opened. Codes: APP_MAKER/prepsto-links.json -->\n\
-    <script src=\"https://prepsto.com/_/theme/widget.js\" data-prepsto=\"jb924jc\" data-button=\"false\" data-label=\"Submit\
-    \ feedback\" async></script>\n<link rel=\"stylesheet\" href=\"_/theme/app.css?v=a2b30a32fe\">\n<script src=\"_/theme/app.js?v=fc0263f3bd\"\
-    ></script>\n"
+  head_html: |
+    <script src="_/theme/legal-kit.js?v=6f47cd852e"></script>
+    <!-- seo:start (APP_MAKER/seo: edit seo/apps/robopresence.json and run seo.py, not here) -->
+    <link rel="canonical" href="https://robo-presence.anvil.app/">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="keywords" content="telepresence robot, Raspberry Pi robot, DIY telepresence robot, WebRTC robot control, remote control robot browser, Arduino robot car, Raspberry Pi camera robot, robot simulator, pan tilt camera robot">
+    <meta name="author" content="Arkvital">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Robo Presence">
+    <meta property="og:title" content="Robo Presence: DIY telepresence robot in your browser">
+    <meta property="og:description" content="Build a camera robot on wheels with a Raspberry Pi, an Arduino or an old phone, install it with one command, and drive it live from any browser over WebRTC.">
+    <meta property="og:locale" content="en_CA">
+    <meta property="og:url" content="https://robo-presence.anvil.app/">
+    <meta property="og:image" content="https://robo-presence.anvil.app/_/theme/og-image.png">
+    <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Robo Presence: Build a camera robot. Drive it from anywhere.">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Robo Presence: DIY telepresence robot in your browser">
+    <meta name="twitter:description" content="Build a camera robot on wheels with a Raspberry Pi, an Arduino or an old phone, install it with one command, and drive it live from any browser over WebRTC.">
+    <meta name="twitter:image" content="https://robo-presence.anvil.app/_/theme/og-image.png">
+    <link rel="alternate" type="text/plain" title="Robo Presence for AI assistants" href="https://robo-presence.anvil.app/llms.txt">
+    <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "WebApplication", "@id": "https://robo-presence.anvil.app/#app", "name": "Robo Presence", "url": "https://robo-presence.anvil.app/", "description": "Build a camera robot on wheels with a Raspberry Pi, an Arduino or an old phone, install it with one command, and drive it live from any browser over WebRTC.", "image": "https://robo-presence.anvil.app/_/theme/og-image.png", "inLanguage": "en", "publisher": {"@id": "https://arkvital.com/#org"}, "keywords": "telepresence robot, Raspberry Pi robot, DIY telepresence robot, WebRTC robot control, remote control robot browser, Arduino robot car, Raspberry Pi camera robot, robot simulator, pan tilt camera robot", "applicationCategory": "UtilitiesApplication", "operatingSystem": "Any (web browser)", "browserRequirements": "Requires JavaScript and a modern web browser", "featureList": ["Live WebRTC video and controls, peer to peer", "One-line installer for Raspberry Pi robots", "Parts builder: wheels, servos, sonar, switches, voice and more", "Arduino bridge sketch generated from your parts", "Use an old phone or laptop as the robot", "Share drive or watch access, or send a time-limited guest pass", "A 3D garage simulator to practise driving", "Step-by-step build guide with shopping list and wiring"], "audience": {"@type": "Audience", "audienceType": "Makers, and families who want a robot to visit through"}}, {"@type": "WebSite", "@id": "https://robo-presence.anvil.app/#site", "url": "https://robo-presence.anvil.app/", "name": "Robo Presence", "publisher": {"@id": "https://arkvital.com/#org"}}, {"@type": "Organization", "@id": "https://arkvital.com/#org", "name": "Arkvital", "url": "https://arkvital.com", "email": "arkvital@outlook.com", "address": {"@type": "PostalAddress", "addressLocality": "Montreal", "addressRegion": "QC", "addressCountry": "CA"}}]}</script>
+    <!-- seo:end -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#ECE6D6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Saira+Stencil+One&display=swap" rel="stylesheet">
+    <link id="ui-favicon" rel="icon" type="image/svg+xml" href="_/theme/icon.svg?v=002800f2ee">
+    <link rel="apple-touch-icon" href="_/theme/icon-180.png?v=6b1979f0ec">
+    <script>
+    /* Keep our tab icon: Anvil adds its own <link rel="icon">, so drop any other icon link. */
+    (function () {
+      function keep() {
+        var ours = document.getElementById('ui-favicon');
+        if (!ours) return;
+        document.querySelectorAll('link[rel~="icon"]').forEach(function (l) { if (l !== ours) l.remove(); });
+      }
+      keep();
+      document.addEventListener('DOMContentLoaded', keep);
+      window.addEventListener('load', keep);
+    })();
+    </script>
+
+    <!-- Prepsto feedback panel: every "Submit feedback" link and button opens it (it is the only feedback channel). No floating button, no cookies, nothing loads until it is opened. Codes: APP_MAKER/prepsto-links.json -->
+    <script src="https://prepsto.com/_/theme/widget.js" data-prepsto="jb924jc" data-button="false" data-label="Submit feedback" async></script>
+    <link rel="stylesheet" href="_/theme/icons.css?v=2d622fe315">
+    <link rel="stylesheet" href="_/theme/app.css?v=9a2c4f9b7c">
+    <script src="_/theme/app-kit.js?v=7c9862dcc6"></script>
+    <script src="_/theme/rp-kit.js?v=ade919b995"></script>
+    <script src="_/theme/rp-core.js?v=785b3964cb"></script>
+    <script src="_/theme/rp-sim.js?v=af66425d42"></script>
+    <script src="_/theme/rp-link.js?v=314e50a480"></script>
+    <script src="_/theme/rp-builder.js?v=58e4a9146d"></script>
+    <script src="_/theme/rp-cockpit.js?v=d4592a51ae"></script>
+    <script src="_/theme/rp-bot.js?v=e2437ff5bf"></script>
 package_name: Robo_Presence
 runtime_options:
   client_version: '3'
@@ -542,5 +552,5 @@ services:
   server_config: {}
   source: /runtime/services/google.yml
 startup:
-  module: Main
-  type: form
+  module: startup
+  type: module

@@ -1,0 +1,34 @@
+<div class="rb-tab">
+  <div class="rb-cols">
+    <div>
+      <div class="ui-card ui-stack">
+        <h3>Invite people</h3>
+        <anvil-component type="Label" name="invite_text" prop:role='["fine-print"]'></anvil-component>
+        <div class="rb-form-row">
+          <label class="ui-field"><span>Email</span><anvil-component type="TextBox" name="email_box" prop:type="email" prop:placeholder="friend@example.com"></anvil-component></label>
+          <label class="ui-field"><span>Role</span><anvil-component type="DropDown" name="share_role"></anvil-component></label>
+          <anvil-component type="Button" name="invite_button" prop:text="Invite" prop:role='["btn", "btn-primary", "ic-plus"]'></anvil-component>
+        </div>
+        <anvil-component type="RepeatingPanel" name="shares_panel" prop:item_template="Robo_Presence.Items.ShareRow" prop:role='["rb-rows"]'></anvil-component>
+        <anvil-component type="Label" name="no_shares" prop:role='["fine-print"]' prop:text="Not shared with anyone yet."></anvil-component>
+      </div>
+    </div>
+    <div>
+      <div class="ui-card ui-stack">
+        <h3>Guest passes</h3>
+        <p class="muted small">A link that lets someone drive or watch without an account, until it runs out. Good for a video call with grandparents, or a demo.</p>
+        <div class="rb-pass" anvil:name="new_pass">
+          <p><b>Here is the link.</b> Copy it now: for safety it is only shown once.</p>
+          <anvil-component type="Robo_Presence.Components.CmdBox" name="pass_link" prop:what="Guest link" prop:prompt="false"></anvil-component>
+        </div>
+        <div class="rb-form-row three">
+          <label class="ui-field"><span>For</span><anvil-component type="TextBox" name="label_box" prop:placeholder="Grandma"></anvil-component></label>
+          <label class="ui-field"><span>Can</span><anvil-component type="DropDown" name="pass_role"></anvil-component></label>
+          <label class="ui-field"><span>For how long</span><anvil-component type="DropDown" name="hours_box"></anvil-component></label>
+          <anvil-component type="Button" name="make_button" prop:text="Make" prop:role='["btn", "btn-primary", "ic-link"]'></anvil-component>
+        </div>
+        <anvil-component type="RepeatingPanel" name="passes_panel" prop:item_template="Robo_Presence.Items.PassRow" prop:role='["rb-rows"]'></anvil-component>
+      </div>
+    </div>
+  </div>
+</div>

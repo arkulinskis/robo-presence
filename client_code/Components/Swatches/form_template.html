@@ -1,0 +1,22 @@
+---
+custom_component: true
+properties:
+  - name: value
+    type: string
+    default_value: orange
+    description: The chosen paint (orange, olive, yellow, blue, red, steel)
+    default_binding_prop: true
+toolbox_item:
+  title: Paint swatches
+  group: Robo Presence
+help_text: |
+  The six robot paints as radio swatches (New robot, the robot page's Name and paint).
+---
+<div class="gr-swatches-host"><div class="gr-swatches" role="radiogroup" aria-label="Paint">
+  <label title="Safety orange"><input type="radio" value="orange" anvil:dom-node="c_orange" aria-label="Safety orange"><i style="background:#e2611e"></i></label>
+  <label title="Olive drab"><input type="radio" value="olive" anvil:dom-node="c_olive" aria-label="Olive drab"><i style="background:#6b7a3a"></i></label>
+  <label title="Hazard yellow"><input type="radio" value="yellow" anvil:dom-node="c_yellow" aria-label="Hazard yellow"><i style="background:#e9b42c"></i></label>
+  <label title="Workshop blue"><input type="radio" value="blue" anvil:dom-node="c_blue" aria-label="Workshop blue"><i style="background:#3f6f9c"></i></label>
+  <label title="Fire red"><input type="radio" value="red" anvil:dom-node="c_red" aria-label="Fire red"><i style="background:#c23b22"></i></label>
+  <label title="Bare steel"><input type="radio" value="steel" anvil:dom-node="c_steel" aria-label="Bare steel"><i style="background:#8a9095"></i></label>
+</div></div>

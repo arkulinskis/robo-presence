@@ -1,0 +1,13 @@
+---
+custom_component: true
+events:
+  - name: ready
+    description: The cockpit has connected (or shown its error)
+toolbox_item:
+  title: Cockpit
+  group: Robo Presence
+help_text: |
+  The driving screen (RP.cockpit in rp-cockpit.js): video, joystick, look pad, the robot's controls and gauges, built
+  from the robot's manifest. Call start(options) once the page knows what to drive; it is destroyed when it leaves.
+---
+<div class="rp-cockpit-host"><div anvil:dom-node="host"></div></div>

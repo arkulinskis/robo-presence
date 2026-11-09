@@ -1,0 +1,45 @@
+<anvil-form layout="Robo_Presence.Layouts.Shell">
+  <anvil-block slot="content">
+    <div class="ui-wrap">
+      <p class="rb-back"><a href="#garage"><i class="ic ic-back"></i> Garage</a></p>
+      <div class="ui-empty" anvil:name="missing">
+        <i class="ic ic-robot"></i><h2>That robot isn't in your garage</h2>
+        <anvil-component type="Label" name="missing_text" prop:role='["fine-print"]'></anvil-component>
+        <p><a href="#garage">Back to the garage</a></p>
+      </div>
+      <div anvil:name="main">
+        <div class="ui-card rb-hero rp-plate">
+          <div class="art"><anvil-component type="Robo_Presence.Components.RobotArt" name="art" prop:pan="14" prop:tilt="6"></anvil-component></div>
+          <div>
+            <div class="ui-row rb-badges">
+              <anvil-component type="Robo_Presence.Components.Lamp" name="lamp"></anvil-component>
+              <anvil-component type="Label" name="board_badge" prop:role='["badge"]'></anvil-component>
+              <anvil-component type="Label" name="role_badge" prop:role='["badge", "badge-brand"]'></anvil-component>
+              <anvil-component type="Label" name="owner_badge" prop:role='["badge"]'></anvil-component>
+            </div>
+            <anvil-component type="Label" name="name_title" prop:role='["rb-title"]'></anvil-component>
+            <anvil-component type="Label" name="notes_label" prop:role='["rb-notes"]'></anvil-component>
+            <anvil-component type="RepeatingPanel" name="chips" prop:item_template="Robo_Presence.Items.Chip" prop:role='["rp-chips"]'></anvil-component>
+            <div class="rb-acts">
+              <a class="ui-btn primary" href="#drive" anvil:name="drive_link" anvil:on-dom:click="self.drive_click"><i class="ic ic-joystick" anvil:name="drive_icon"></i><anvil-component type="Label" name="drive_text" prop:role='["inline"]' prop:text="Drive"></anvil-component></a>
+              <a class="ui-btn" href="#drive" anvil:name="sim_link"><i class="ic ic-play"></i>Try its parts in the simulator</a>
+              <a class="ui-btn" href="#bot" anvil:name="bot_link"><i class="ic ic-phone"></i>Run it in this browser</a>
+            </div>
+          </div>
+        </div>
+        <nav class="ui-tabs" aria-label="Robot">
+          <a href="#robot" anvil:name="tab_overview"><i class="ic ic-robot"></i>Overview</a>
+          <a href="#robot" anvil:name="tab_parts"><i class="ic ic-wrench"></i>Parts</a>
+          <a href="#robot" anvil:name="tab_install"><i class="ic ic-terminal"></i>Install</a>
+          <a href="#robot" anvil:name="tab_sharing"><i class="ic ic-users"></i>Sharing</a>
+          <a href="#robot" anvil:name="tab_log"><i class="ic ic-clock"></i>Log</a>
+        </nav>
+        <anvil-component type="Robo_Presence.Tabs.Overview" name="overview" prop:visible="false"></anvil-component>
+        <anvil-component type="Robo_Presence.Tabs.Parts" name="parts" prop:visible="false"></anvil-component>
+        <anvil-component type="Robo_Presence.Tabs.Install" name="install" prop:visible="false"></anvil-component>
+        <anvil-component type="Robo_Presence.Tabs.Sharing" name="sharing" prop:visible="false"></anvil-component>
+        <anvil-component type="Robo_Presence.Tabs.Log" name="log" prop:visible="false"></anvil-component>
+      </div>
+    </div>
+  </anvil-block>
+</anvil-form>
