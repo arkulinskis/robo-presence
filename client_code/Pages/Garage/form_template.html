@@ -1,0 +1,45 @@
+<anvil-form layout="Robo_Presence.Layouts.Shell">
+  <anvil-block slot="content">
+    <div class="ui-wrap">
+      <div class="gr-head">
+        <div>
+          <anvil-component type="Label" name="title" prop:role='["page-title", "gr-title"]' prop:text="Your robots"></anvil-component>
+          <anvil-component type="Label" name="lead" prop:role='["gr-lead"]'></anvil-component>
+        </div>
+        <anvil-component type="Button" name="new_button" prop:text="New robot" prop:role='["btn", "btn-primary", "ic-plus"]'></anvil-component>
+      </div>
+      <div class="gr-grid">
+        <anvil-component type="RepeatingPanel" name="mine_panel" prop:item_template="Robo_Presence.Items.RobotCard" prop:role='["contents"]'></anvil-component>
+        <button type="button" class="gr-new" anvil:name="new_tile" anvil:on-dom:click="self.new_tile_click">
+          <div><i class="ic ic-plus"></i>
+            <anvil-component type="Label" name="new_tile_title" prop:role='["gr-new-title"]' prop:text="Build your first robot"></anvil-component>
+            <span class="small">Raspberry Pi, Pi + Arduino, or an old phone</span></div>
+        </button>
+      </div>
+
+      <div anvil:name="shared_part">
+        <div class="gr-sec"><h2>Shared with you</h2><span class="muted small">Robots other people let you drive or watch</span></div>
+        <div class="gr-grid">
+          <anvil-component type="RepeatingPanel" name="shared_panel" prop:item_template="Robo_Presence.Items.RobotCard" prop:role='["contents"]'></anvil-component>
+        </div>
+      </div>
+
+      <div class="gr-sec"><h2>Test drive</h2></div>
+      <a class="ui-card gr-sim rp-plate" href="#drive">
+        <div class="txt">
+          <h3 class="gr-sim-h">The garage simulator: no hardware needed</h3>
+          <p class="muted">A virtual robot in a virtual garage, driven with the real cockpit: joystick, look pad, headlights, horn, sonar. Five bolts are lost under the furniture. Find them all.</p>
+          <span class="ui-btn primary"><i class="ic ic-joystick"></i>Start the simulator</span>
+        </div>
+        <anvil-component type="Robo_Presence.Components.SimMini" name="mini"></anvil-component>
+      </a>
+
+      <div anvil:name="showroom_part">
+        <div class="gr-sec"><h2>Showroom</h2><span class="muted small">Robots built by other makers (demo). Open one to see its parts, or drive it in the simulator.</span></div>
+        <div class="gr-grid">
+          <anvil-component type="RepeatingPanel" name="showroom_panel" prop:item_template="Robo_Presence.Items.RobotCard" prop:role='["contents"]'></anvil-component>
+        </div>
+      </div>
+    </div>
+  </anvil-block>
+</anvil-form>

@@ -1,0 +1,15 @@
+<div class="gr-card-item">
+  <a class="ui-card gr-card" anvil:name="card" href="#garage">
+    <div class="gr-art">
+      <anvil-component type="Robo_Presence.Components.Lamp" name="lamp"></anvil-component>
+      <anvil-component type="Label" name="role_badge" prop:role='["badge", "gr-role"]'></anvil-component>
+      <anvil-component type="Robo_Presence.Components.RobotArt" name="art" prop:small="true"></anvil-component>
+    </div>
+    <div class="gr-body">
+      <anvil-component type="Label" name="name_label" prop:role='["gr-name"]' bind:text="self.item['name']"></anvil-component>
+      <anvil-component type="Label" name="sub_label" prop:role='["fine-print"]'></anvil-component>
+      <anvil-component type="Label" name="notes_label" prop:role='["gr-notes"]'></anvil-component>
+      <anvil-component type="RepeatingPanel" name="chips" prop:item_template="Robo_Presence.Items.Chip" prop:role='["rp-chips"]'></anvil-component>
+    </div>
+  </a>
+</div>

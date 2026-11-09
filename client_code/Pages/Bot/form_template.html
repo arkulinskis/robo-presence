@@ -1,0 +1,59 @@
+<anvil-form layout="Robo_Presence.Layouts.Shell">
+  <anvil-block slot="content">
+    <div class="ui-wrap">
+      <p class="rb-back"><a href="#garage" anvil:name="back_link"><i class="ic ic-back"></i> <anvil-component type="Label" name="back_label" prop:role='["inline"]' prop:text="Garage"></anvil-component></a></p>
+      <div class="ui-empty" anvil:name="denied">
+        <i class="ic ic-lock"></i><h2>Only the owner can run this robot</h2><p><a href="#garage">Back to the garage</a></p>
+      </div>
+      <div anvil:name="main">
+        <div class="ui-page-head"><div>
+          <anvil-component type="Label" name="title" prop:role='["page-title"]'></anvil-component>
+          <p class="muted">Robot mode: put this phone or laptop on the robot, choose a camera and press Start. Pilots then connect to it exactly like to a Raspberry Pi.</p>
+        </div></div>
+        <div class="bt-grid">
+          <div>
+            <div class="bt-screen" anvil:dom-node="screen">
+              <anvil-component type="Label" name="screen_label" prop:role='["bt-lbl"]' prop:text="CAMERA"></anvil-component>
+              <div class="idle" anvil:name="idle"><div>
+                <div class="art"><anvil-component type="Robo_Presence.Components.RobotArt" name="idle_art" prop:eyes_on="false" prop:small="true"></anvil-component></div>
+                Not running</div></div>
+            </div>
+            <div class="ui-card ui-stack">
+              <h3>Camera</h3>
+              <div class="ui-seg" role="group" aria-label="Camera">
+                <button type="button" anvil:name="cam_sim" data-v="sim" anvil:on-dom:click="self.cam_click">Simulated garage</button>
+                <button type="button" anvil:name="cam_user" data-v="user" anvil:on-dom:click="self.cam_click">Front camera</button>
+                <button type="button" anvil:name="cam_environment" data-v="environment" anvil:on-dom:click="self.cam_click">Back camera</button>
+              </div>
+              <p class="small muted">The simulated garage needs no camera: handy for testing from a desk. Real cameras ask for permission.</p>
+              <div class="bt-big">
+                <anvil-component type="Button" name="start_button" prop:text="Start robot" prop:role='["btn", "btn-primary", "btn-lg", "ic-play"]'></anvil-component>
+                <anvil-component type="Button" name="stop_button" prop:text="Stop" prop:role='["btn", "btn-lg", "ic-pause"]' prop:visible="false"></anvil-component>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="ui-card">
+              <h3>Status</h3>
+              <div class="ui-row">
+                <anvil-component type="Robo_Presence.Components.Lamp" name="lamp"></anvil-component>
+                <anvil-component type="Label" name="status_note" prop:role='["fine-print"]'></anvil-component>
+              </div>
+              <anvil-component type="RepeatingPanel" name="pilots_panel" prop:item_template="Robo_Presence.Items.Chip" prop:role='["bt-pilots"]'></anvil-component>
+            </div>
+            <div class="ui-card ui-stack">
+              <h3>Parts</h3>
+              <anvil-component type="RepeatingPanel" name="parts_panel" prop:item_template="Robo_Presence.Items.BotPart" prop:role='["bt-parts"]'></anvil-component>
+              <anvil-component type="CheckBox" name="arduino_box" prop:text="Connect the Arduino when I press Start (Chrome or Edge; you pick the USB port)" prop:checked="true"></anvil-component>
+              <p class="small muted">Change parts in the <a href="#garage" anvil:name="parts_link">Parts tab</a>. Pi-only parts need the Raspberry Pi brain.</p>
+            </div>
+            <div class="ui-card">
+              <h3>Log</h3>
+              <anvil-component type="RepeatingPanel" name="log_panel" prop:item_template="Robo_Presence.Items.LogLine" prop:role='["bt-log"]'></anvil-component>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </anvil-block>
+</anvil-form>

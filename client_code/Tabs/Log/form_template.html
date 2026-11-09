@@ -1,0 +1,17 @@
+<div class="rb-tab">
+  <div class="rb-cols">
+    <div class="ui-card">
+      <h3>Drives</h3>
+      <div anvil:name="sessions_part">
+        <div class="rb-row rb-sess rb-head" aria-hidden="true"><b>Who</b><b>When</b><b>How long</b><b class="rb-wide">Round trip</b><b class="rb-wide">Video</b></div>
+        <anvil-component type="RepeatingPanel" name="sessions_panel" prop:item_template="Robo_Presence.Items.SessionRow" prop:role='["rb-rows"]'></anvil-component>
+      </div>
+      <p class="muted" anvil:name="no_sessions">No drives yet.</p>
+    </div>
+    <div class="ui-card">
+      <h3>Robot log</h3>
+      <anvil-component type="RepeatingPanel" name="events_panel" prop:item_template="Robo_Presence.Items.EventRow" prop:role='["rb-events"]'></anvil-component>
+      <p class="muted" anvil:name="no_events">Nothing yet.</p>
+    </div>
+  </div>
+</div>

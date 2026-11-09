@@ -195,7 +195,7 @@ def clean(config):
         seen.add(pid)
         drivers = TYPES[typ]["drivers"]
         drv = p.get("driver") if p.get("driver") in drivers else drivers[0]
-        q = {"id": pid, "type": typ, "driver": drv, "label": _txt(p.get("label"), 40) or TYPES[typ]["label"]}
+        q: dict = {"id": pid, "type": typ, "driver": drv, "label": _txt(p.get("label"), 40) or TYPES[typ]["label"]}
         key = _txt(p.get("key"), 1).lower()
         if key and re.match(r"^[a-z0-9]$", key) and key not in "wasdh":
             q["key"] = key

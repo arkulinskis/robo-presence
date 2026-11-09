@@ -1,0 +1,7 @@
+<div class="pb-cat-item">
+  <button type="button" class="pb-cat" anvil:name="pick" anvil:on-dom:click="self.pick_click">
+    <i class="ic" anvil:name="icon"></i>
+    <anvil-component type="Label" name="name_label" prop:role='["strong"]' bind:text="self.item['name']"></anvil-component>
+    <anvil-component type="Label" name="text_label" prop:role='["pb-cat-text"]' bind:text="self.item['text']"></anvil-component>
+  </button>
+</div>

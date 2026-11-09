@@ -1,0 +1,94 @@
+<anvil-form layout="Robo_Presence.Layouts.Shell">
+  <anvil-block slot="content">
+    <div class="ui-wrap">
+      <div class="ui-page-head"><div><h1>Admin</h1><p class="muted">Only admins see this page.</p></div></div>
+      <nav class="ui-tabs">
+        <a href="#admin/overview" anvil:name="tab_overview"><i class="ic ic-grid"></i>Overview</a>
+        <a href="#admin/robots" anvil:name="tab_robots"><i class="ic ic-robot"></i>Robots</a>
+        <a href="#admin/network" anvil:name="tab_network"><i class="ic ic-signal"></i>Network</a>
+        <a href="#admin/feedback" anvil:name="tab_feedback"><i class="ic ic-inbox"></i>Feedback</a>
+        <a href="#admin/users" anvil:name="tab_users"><i class="ic ic-users"></i>Users</a>
+        <a href="#admin/demo" anvil:name="tab_demo"><i class="ic ic-database"></i>Demo data</a>
+      </nav>
+
+      <div anvil:name="overview_part">
+        <div class="ad-stats">
+          <a class="ui-card ui-stat ad-stat" href="#admin/users"><anvil-component type="Label" name="s_users" prop:role='["stat-num"]'></anvil-component><span>people signed up</span></a>
+          <a class="ui-card ui-stat ad-stat" href="#admin/users"><anvil-component type="Label" name="s_admins" prop:role='["stat-num"]'></anvil-component><anvil-component type="Label" name="s_admins_label" prop:role='["fine-print"]'></anvil-component></a>
+          <a class="ui-card ui-stat ad-stat" href="#admin/robots"><anvil-component type="Label" name="s_robots" prop:role='["stat-num"]'></anvil-component><anvil-component type="Label" name="s_robots_label" prop:role='["fine-print"]'></anvil-component></a>
+          <a class="ui-card ui-stat ad-stat" href="#admin/robots"><anvil-component type="Label" name="s_online" prop:role='["stat-num"]'></anvil-component><span>online now</span></a>
+          <a class="ui-card ui-stat ad-stat" href="#admin/robots"><anvil-component type="Label" name="s_drives" prop:role='["stat-num"]'></anvil-component><span>drives this week</span></a>
+          <a class="ui-card ui-stat ad-stat" href="#admin/feedback"><anvil-component type="Label" name="s_feedback" prop:role='["stat-num"]'></anvil-component><span>new feedback</span></a>
+        </div>
+        <anvil-component type="Label" name="demo_line" prop:role='["fine-print", "ad-demo-line"]'></anvil-component>
+      </div>
+
+      <div anvil:name="robots_part">
+        <p class="muted small">Every robot, with its owner and status. Admins never get camera access: robots can be in people's homes.</p>
+        <div anvil:name="robots_list">
+          <div class="ad-table ad-robots-head" aria-hidden="true"><b>Robot</b><b>Owner</b><b>Status</b><b>Brain</b><b>Drives</b></div>
+          <anvil-component type="RepeatingPanel" name="robots_panel" prop:item_template="Robo_Presence.Items.AdminRobotRow"></anvil-component>
+        </div>
+        <div class="ui-empty" anvil:name="no_robots"><i class="ic ic-robot"></i><h2>No robots yet</h2></div>
+      </div>
+
+      <div anvil:name="network_part">
+        <div class="ui-card ui-stack ad-net">
+          <h3>Connection servers</h3>
+          <p class="muted small">Browsers and robots use these to find a path to each other. STUN is enough on most networks. Strict networks (some offices, some mobile carriers) need a <b>TURN relay</b>: add one (urls starting with turn: or turns:, with a username and credential), from your own coturn server or a hosted service.</p>
+          <label class="ui-field"><span>ICE servers <em>(JSON list, sent to every pilot and robot)</em></span>
+            <anvil-component type="TextArea" name="ice_box" prop:height="150" prop:role='["mono-box"]'></anvil-component></label>
+          <div class="ui-grid two">
+            <label class="ui-field"><span>Robot check-in while someone is about to drive <em>(ms)</em></span><anvil-component type="TextBox" name="fast_box" prop:type="number"></anvil-component></label>
+            <label class="ui-field"><span>Robot check-in when idle <em>(ms)</em></span><anvil-component type="TextBox" name="idle_box" prop:type="number"></anvil-component></label>
+          </div>
+          <p class="small muted">Faster check-ins connect pilots sooner but make more server calls (one per robot per check-in).</p>
+          <label class="ui-field"><span>Robot code download <em>(the installer fetches this .tar.gz)</em></span><anvil-component type="TextBox" name="source_box" prop:type="url"></anvil-component></label>
+          <div class="ui-row">
+            <anvil-component type="Button" name="net_save" prop:text="Save" prop:role='["btn", "btn-primary", "ic-check"]'></anvil-component>
+            <anvil-component type="Button" name="net_reset" prop:text="Back to the defaults" prop:role='["btn"]'></anvil-component>
+          </div>
+        </div>
+      </div>
+
+      <div anvil:name="feedback_part">
+        <div class="ui-row ad-filter">
+          <div class="ui-seg">
+            <anvil-component type="Button" name="f_new" prop:text="New" prop:role='["seg"]'></anvil-component>
+            <anvil-component type="Button" name="f_read" prop:text="Read" prop:role='["seg"]'></anvil-component>
+            <anvil-component type="Button" name="f_done" prop:text="Done" prop:role='["seg"]'></anvil-component>
+            <anvil-component type="Button" name="f_all" prop:text="All" prop:role='["seg"]'></anvil-component>
+          </div>
+        </div>
+        <anvil-component type="RepeatingPanel" name="feedback_panel" prop:item_template="Robo_Presence.Items.FeedbackRow" prop:role='["ad-fb"]'></anvil-component>
+        <div class="ui-empty" anvil:name="no_feedback">
+          <i class="ic ic-inbox"></i>
+          <h2>No messages here</h2>
+          <p>New feedback goes to Prepsto (prepsto.com). Older messages and requests from the app show up here.</p>
+        </div>
+      </div>
+
+      <div anvil:name="users_part">
+        <div class="ui-row ad-search">
+          <anvil-component type="TextBox" name="search_box" prop:placeholder="Search by name or email" prop:role='["ad-search-box"]'></anvil-component>
+          <anvil-component type="Button" name="search_button" prop:text="Search" prop:role='["btn", "ic-search"]'></anvil-component>
+          <anvil-component type="Label" name="users_count" prop:role='["fine-print"]'></anvil-component>
+        </div>
+        <div class="ad-table ad-users-head"><b>Name</b><b>Email</b><b>Joined</b><b>Admin</b><b>Active</b></div>
+        <anvil-component type="RepeatingPanel" name="users_panel" prop:item_template="Robo_Presence.Items.UserRow"></anvil-component>
+      </div>
+
+      <div anvil:name="demo_part">
+        <div class="ui-card ui-narrow ad-demo">
+          <h3>Demo data</h3>
+          <p class="muted">Example people and content, so the app never looks empty for the first visitors. Demo rows are flagged, so removing them never touches real data. Once removed, it stays removed until you load it again.</p>
+          <anvil-component type="Label" name="demo_status"></anvil-component>
+          <div class="ui-row">
+            <anvil-component type="Button" name="demo_load_button" prop:text="Load demo data" prop:role='["btn", "btn-primary", "ic-refresh"]'></anvil-component>
+            <anvil-component type="Button" name="demo_remove_button" prop:text="Remove demo data" prop:role='["btn", "btn-danger", "ic-trash"]'></anvil-component>
+          </div>
+        </div>
+      </div>
+    </div>
+  </anvil-block>
+</anvil-form>
