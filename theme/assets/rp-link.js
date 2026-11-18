@@ -1,6 +1,7 @@
 /* rp-link.js (moved unchanged from the JavaScript version's web/pages/_rp_link.html.html)
  _rp_link: WebRTC.
-     RP.connectLive  the pilot's side: offer (video in, two data channels out) -> server -> robot -> answer -> peer to peer.
+     RP.connectLive  the pilot's side: offer (video in, audio in and/or the pilot's voice out, two data channels out)
+                     -> server -> robot -> answer -> peer to peer. link.talk(true|false) = push-to-talk.
      RP.RobotHost    the robot's side in a browser tab (bot.html): calls the bot API like robot/robopresence does,
                      answers pilots' offers with a camera or simulator stream, and feeds their messages to a RobotCore. */
 (function () {
@@ -41,13 +42,16 @@
   }
 
   /* ---------------------------------------------------------------- the pilot */
-  /* opts: {robotId, pass, pilot, ice, audio, onStep(text)} -> Promise of a link like RP.simulator's */
+  /* opts: {robotId, pass, pilot, ice, audio (hear the robot's mic), talk (push-to-talk), onStep(text)} -> Promise of a link like RP.simulator's */
   RP.connectLive = function (opts) {
     var step = opts.onStep || function () {};
     var pc = new RTCPeerConnection({ iceServers: opts.ice || [] });
     var link = { kind: 'live', pc: pc, stream: new MediaStream(), onmessage: null, onclose: null, session: null, closed: false };
     pc.addTransceiver('video', { direction: 'recvonly' });
-    if (opts.audio) pc.addTransceiver('audio', { direction: 'recvonly' });
+    /* One audio line both ways. The pilot's half starts with no track (nothing is sent, no microphone prompt);
+       the first link.talk(true) asks for the microphone and slots it in with replaceTrack (no renegotiation). */
+    var voice = null, mic = null, micAsk = null;
+    if (opts.audio || opts.talk) voice = pc.addTransceiver('audio', { direction: opts.audio && opts.talk ? 'sendrecv' : opts.talk ? 'sendonly' : 'recvonly' });
     var fast = pc.createDataChannel('rp-fast', { ordered: false, maxRetransmits: 0 });
     var rel = pc.createDataChannel('rp');
     var onMsg = function (e) { var m; try { m = JSON.parse(e.data); } catch (x) { return; } if (link.onmessage) link.onmessage(m); };
@@ -62,9 +66,31 @@
     };
     var prev = null;
     link.stats = function () { return readStats(pc, prev).then(function (s) { prev = { bytes: s.bytes, ts: s.ts }; return s; }); };
+    link.canTalk = !!opts.talk;
+    link.talking = false;
+    link.talk = function (on) {
+      if (!opts.talk || !voice || link.closed) return Promise.resolve(false);
+      link.talking = !!on;
+      if (mic) { mic.enabled = link.talking; return Promise.resolve(true); }
+      if (!on) return Promise.resolve(true);
+      if (!micAsk) {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return Promise.reject(new Error('This browser can\'t use a microphone.'));
+        micAsk = navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true }, video: false })
+          .then(function (s) {
+            var t = s.getAudioTracks()[0];
+            if (link.closed) { t.stop(); throw new Error('Closed.'); }
+            return voice.sender.replaceTrack(t).then(function () { mic = t; mic.enabled = link.talking; return true; });
+          }, function (e) {
+            micAsk = null;
+            throw new Error(e && e.name === 'NotAllowedError' ? 'The microphone is blocked. Allow it for this site (the icon in the address bar), then hold Talk again.' : 'No microphone found.');
+          });
+      }
+      return micAsk;
+    };
     link.close = function (stats) {
       if (link.closed) return;
       link.closed = true;
+      if (mic) { try { mic.stop(); } catch (e) {} }
       try { pc.close(); } catch (e) {}
       if (link.session) UI.apiQuiet('drive_end', link.session.session_id, link.session.secret, stats || {}).catch(function () {});
     };
@@ -153,6 +179,7 @@
       var ch = chans.rp; if (ch && ch.readyState === 'open') { try { ch.send(JSON.stringify(msg)); } catch (e) {} } } };
     var sess = { pc: pc, peer: peer, joined: false, close: function () {
       if (sess.closed) return; sess.closed = true;
+      if (sess.voice) { try { sess.voice.srcObject = null; } catch (e) {} }
       try { pc.close(); } catch (e) {}
       if (sess.joined) self.core.leave(peer);
       delete self.sessions[offer.session];
@@ -160,6 +187,13 @@
       if (self.o.onChange) self.o.onChange();
     } };
     this.sessions[offer.session] = sess;
+    pc.ontrack = function (e) {
+      if (e.track.kind !== 'audio' || offer.role === 'viewer' || self.o.talk === false) return;
+      var el = document.createElement('audio');
+      el.autoplay = true; el.srcObject = new MediaStream([e.track]);
+      sess.voice = el;
+      var p = el.play(); if (p && p.catch) p.catch(function () { self.log('Tap the page once so ' + offer.pilot + '\'s voice can play.', 'warn'); });
+    };
     pc.ondatachannel = function (e) {
       chans[e.channel.label] = e.channel;
       e.channel.onmessage = function (m) { self.core.handle(peer, m.data); };

@@ -71,6 +71,7 @@
     music: '<path d="M9 18V5l11-2v13"/><circle cx="6.5" cy="18" r="2.5"/><circle cx="17.5" cy="16" r="2.5"/>',
     robot: '<rect x="5" y="4" width="14" height="3" rx="1"/><circle cx="8.5" cy="11" r="3"/><circle cx="15.5" cy="11" r="3"/><path d="M11.5 11h1M12 14v3M7 17h10l1.5 4h-13z"/>',
     joystick: '<path d="M12 4v9"/><circle cx="12" cy="4.5" r="2.5"/><path d="M5 16h14l-1.5 5h-11z"/><path d="M8 16v-2h8v2"/>',
+    mic: '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21M8.5 21h7"/>',
     wheel: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="2.5"/><path d="M12 3.5v6M12 14.5v6M3.5 12h6M14.5 12h6"/>',
     servo: '<rect x="4" y="9" width="16" height="10" rx="1.5"/><circle cx="9" cy="9" r="3"/><path d="M9 6V3h9"/>',
     slider: '<path d="M4 12h16"/><rect x="11" y="8" width="4" height="8" rx="1"/>',

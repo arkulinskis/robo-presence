@@ -41,7 +41,7 @@ say "Installing system packages (a few minutes the first time)"
 export DEBIAN_FRONTEND=noninteractive
 apt-get update -qq
 apt-get install -y -qq python3-venv python3-pip curl
-for pkg in python3-numpy python3-gpiozero python3-lgpio python3-serial python3-smbus2 python3-picamera2 espeak-ng; do
+for pkg in python3-numpy python3-gpiozero python3-lgpio python3-serial python3-smbus2 python3-picamera2 espeak-ng alsa-utils; do
   if apt-cache show "$pkg" >/dev/null 2>&1; then
     apt-get install -y -qq "$pkg" >/dev/null || echo "   (couldn't install $pkg, carrying on)"
   fi

@@ -88,7 +88,7 @@ def _txt(v, n):
 def preset(name, robot_name="Robot"):
     """A starting config. 'pi': everything wired to the Pi. 'pi_arduino': an Arduino runs the motors and servos.
     'browser': a phone or laptop on the robot is its brain (web/pages/bot.html), with simulated or Arduino parts."""
-    cam = {"source": "auto", "size": "640x480", "fps": 24, "flip": False, "codec": "h264", "audio": False}
+    cam = {"source": "auto", "size": "640x480", "fps": 24, "flip": False, "codec": "h264", "audio": False, "talk": True}
     safety = {"watchdog_ms": 500, "max_sessions": 3}
     pi_sensors = [
         {"id": "cpu_temp", "type": "gauge", "driver": "cpu_temp", "label": "CPU"},
@@ -164,6 +164,7 @@ def clean(config):
         "flip": bool(cam.get("flip")),
         "codec": cam.get("codec") if cam.get("codec") in CODECS else "h264",
         "audio": bool(cam.get("audio")),
+        "talk": bool(cam.get("talk", True)),
         "device": _txt(cam.get("device"), 60) or "/dev/video0",
     }
     ard = config.get("arduino") if isinstance(config.get("arduino"), dict) else {}
@@ -197,7 +198,7 @@ def clean(config):
         drv = p.get("driver") if p.get("driver") in drivers else drivers[0]
         q: dict = {"id": pid, "type": typ, "driver": drv, "label": _txt(p.get("label"), 40) or TYPES[typ]["label"]}
         key = _txt(p.get("key"), 1).lower()
-        if key and re.match(r"^[a-z0-9]$", key) and key not in "wasdh":
+        if key and re.match(r"^[a-z0-9]$", key) and key not in "wasdht":  # t = push-to-talk
             q["key"] = key
         if typ == "drive":
             drives += 1
@@ -347,7 +348,8 @@ def manifest_from_config(config, name="Robot"):
     cam = config.get("camera") or {}
     w, h = (cam.get("size") or "640x480").split("x")
     out = {"protocol": PROTOCOL, "name": name, "preview": True,
-           "camera": {"width": int(w), "height": int(h), "fps": cam.get("fps", 24), "source": cam.get("source", "auto")},
+           "camera": {"width": int(w), "height": int(h), "fps": cam.get("fps", 24), "source": cam.get("source", "auto"),
+                      "audio": bool(cam.get("audio")), "talk": bool(cam.get("talk", True))},
            "controls": [], "sensors": [], "problems": []}
     for p in config.get("parts") or []:
         if p.get("type") not in TYPES:
@@ -364,7 +366,7 @@ def clean_manifest(m):
     cam = m.get("camera") if isinstance(m.get("camera"), dict) else {}
     out["camera"] = {"width": int(_num(cam.get("width"), 0, 4096, 0)), "height": int(_num(cam.get("height"), 0, 4096, 0)),
                      "fps": int(_num(cam.get("fps"), 0, 120, 0)), "source": _txt(cam.get("source"), 30),
-                     "audio": bool(cam.get("audio"))}
+                     "audio": bool(cam.get("audio")), "talk": bool(cam.get("talk"))}
     for key in ("controls", "sensors"):
         items = []
         for c in (m.get(key) if isinstance(m.get(key), list) else [])[:MAX_PARTS + 8]:

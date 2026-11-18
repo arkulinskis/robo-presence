@@ -73,6 +73,7 @@
     });
   };
   RP.BotRunner = function (R, opts) {
+    if (!(this instanceof RP.BotRunner)) return new RP.BotRunner(R, opts);  // Python (Pages/Bot) calls it without new
     var self = this;
     self.R = R; self.opts = opts || {}; self.run = null; self.stream = null; self.label = '';
     var log = function (t, l) { if (self.opts.onLog) self.opts.onLog(String(t), l || 'info'); };
@@ -94,6 +95,7 @@
         return s;
       });
       var core = new RP.RobotCore(specs, { name: R.name, watchdog_ms: (R.config.safety || {}).watchdog_ms || 500 });
+      var camCfg = R.config.camera || {}, talk = camCfg.talk !== false;
       var p = Promise.resolve();
       if (useArd) p = p.then(function () {
         ard = new RP.SerialArduino();
@@ -114,6 +116,11 @@
           .then(function (s) { stream = s; label = (s.getVideoTracks()[0] || {}).label || camMode + ' camera'; });
       });
       p = p.then(function () {
+        // what the cockpit learns from the manifest: the mic it can hear, and push-to-talk out of this device's speaker
+        core.camera = { width: 640, height: 480, fps: camMode === 'sim' ? 30 : 24, source: label || camMode,
+                        audio: !!(stream && stream.getAudioTracks().length), talk: talk };
+      });
+      p = p.then(function () {
         var ardDrive = { l: 0, r: 0, at: 0 };
         core.hw = {
           drive: function (l, r) { var d = core.ofType('drive'); if (ard && d && d.spec.driver === 'arduino') { ardDrive = { l: l, r: r }; ard.send('D ' + Math.round(l * 100) + ' ' + Math.round(r * 100)); } },
@@ -130,7 +137,7 @@
         var resend = setInterval(function () { if (ard && (ardDrive.l || ardDrive.r)) ard.send('D ' + Math.round(ardDrive.l * 100) + ' ' + Math.round(ardDrive.r * 100)); }, 250);
         core.on(function (ev) { if (ev.kind === 'log') log(ev.text, ev.level); if (ev.kind === 'peers') status(); });
         return Promise.resolve(self.opts.claim()).then(function (t) {
-          var host = new RP.RobotHost({ api: R.api_origin, token: t.token, core: core, stream: stream, cameraLabel: label,
+          var host = new RP.RobotHost({ api: R.api_origin, token: t.token, core: core, stream: stream, cameraLabel: label, talk: talk,
             onLog: log, onChange: status, onConfig: function () { log('The parts changed in the website: press Stop and Start to load them.', 'warn'); } });
           self.run = { core: core, host: host, world: world, stream: stream, ard: ard, resend: resend, lock: null };
           return host.start();

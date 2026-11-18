@@ -76,7 +76,8 @@ class Drive(DriveTemplate):
             "robot": r, "mode": "live", "role": d.get("role"),
             "back": "#landing" if token else "#robot/" + r["id"], "backLabel": "Leave" if token else r["name"],
             "live": {"robotId": None if token else r["id"], "pass": token, "pilot": pilot, "ice": d.get("ice_servers"),
-                     "audio": bool(cam.get("audio")), "offline": offline}})
+                     "audio": bool(cam.get("audio")), "talk": bool(cam.get("talk")) and d.get("role") != "viewer",
+                     "offline": offline}})
 
     # ---- guest passes
     def _guest(self, token):

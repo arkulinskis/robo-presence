@@ -1,5 +1,6 @@
-"""One pilot's WebRTC connection (aiortc). The pilot's browser makes the offer (video + audio to receive, two data
-channels); the robot answers with its camera track and talks over the channels. ICE is not trickled: both sides
+"""One pilot's WebRTC connection (aiortc). The pilot's browser makes the offer (video to receive, audio both ways when
+the robot has a microphone and/or push-to-talk, two data channels); the robot answers with its camera track, plays the
+pilot's voice on its speaker (speaker.py) and talks over the channels. ICE is not trickled: both sides
 send complete descriptions, so the server only carries one offer and one answer."""
 import asyncio
 import json
@@ -17,6 +18,7 @@ class Session:
         self.robot, self.media, self.ice, self.codec = robot, media, ice_servers or [], codec
         self.channels = {}
         self.pc = None
+        self.voice = None
         self.closed = asyncio.Event()
 
     def send_text(self, text):
@@ -50,6 +52,17 @@ class Session:
             def on_message(m):
                 if isinstance(m, str):
                     self.robot.handle(self, m)
+
+        @pc.on("track")
+        def on_track(track):
+            if track.kind != "audio":
+                return
+            from . import speaker
+            cam = (getattr(self.robot, "config", None) or {}).get("camera") or {}
+            if self.role == "viewer" or not cam.get("talk", True):
+                self.voice = asyncio.ensure_future(speaker.drain(track))  # viewers watch; they don't talk
+            else:
+                self.voice = asyncio.ensure_future(speaker.play(track, self.pilot))
 
         @pc.on("connectionstatechange")
         async def on_state():
@@ -89,6 +102,8 @@ class Session:
             return
         self.closed.set()
         self.robot.leave(self)
+        if self.voice is not None:
+            self.voice.cancel()
         if self.pc is not None:
             try:
                 await self.pc.close()

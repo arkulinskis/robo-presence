@@ -114,6 +114,11 @@ def pilot_gets(m):
     if s["pan"] or s["tilt"]:
         names = ", ".join((x.get("label") or x.get("id") or "") for x in (s["pan"], s["tilt"]) if x)
         out.append({"icon": "eye", "text": "Look pad, arrow keys and drag-the-picture for the head (%s)" % names, "bad": ""})
+    cam = (m or {}).get("camera") or {}
+    if cam.get("talk"):
+        out.append({"icon": "mic", "text": "Push-to-talk (hold T or the Talk button): your voice comes out of the robot's speaker", "bad": ""})
+    if cam.get("audio"):
+        out.append({"icon": "volume", "text": "Sound from the robot's microphone (speaker button in the cockpit)", "bad": ""})
     for c in s["others"]:
         how = HOW.get(c.get("type"), 'Unknown part type "%s"' % c.get("type"))
         key = " (key %s)" % c["key"].upper() if c.get("key") else ""
@@ -137,7 +142,8 @@ def pilot_gets(m):
 
 def manifest_of_config(cfg):
     """The manifest a parts list describes (the Parts tab's preview before saving)."""
-    man = {"controls": [], "sensors": []}
+    cam = (cfg or {}).get("camera") or {}
+    man = {"controls": [], "sensors": [], "camera": {"audio": bool(cam.get("audio")), "talk": bool(cam.get("talk", True))}}
     for p in (cfg or {}).get("parts") or []:
         d = dict(p)
         if p.get("type") == "custom":

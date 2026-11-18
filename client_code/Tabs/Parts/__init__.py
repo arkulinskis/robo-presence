@@ -33,7 +33,7 @@ class Parts(PartsTemplate):
         self.parts_list.add_event_handler("changed", self._changed)
         for box in (self.cam_source, self.cam_size, self.cam_codec):
             box.add_event_handler("change", self._cam_changed)
-        for box in (self.cam_flip, self.cam_audio):
+        for box in (self.cam_flip, self.cam_audio, self.cam_talk):
             box.add_event_handler("change", self._cam_changed)
         self.cam_fps.add_event_handler("change", self._cam_changed)
 
@@ -68,6 +68,7 @@ class Parts(PartsTemplate):
         self.cam_fps.text = str(cam.get("fps") or 24)
         self.cam_flip.checked = bool(cam.get("flip"))
         self.cam_audio.checked = bool(cam.get("audio"))
+        self.cam_talk.checked = bool(cam.get("talk", True))
         for box, label in ((self.cam_source, "Source"), (self.cam_size, "Size"), (self.cam_codec, "Codec"), (self.cam_fps, "Frames per second")):
             state.set_control_attr(box, "aria-label", label)
         self.parts_list.set(board, cfg.get("parts") or [])
@@ -92,7 +93,8 @@ class Parts(PartsTemplate):
         except ValueError:
             fps = 24
         cam.update({"source": self.cam_source.selected_value, "size": self.cam_size.selected_value, "fps": fps,
-                    "codec": self.cam_codec.selected_value, "flip": bool(self.cam_flip.checked), "audio": bool(self.cam_audio.checked)})
+                    "codec": self.cam_codec.selected_value, "flip": bool(self.cam_flip.checked), "audio": bool(self.cam_audio.checked),
+                    "talk": bool(self.cam_talk.checked)})
         self.cfg["camera"] = cam
 
     # ---- edits

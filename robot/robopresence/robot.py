@@ -24,7 +24,7 @@ import platform
 import socket
 import time
 
-from . import __version__, parts as P
+from . import __version__, parts as P, speaker
 
 log = logging.getLogger("robopresence")
 SENSOR_TYPES = ("gauge", "distance")
@@ -152,7 +152,8 @@ class Robot:
             w, h = 640, 480
         m = {"protocol": 1, "name": self.name, "version": __version__, "model": model_name(),
              "camera": {"width": int(w), "height": int(h), "fps": int(cam.get("fps") or 24),
-                        "source": self.camera_desc or cam.get("source", "auto"), "audio": bool(cam.get("audio"))},
+                        "source": self.camera_desc or cam.get("source", "auto"), "audio": bool(cam.get("audio")),
+                        "talk": bool(cam.get("talk", True)) and speaker.available()},
              "controls": [], "sensors": [], "problems": []}
         for p in self.parts:
             d = p.describe()

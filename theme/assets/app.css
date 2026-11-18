@@ -538,6 +538,25 @@ html.ui-dark .rp-art { filter: drop-shadow(0 0 .6px rgba(237, 231, 214, .55)) dr
 .ck-pad.active i { transition: none; }
 .ck-pad i :is(.ui-ic, .ic) { width: 24px; height: 24px; }
 .ck-pad span { position: absolute; left: 0; right: 0; bottom: -20px; text-align: center; font: 600 .75rem/1 var(--font-mono); letter-spacing: .1em; color: var(--ck-muted); text-shadow: 0 1px 2px #000; }
+/* push-to-talk: a round key between the pads; held = lit, pressed in, ON AIR on the picture */
+.ck-talk { pointer-events: auto; position: relative; align-self: center; width: 88px; height: 88px; border-radius: 50%; padding: 0; cursor: pointer;
+  border: 2px solid rgba(237,231,214,.35); background: rgba(16,18,9,.6); color: var(--ck-ink); touch-action: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+  transition: transform var(--dur-press) var(--ease-out), background-color var(--dur-fast) ease, border-color var(--dur-fast) ease, box-shadow var(--dur-fast) ease; }
+.ck-talk[hidden] { display: none; }
+.ck-deck .ck-talk { margin: 0 auto 0 22px; }  /* wide screens: beside the drive pad, clear of the HUD in the middle */
+.ck-talk i { display: grid; place-items: center; width: 52px; height: 52px; margin: 0 auto; border-radius: 50%; background: #2c3220; border: 3px solid #15170f; box-shadow: 0 3px 0 rgba(0,0,0,.4); }
+.ck-talk i :is(.ui-ic, .ic) { width: 24px; height: 24px; }
+.ck-talk span { position: absolute; left: -20px; right: -20px; bottom: -20px; text-align: center; font: 600 .75rem/1 var(--font-mono); letter-spacing: .1em; color: var(--ck-muted); text-shadow: 0 1px 2px #000; }
+.ck-talk:hover { border-color: rgba(237,231,214,.6); }
+.ck-talk:focus-visible { outline: 2px solid var(--ck-hot); outline-offset: 3px; }
+.ck-talk.down { transform: scale(.96); border-color: var(--ck-hot); background: rgba(240,115,46,.22); box-shadow: 0 0 0 6px rgba(240,115,46,.18); }
+.ck-talk.down i { background: var(--ck-hot); color: #15170f; box-shadow: 0 1px 0 rgba(0,0,0,.4); }
+.ck-talk.down span { color: var(--ck-hot); }
+.ck-onair { position: absolute; top: 44px; left: 12px; display: inline-flex; align-items: center; gap: 6px; padding: 4px 9px; border-radius: 3px; background: rgba(120,40,10,.75);
+  border: 1px solid var(--ck-hot); color: #ffd9c2; font: 600 .78rem/1 var(--font-mono); letter-spacing: .1em; }
+.ck-onair[hidden] { display: none; }
+.ck-onair :is(.ui-ic, .ic) { width: 14px; height: 14px; animation: rp-blink 1s infinite; }
+.ck-tool[hidden] { display: none; }
 .ck-side { background: var(--ck-panel); border-left: 1px solid var(--ck-line); overflow-y: auto; padding: 12px; display: grid; gap: 12px; align-content: start; }
 .ck-estop { width: 100%; min-height: 64px; border: 0; border-radius: 6px; cursor: pointer; padding: 6px; background: repeating-linear-gradient(-45deg, #e9b42c 0 12px, #15170f 12px 24px); }
 .ck-estop b { display: flex; align-items: center; justify-content: center; gap: 10px; height: 52px; border-radius: 4px; background: #c8281a; color: #fff; font: 400 1.5rem/1 var(--font-display); letter-spacing: .08em;
@@ -591,6 +610,8 @@ html.ui-dark .rp-art { filter: drop-shadow(0 0 .6px rgba(237, 231, 214, .55)) dr
   .ck-stage { aspect-ratio: 4 / 3; max-height: 62vh; width: 100%; }
   .ck-deck { position: static; background: #0b0c07; padding: 14px 18px 28px; border-top: 1px solid var(--ck-line); }
   .ck-pad { width: 132px; height: 132px; }
+  .ck-deck .ck-talk { width: 76px; height: 76px; margin: 0; }
+  .ck-talk i { width: 46px; height: 46px; }
   .ck-side { border-left: 0; border-top: 1px solid var(--ck-line); }
   .ck-stats .ck-stat.opt { display: none; }
   .ck-scale-x { width: 70%; }
@@ -607,6 +628,7 @@ html.ui-dark .rp-art { filter: drop-shadow(0 0 .6px rgba(237, 231, 214, .55)) dr
   .ck-tool.opt { display: none; }
   .ck-banner { white-space: normal; width: max-content; max-width: 92%; }
   .ck-wheels { gap: 50px; }
+  .ck-deck:has(.ck-talk:not([hidden])) .ck-pad { width: 118px; height: 118px; }
 }
 @media (max-height: 520px) and (orientation: landscape) {
   .ck { height: 100vh; overflow: hidden; grid-template-rows: auto 1fr; }
@@ -615,6 +637,8 @@ html.ui-dark .rp-art { filter: drop-shadow(0 0 .6px rgba(237, 231, 214, .55)) dr
   .ck-stagewrap { display: grid; }
   .ck-deck { position: absolute; background: none; border: 0; padding: 10px; }
   .ck-pad { width: 112px; height: 112px; }
+  .ck-deck .ck-talk { width: 72px; height: 72px; margin: 0 auto 0 14px; }
+  .ck-talk i { width: 44px; height: 44px; }
   .ck-side { border-left: 1px solid var(--ck-line); border-top: 0; }
 }
 

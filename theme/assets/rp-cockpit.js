@@ -3,6 +3,8 @@
      wheels -> a joystick (+ WASD, gamepad left stick); a head (pan + tilt servos) -> a look pad, drag on the video,
      arrow keys, gamepad right stick, HUD scales; every other part -> a control in the side panel (switch, hold
      button, slider, voice box, choice chips; unknown types get a "needs a newer cockpit" card); sensors -> gauges.
+     manifest.camera.talk (live only) -> a hold-to-talk button + the T key: the pilot's voice plays on the robot's speaker;
+     manifest.camera.audio -> a speaker button in the top bar to hear the robot's microphone (off at the start).
      When the robot sends a new manifest (parts changed), the controls redraw. Works the same for the simulator
      (RP.simulator) and a real robot (RP.connectLive): both give a "link" with send / onmessage / stream / stats / close. */
 (function () {
@@ -23,7 +25,7 @@
     var drive = { pad: [0, 0], keys: [0, 0], pad2: [0, 0], sent: [0, 0], seq: 0, zeroes: 0 };
     var keys = {}, held = {}, timers = [], rtt = null, pingN = 0, pings = {}, startedAt = 0, statSum = { rtt: [], fps: [], kbps: [] };
     var recorder = null, recChunks = [], recStart = 0, alive = true, gpIndex = null, gpPrev = [];
-    var bolts = 0;
+    var bolts = 0, talk = { down: false, src: null, said: false };
 
     view.innerHTML = '<div class="ck" data-mode="' + mode + '">' +
       '<div class="ck-bar">' +
@@ -33,6 +35,7 @@
         '<div class="ck-stats"><span class="ck-stat" data-stat="rtt">RTT <b>–</b></span><span class="ck-stat" data-stat="fps"><b>–</b> fps</span>' +
           '<span class="ck-stat opt" data-stat="kbps"><b>–</b> kbps</span><span class="ck-stat opt" data-stat="path"><b>–</b></span></div>' +
         '<div class="ck-tools">' +
+          '<button class="ck-tool" data-act="sound" title="Hear the robot" aria-label="Hear the robot\'s microphone" aria-pressed="false" hidden>' + UI.icon('volume') + '</button>' +
           '<button class="ck-tool" data-act="snap" title="Snapshot (P)" aria-label="Save a snapshot">' + UI.icon('snapshot') + '</button>' +
           '<button class="ck-tool opt" data-act="rec" title="Record a clip" aria-label="Record a clip">' + UI.icon('record') + '</button>' +
           '<button class="ck-tool opt" data-act="full" title="Full screen (F)" aria-label="Full screen">' + UI.icon('fullscreen') + '</button>' +
@@ -49,6 +52,7 @@
             '<div class="ck-prox" data-prox hidden></div>' +
             '<div class="ck-hudsens" data-hudsens></div>' +
             '<div class="ck-rec" data-recbadge hidden>● REC <span>0:00</span></div>' +
+            '<div class="ck-onair" data-onair hidden>' + UI.icon('mic') + ' ON AIR</div>' +
             '<div class="ck-ticker" data-ticker></div>' +
             '<div class="ck-banner" data-banner hidden></div>' +
           '</div><div class="ck-flash" data-flash></div>' +
@@ -56,6 +60,7 @@
         '</div>' +
         '<div class="ck-deck" data-deck>' +
           '<div class="ck-pad" data-pad="drive" aria-label="Drive joystick"><i>' + UI.icon('wheel') + '</i><span>DRIVE · WASD</span></div>' +
+          '<button type="button" class="ck-talk" data-talk aria-label="Hold to talk through the robot (T)" aria-pressed="false" hidden><i>' + UI.icon('mic') + '</i><span>TALK · T</span></button>' +
           '<div class="ck-pad look" data-pad="look" aria-label="Look around"><i>' + UI.icon('eye') + '</i><span>LOOK · ARROWS</span></div>' +
         '</div></div>' +
         '<aside class="ck-side" data-side></aside>' +
@@ -107,6 +112,10 @@
       Q('[data-scale="x"]').hidden = !split.pan;
       Q('[data-scale="y"]').hidden = !split.tilt;
       Q('[data-wheels]').hidden = !split.drive;
+      var cam = (manifest && manifest.camera) || {};
+      Q('[data-talk]').hidden = !canTalk();
+      Q('[data-act="sound"]').hidden = !(mode === 'live' && cam.audio);
+      if (!canTalk()) talkUp();
       if (viewer) side.querySelectorAll('.ck-switch, .ck-hold, .ck-range, .ck-say button, .ck-say input, [data-phrase], [data-choice], [data-act="home"]').forEach(function (el) { el.disabled = true; });
       logLines.forEach(function (l) { addLogEl(l); });
       applyValues();
@@ -116,6 +125,7 @@
       var rows = [];
       if (split.drive) rows.push(['<kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd>', 'drive'], ['<kbd>1</kbd><kbd>2</kbd><kbd>3</kbd>', 'gear']);
       if (split.pan || split.tilt) rows.push(['<kbd>←</kbd><kbd>↑</kbd><kbd>→</kbd><kbd>↓</kbd>', 'look'], ['<kbd>H</kbd>', 'head home']);
+      if (canTalk()) rows.push(['<kbd>T</kbd>', 'hold: talk through the robot']);
       rows.push(['<kbd>Space</kbd>', 'emergency stop']);
       split.others.forEach(function (c) { if (c.key) rows.push(['<kbd>' + esc(c.key.toUpperCase()) + '</kbd>', (c.type === 'button' ? 'hold: ' : '') + (c.label || c.id)]); });
       rows.push(['<kbd>P</kbd>', 'snapshot'], ['<kbd>F</kbd>', 'full screen']);
@@ -297,6 +307,7 @@
         else if (act === 'home') homeHead();
         else if (act === 'seat') send({ t: 'seat' });
         else if (act === 'snap') snapshot();
+        else if (act === 'sound') toggleSound(a);
         else if (act === 'rec') toggleRec(a);
         else if (act === 'full') fullscreen();
         else if (act === 'help') help();
@@ -338,6 +349,39 @@
     ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (ev) {
       view.addEventListener(ev, function (e) { var b = e.target.closest && e.target.closest('[data-hold]'); if (b) holdUp(b.getAttribute('data-hold'), b); }, true);
     });
+    /* push-to-talk: the link owns the microphone (asked for on the first press); here only down / up and the looks */
+    function canTalk() { return mode === 'live' && !viewer && !!(manifest && manifest.camera && manifest.camera.talk) && (!link || !!link.canTalk); }
+    function talkLook(on) {
+      var b = Q('[data-talk]'), badge = Q('[data-onair]');
+      if (b) { b.classList.toggle('down', on); b.setAttribute('aria-pressed', String(on)); }
+      if (badge) badge.hidden = !on;
+    }
+    function talkDown(src) {
+      if (talk.down || !link || !link.talk || !canTalk()) return;
+      talk.down = true; talk.src = src; talkLook(true);
+      link.talk(true).then(function (ok) {
+        if (ok && !talk.down) link.talk(false);       // let go while the browser was still asking
+        if (ok && talk.down && !talk.said) { talk.said = true; log('Talking through the robot. Let go to stop.', 'ok'); }
+      }, function (e) { talk.down = false; talkLook(false); UI.toast(e.message, 'error'); log(e.message, 'warn'); });
+    }
+    function talkUp(src) {
+      if (!talk.down || (src && talk.src && src !== talk.src)) return;
+      talk.down = false; talk.src = null; talkLook(false);
+      if (link && link.talk) link.talk(false);
+    }
+    var talkBtn = Q('[data-talk]');
+    talkBtn.addEventListener('pointerdown', function (e) { e.preventDefault(); try { talkBtn.setPointerCapture(e.pointerId); } catch (x) {} talkDown('pointer'); });
+    ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function (ev) { talkBtn.addEventListener(ev, function () { talkUp('pointer'); }); });
+    talkBtn.addEventListener('contextmenu', function (e) { e.preventDefault(); });
+    talkBtn.addEventListener('keydown', function (e) { if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); e.stopPropagation(); talkDown('button'); } });
+    talkBtn.addEventListener('keyup', function (e) { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); talkUp('button'); } });
+    function toggleSound(btn) {
+      var on = video.muted;
+      video.muted = !on;
+      btn.setAttribute('aria-pressed', String(on)); btn.classList.toggle('on', on);
+      if (on) { var p = video.play(); if (p && p.catch) p.catch(function () {}); }
+      log(on ? 'Robot sound on.' : 'Robot sound off.', 'info');
+    }
     function setGear(i) { gear = clamp(i, 0, 2); UI.store.set('gear', gear); side.querySelectorAll('[data-gear]').forEach(function (b) { b.classList.toggle('on', +b.getAttribute('data-gear') === gear); }); }
 
     /* ------------------------------------------------------------ keyboard */
@@ -356,6 +400,7 @@
         if (down && code.indexOf('Arrow') === 0) syncHeadFromRobot();
         keys[code] = down; keyDrive(); return;
       }
+      if (k === 't' && canTalk()) { e.preventDefault(); if (!down) talkUp('key'); else if (!e.repeat) talkDown('key'); return; }
       if (!down) { var p0 = partForKey(k); if (p0 && p0.type === 'button') holdUp(p0.id, side.querySelector('[data-hold="' + p0.id + '"]')); return; }
       if (e.repeat) return;
       if (code === 'Space') { e.preventDefault(); stopAll(); return; }
@@ -372,7 +417,7 @@
     }
     window.addEventListener('keydown', onKey);
     window.addEventListener('keyup', onKey);
-    function blur() { keys = {}; keyDrive(); drive.pad = [0, 0]; Object.keys(held).forEach(function (id) { holdUp(id, null); }); }
+    function blur() { keys = {}; keyDrive(); drive.pad = [0, 0]; Object.keys(held).forEach(function (id) { holdUp(id, null); }); talkUp(); }
     window.addEventListener('blur', blur);
 
     /* ------------------------------------------------------------ gamepad */
@@ -433,6 +478,7 @@
         keyRows().map(function (r) { return '<span>' + r[0] + '</span><span>' + esc(r[1]) + '</span>'; }).join('') + '</div>' +
         '<h3 style="margin-top:18px">Touch and mouse</h3><p class="muted">Left pad: drive (push further to go faster). Right pad: look around. Or drag the picture to aim the camera; double-click it to bring the head home.</p>' +
         '<h3>Gamepad</h3><p class="muted">Left stick drives, right stick looks. A = ' + esc((firstOf('button') || {}).label || 'first button') + ', B = emergency stop, X = ' + esc((firstOf('toggle') || {}).label || 'first switch') + ', Y = head home, LB / RB = gear.</p>' +
+        (canTalk() ? '<h3>Talk</h3><p class="muted">Hold T or the round Talk button and speak: your voice comes out of the robot\'s speaker. The first time, your browser asks to use the microphone. Let go and the robot hears nothing.</p>' : '') +
         '<h3>Safety</h3><p class="muted">The robot stops its wheels by itself when it hasn\'t heard from you for half a second, and whenever you leave. Space or the STOP button stops it at once.</p>');
     }
 
@@ -473,7 +519,7 @@
         if (!alive) { l.close(); return; }
         link = l; startedAt = Date.now();
         link.onmessage = onMessage;
-        link.onclose = function (why) { if (!alive) return; link = null; showError(why === 'failed' ? 'The connection dropped. The robot may have lost its Wi-Fi.' : 'The connection closed.'); };
+        link.onclose = function (why) { if (!alive) return; talkUp(); link = null; showError(why === 'failed' ? 'The connection dropped. The robot may have lost its Wi-Fi.' : 'The connection closed.'); };
         video.srcObject = link.stream;
         var p = video.play(); if (p && p.catch) p.catch(function () {});
         return link.open().then(function () {
@@ -482,6 +528,7 @@
           log(mode === 'live' ? 'Connected peer to peer. Video and controls go straight between you and the robot.' : 'Simulator running. Drive around the garage!', 'ok');
           if (mode === 'demo') log('This showroom robot isn\'t plugged in, so you\'re driving the simulator with its parts.', 'info');
           drawBanner();
+          Q('[data-talk]').hidden = !canTalk();
         });
       }).catch(function (e) { if (alive) showError(e && e.message || 'Something went wrong.'); });
     }
@@ -500,7 +547,7 @@
     drawSide();
     var ready = start();
     window.RP_COCKPIT = { state: function () { return { values: values, sensors: sensors, seat: seat, me: me, rtt: rtt, link: !!link, manifest: manifest, gear: gear, head: { pan: head.pan, tilt: head.tilt }, bolts: bolts, log: logLines.map(function (l) { return l.text; }) }; },
-      link: function () { return link; }, keys: keys, drive: drive };
+      link: function () { return link; }, keys: keys, drive: drive, talk: talk, talkDown: talkDown, talkUp: talkUp };
     return {
       ready: ready,
       destroy: function () {
@@ -518,13 +565,13 @@
 })();
 /* RP.openCockpit(el, o): the cockpit for the Forms version's Pages/Drive (Components/Cockpit), with plain-data options so
    Python never hands functions over. o = {robot, mode: 'sim'|'demo'|'live', role, back, backLabel,
-   sim: {manifest, pilot, label}  or  live: {robotId, pass, pilot, ice, audio, offline: "message if the robot is offline"}}.
+   sim: {manifest, pilot, label}  or  live: {robotId, pass, pilot, ice, audio, talk, offline: "message if the robot is offline"}}.
    Returns RP.cockpit's {ready, destroy}. */
 window.RP.openCockpit = function (el, o) {
   var RP = window.RP;
   var connect = o.live ? function (step) {
     if (o.live.offline) return Promise.reject(new Error(o.live.offline));
-    return RP.connectLive({ robotId: o.live.robotId || null, pass: o.live.pass || null, pilot: o.live.pilot || null, ice: o.live.ice, audio: !!o.live.audio, onStep: step });
+    return RP.connectLive({ robotId: o.live.robotId || null, pass: o.live.pass || null, pilot: o.live.pilot || null, ice: o.live.ice, audio: !!o.live.audio, talk: !!o.live.talk, onStep: step });
   } : function () {
     return RP.simulator((o.sim || {}).manifest || null, { pilot: (o.sim || {}).pilot || 'You', label: (o.sim || {}).label || 'SIM CAM' });
   };

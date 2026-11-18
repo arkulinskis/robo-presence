@@ -408,6 +408,20 @@ R.ice_servers(); assert len(_http.CALLS) == n_calls + 1, "relay login is cached,
 _sec.SECRETS.pop("cf_turn_key_id"); _sec.SECRETS.pop("cf_turn_api_token"); _http.REPLIES.pop("https://rtc.live.cloudflare.com/")
 T.app_settings.get(key="turn_cache").delete()
 
+# ---------------------------------------------------------------------------------- push-to-talk (camera.talk)
+P = M["Parts"]
+assert P.preset("pi")["camera"]["talk"] is True, "new robots have push-to-talk on"
+c, probs = P.clean(dict(P.preset("pi"), camera={"source": "auto"}))
+assert c["camera"]["talk"] is True, "configs saved before push-to-talk default to on"
+c, probs = P.clean(dict(P.preset("pi"), camera={"talk": False}))
+assert c["camera"]["talk"] is False
+assert P.manifest_from_config(P.preset("pi"))["camera"]["talk"] is True, "offline preview shows Talk"
+assert P.clean_manifest({"camera": {"talk": True}, "controls": []})["camera"]["talk"] is True
+assert P.clean_manifest({"camera": {}, "controls": []})["camera"]["talk"] is False, "older robot code (no speaker support): no Talk button"
+part = dict(P.preset("pi")["parts"][3], key="t")
+c, probs = P.clean(dict(P.preset("pi"), parts=[part]))
+assert "key" not in c["parts"][0], "T is the push-to-talk key"
+
 # ---------------------------------------------------------------------------------- Privacy & Terms
 if "legal_server" in M:
     as_user(ana)
