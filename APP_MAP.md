@@ -6,17 +6,20 @@
 around them with an offset instead of whole files.
 
 **What it is:** Build a camera robot on wheels with a Raspberry Pi, an Arduino or an old phone, install it with one command, and drive it live from any browser over WebRTC.
-**Live:** https://robo-presence.anvil.app · **Repo:** github.com/arkulinskis/robo-presence · **Layout:** classic Anvil repo with a JavaScript front end (not native Forms yet) · **Deploy:** master
+**Live:** https://robo-presence.anvil.app · **Repo:** github.com/arkulinskis/robo-presence · **Layout:** native Anvil Forms · **Deploy:** master
 **Guide** (workflow, design rules, product knowledge): `robo-presence/.claude/skills/robopresence/SKILL.md`
 
 ## How to change it
 
-- This folder **is** the Anvil repo. The front end is JavaScript in `theme/assets/`, started by the client form(s) below;
-  the server is `server_code/`.
-- **New server function**: `@anvil.server.callable` in `server_code`; the JavaScript reaches it through the form's bridge (see *Client side*).
-- **New table/column**: `anvil.yaml` → `db_schema` (the user accepts Anvil's Schema Mismatch alert).
-- **Check**: `python -I APP_MAKER/tools/gitapp_check.py <key>`; server tests: `python -I APP_MAKER/tools/gitapp_test.py`.
-- **Deploy**: commit as arkulinskis (+ Co-Authored-By) and `git push origin master` (pull first: Anvil commits too).
+- **New page**: copy a similar `client_code/Pages/<Name>/` (form_template.html + __init__.py), register it in
+  `client_code/router.py` (`PAGES`, `_form()`, and `NAV` for the menu). Address = `#name/arg`.
+- **New list**: a RepeatingPanel in the page template + `client_code/Items/<Name>/`. **Dialog**: `client_code/Dialogs/<Name>/` opened with `alert(...)`.
+- **New server function**: `@anvil.server.callable` in the matching `server_code` module (see *Server*), called with `state.call("name", ...)`.
+- **New table/column**: `anvil.yaml` → `db_schema` (the user accepts Anvil's Schema Mismatch alert); update the server-test mock.
+- **Drawing/media/canvas**: a JavaScript engine in `theme/assets/` wrapped by a Python module or a `Components/` form.
+- **Styles**: `theme/assets/app.css` (colour tokens at the top; rules in APP_MAKER/design/README.md).
+- **Check**: `python tools/check.py` → ALL CHECKS PASSED; UI: `python -I tools/ui_test.py` (Docker Desktop running).
+- **Deploy**: commit as arkulinskis (+ Co-Authored-By) and `git push` (master unless apps.json says branch-first).
 - **Footer** must keep: Submit feedback (Prepsto), Privacy & Terms, Contact developer (arkvital.com), Parent company (addanapp.com).
 - **After any change**: `python -I C:/Users/arkvi/Documents/CLAUDE/APP_MAKER/standard/app_map.py robopresence` refreshes this map.
 
@@ -51,9 +54,19 @@ around them with an offset instead of whole files.
 - Pages/Bot calls `RP.BotRunner(...)` from Python without `new`: the constructor guards for it (it was broken before 2026-11-18).
 <!-- /NOTES -->
 
-## Addresses seen in the JavaScript
+## Pages (`client_code/router.py`)
 
-`#drive`
+| Address | Who | Form | Lines py/html | Server calls | Links to |
+|---|---|---|---|---|---|
+| #landing | anyone | Pages/Landing | 31/32 | – | #auth #drive |
+| #auth | guest | Pages/Auth | 134/45 | – | #auth #landing |
+| #garage | user | Pages/Garage | 41/46 | get_garage | #drive |
+| #robot | user | Pages/Robot | 126/46 | get_robot, robot_status | #bot #drive #garage #robot |
+| #drive | anyone | Pages/Drive | 130/21 | drive_open, get_robot, pass_info | #drive #garage |
+| #bot | user | Pages/Bot | 127/60 | get_robot, tab_claim | #garage |
+| #guide | anyone | Pages/Guide | 54/45 | – | #auth #guide |
+| #profile | user | Pages/Profile | 61/43 | update_profile | #admin #landing |
+| #admin | admin | Pages/Admin | 159/96 | admin_overview, admin_robots, demo_load, demo_remove, get_network, list_feedback, list_users, set_network | #admin |
 
 ## Server (`server_code/`)
 
@@ -176,58 +189,61 @@ Callables with no literal client call (admin/tests/dynamic names, or dead): `adm
 
 ## Client side
 
-- `client_code/auth.py` (93 lines): Sign in, create an account, reset a password, Continue with Google, sign out. · _problem L26, _signed_in L33, sign_in L41, sign_up L49, reset L60, _google_step_done L68, google L77, sign_out L89
-- `client_code/Components/__init__.py` (3 lines): Reusable custom components (Forms with custom_component: true in their frontmatter). They appear in… · 
-- `client_code/Components/CmdBox/__init__.py` (44 lines) · CmdBox L7
-- `client_code/Components/Cockpit/__init__.py` (33 lines) · Cockpit L8
-- `client_code/Components/Lamp/__init__.py` (34 lines) · Lamp L7
-- `client_code/Components/PartsList/__init__.py` (32 lines) · PartsList L7
-- `client_code/Components/RobotArt/__init__.py` (90 lines) · RobotArt L7
-- `client_code/Components/SimMini/__init__.py` (30 lines) · SimMini L7
-- `client_code/Components/Swatches/__init__.py` (47 lines) · Swatches L10, _nodes L40, _loose L45
-- `client_code/Dialogs/__init__.py` (3 lines): Dialog Forms, shown with alert(Form(...), buttons=[], role="app-dialog"). Each closes itself with s… · 
-- `client_code/Dialogs/NewRobot/__init__.py` (53 lines) · NewRobot L9, _nodes L46, _loose L51
-- `client_code/Items/__init__.py` (2 lines): RepeatingPanel item templates: one small Form per repeated thing (a card in a list, a row in a tabl… · 
-- `client_code/Items/AdminRobotRow/__init__.py` (20 lines) · AdminRobotRow L7
-- `client_code/Items/BotPart/__init__.py` (16 lines) · BotPart L7
-- `client_code/Items/CatalogItem/__init__.py` (16 lines) · CatalogItem L6
-- `client_code/Items/Chip/__init__.py` (12 lines) · Chip L6
-- `client_code/Items/EventRow/__init__.py` (20 lines) · EventRow L10
-- `client_code/Items/FeedbackRow/__init__.py` (45 lines) · FeedbackRow L7
-- `client_code/Items/GaugeRow/__init__.py` (26 lines) · GaugeRow L7
-- `client_code/Items/GetRow/__init__.py` (13 lines) · GetRow L6
-- `client_code/Items/KvRow/__init__.py` (11 lines) · KvRow L6
-- `client_code/Items/LogLine/__init__.py` (13 lines) · LogLine L6
-- `client_code/Items/NavLink/__init__.py` (15 lines) · NavLink L7
-- `client_code/Items/PassRow/__init__.py` (30 lines) · PassRow L7
-- `client_code/Items/RobotCard/__init__.py` (49 lines) · RobotCard L9
-- `client_code/Items/SessionRow/__init__.py` (19 lines) · SessionRow L7
-- `client_code/Items/ShareRow/__init__.py` (28 lines) · ShareRow L7
-- `client_code/Items/UserRow/__init__.py` (28 lines) · UserRow L7
-- `client_code/Layouts/__init__.py` (2 lines): Layout forms: the frame around every page. · 
-- `client_code/Layouts/Shell/__init__.py` (93 lines) · Shell L13
-- `client_code/legal.py` (92 lines): Privacy & Terms: connects the shared LegalKit page (legal-kit.js) to this app's server. · _kit L20, _accept L27, setup L36, refresh L50, refresh_soon L64, signed_out L72, open L78, consent_field L84, consent_ok L89
-- `client_code/Pages/__init__.py` (2 lines): One Form per page. router.py opens them for the #page/args addresses; each uses Layouts.Shell. · 
-- `client_code/Pages/Admin/__init__.py` (159 lines) · Admin L11
-- `client_code/Pages/Auth/__init__.py` (134 lines) · Auth L14
-- `client_code/Pages/Bot/__init__.py` (127 lines) · Bot L11
-- `client_code/Pages/Drive/__init__.py` (130 lines) · Drive L10
-- `client_code/Pages/Garage/__init__.py` (41 lines) · Garage L7
-- `client_code/Pages/Guide/__init__.py` (54 lines) · Guide L11, _nodes L47, _loose L52
-- `client_code/Pages/Landing/__init__.py` (31 lines) · Landing L11
-- `client_code/Pages/Profile/__init__.py` (61 lines) · Profile L7
-- `client_code/Pages/Robot/__init__.py` (126 lines) · Robot L12
-- `client_code/router.py` (157 lines): Page addresses: #name/arg1/arg2 -> a page Form (open_form), with sign-in rules. Same addresses as t… · _form L32, nav_links L62, parse L69, href L75, home_page L80, show L84, go L120, replace L129, after_sign_in L134, remember_after L144, _on_hash L148, start L152
-- `client_code/rp.py` (226 lines): Robo Presence's JavaScript engines (theme/assets/rp-*.js, window.RP) seen from Python, and the smal… · loose L35, py_value L40, js_value L47, type_icon L52, lamp L63, art L74, split L80, pilot_gets L109, manifest_of_config L143, fmt_dt L155, fmt_date L160, dur L164, slug L175, copy L179, _bridge L184, _toast L205, _confirm L209, _go L215, setup L219
-- `client_code/session_guard.py` (220 lines): Quiet recovery when Anvil's server session has expired (APP_MAKER standard, 2026-11-14). · _now L32, _store L36, is_expired L50, _fields L59, _label L69, _save_fields L78, _restore_fields L91, reload_page L124, _reloaded_recently L137, _report L142, _on_error L159, check_now L167, _back L182, _on_visibility L193, start L200
-- `client_code/startup.py` (19 lines): The app starts here (anvil.yaml: startup module). One server call to learn who is signed in (Anvil'… · 
-- `client_code/state.py` (196 lines): App-wide client state and small helpers every form uses. · me L23, set_me L27, is_admin L31, toast L36, call L45, call_quiet L55, set_attr L63, store_get L73, store_set L78, theme L82, set_theme L86, plural L90, initials L94, short_date L106, month_year L114, ago L121, feedback L136, control L146, focus L154, set_control_attr L159, heading L168, live L174, focus_key L179, refocus L186
-- `client_code/Tabs/__init__.py` (0 lines) · 
-- `client_code/Tabs/Install/__init__.py` (92 lines) · Install L7
-- `client_code/Tabs/Log/__init__.py` (19 lines) · Log L6
-- `client_code/Tabs/Overview/__init__.py` (81 lines) · Overview L7
-- `client_code/Tabs/Parts/__init__.py` (184 lines) · Parts L16
-- `client_code/Tabs/Sharing/__init__.py` (63 lines) · Sharing L8
+**Components/**
+- `Components/CmdBox` (44/25): A command line with Copy (the toast says "<what> to the clipboard").
+- `Components/Cockpit` (33/13): RP.openCockpit(host, options) on start(); destroy() stops the link, the keys and the game…
+- `Components/Lamp` (34/18): A status lamp. show_robot(r) picks the colour and words from a robot dict (online, demo,…
+- `Components/PartsList` (32/13): The part cards. The config dict handed to set() is copied into JS; read() gives the parts…
+- `Components/RobotArt` (90/40): The robot picture (RP.robotArt). Every property redraws it.
+- `Components/SimMini` (30/8): RP.miniSim(box) while shown; stopped when the page goes.
+- `Components/Swatches` (47/21): Six paint swatches (radio buttons in one group per instance).
+
+**Dialogs/**
+- `Dialogs/NewRobot` (53/23): New robot: a name, its brain (preset) and its paint. Opens the new robot's Install tab (O… · calls create_robot
+
+**Items/**
+- `Items/AdminRobotRow` (20/13): A robot in Admin -> Robots: item = Admin.admin_robots row (no camera access, only names a…
+- `Items/BotPart` (16/1): A part in robot mode: item = {p: the part, how: what runs it here, ok: runs in a browser}.
+- `Items/CatalogItem` (16/7): A part you can add (RP.CATALOG): item = {index, icon, name, text}. Raises x-add on its pa…
+- `Items/Chip` (12/1): A small parts chip: item = {icon, text}.
+- `Items/EventRow` (20/1): A robot log line: item = {kind, text, at}.
+- `Items/FeedbackRow` (45/20): Admin → Feedback: one older message (new feedback goes to Prepsto). Status buttons and De… · calls delete_feedback, set_feedback_status
+- `Items/GaugeRow` (26/7): A sensor gauge: item = {s: the sensor's manifest entry, v: its latest value}. Same maths…
+- `Items/GetRow` (13/1): One line of "What the pilot gets": item = {icon, text, bad}.
+- `Items/KvRow` (11/1): A fact: item = {k, v}.
+- `Items/LogLine` (13/1): A line of robot mode's log: item = {text, level}; warnings and stops are red.
+- `Items/NavLink` (15/1): A main-menu link (header and phone tab bar). item = {page, label, icon, on} from router.N…
+- `Items/PassRow` (30/8): A guest pass: item = {id, label, role, expires, uses, last_used, active}. · calls pass_revoke
+- `Items/RobotCard` (49/15): A robot in the garage (yours, shared with you, or a showroom robot): item = get_garage's…
+- `Items/SessionRow` (19/10): A drive: item = Robots._session (pilot, role, state, created, duration_s, rtt_ms, fps, kb…
+- `Items/ShareRow` (28/11): Someone the robot is shared with: item = {id, email, role, joined, name}. · calls share_remove
+- `Items/UserRow` (28/7): Admin → Users: one person with the Admin and Active switches (saved straight away). · calls set_admin, set_enabled
+
+**Layouts/**
+- `Layouts/Shell` (93/74): The frame around every page: header (menu for members, Sign in / Get started for visitors…
+
+**Tabs/**
+- `Tabs/Install` (92/99): The Install tab (owner): flash, ssh, the one-line install with a live "waiting for the ro… · calls new_install_code
+- `Tabs/Log` (19/17): The Log tab: drives (who, when, how long, round trip, video) and the robot's own events.
+- `Tabs/Overview` (81/35): The robot page's Overview tab: what the robot reports (= what the pilot gets), live senso… · calls delete_robot, unpair_robot, update_robot
+- `Tabs/Parts` (184/54): The Parts tab (the builder). Owners: brain, camera, the part cards (Components/PartsList,… · calls check_config, reset_config, save_config
+- `Tabs/Sharing` (63/34): The Sharing tab (owner): invite pilots and viewers by email, and guest passes (a link tha… · calls pass_create, share_add
+
+**Page internals** (methods of the bigger pages)
+- `Pages/Admin`: __init__ L16, _overview L31, _robots L42, _network L49, net_reset_click L66, net_save_click L73, _feedback L88, _set_filter L100, f_new_click L105, f_read_click L109, f_done_click L113, f_all_click L117, _feedback_changed L120, _users L124, search_box_pressed_enter L130, search_button_click L134, _demo L138, demo_load_button_click L145, demo_remove_button_click L153
+- `Pages/Auth`: __init__ L19, _a11y L26, _draw L36, _say L53, mode_click L59, show_button_click L66, name_box_pressed_enter L72, email_box_pressed_enter L76, password_box_pressed_enter L80, submit_button_click L84, google_button_click L121, form_show L132
+- `Pages/Bot`: __init__ L17, _state L45, cam_click L49, _show_cam L55, _log L60, _status L66, _claim L78, start_button_click L86, stop_button_click L111, stop L114, leave L124
+- `Pages/Drive`: __init__ L20, form_show L30, _ready L53, _sim L56, _live L65, _guest L83, _done L108, guest_name_pressed_enter L113, start_button_click L117, leave L128
+- `Pages/Robot`: __init__ L18, owner L41, tabs L44, set_robot L47, draw L52, draw_hero L66, drive_click L90, _tick L97, leave L121
+
+**Client modules** (`client_code/*.py`)
+- `auth.py` (93 lines): Sign in, create an account, reset a password, Continue with Google, sign out. · _problem L26, _signed_in L33, sign_in L41, sign_up L49, reset L60, _google_step_done L68, google L77, sign_out L89
+- `legal.py` (92 lines): Privacy & Terms: connects the shared LegalKit page (legal-kit.js) to this app's server. · _kit L20, _accept L27, setup L36, refresh L50, refresh_soon L64, signed_out L72, open L78, consent_field L84, consent_ok L89
+- `router.py` (157 lines): Page addresses: #name/arg1/arg2 -> a page Form (open_form), with sign-in rules. Same addresses as t… · _form L32, nav_links L62, parse L69, href L75, home_page L80, show L84, go L120, replace L129, after_sign_in L134, remember_after L144, _on_hash L148, start L152
+- `rp.py` (226 lines): Robo Presence's JavaScript engines (theme/assets/rp-*.js, window.RP) seen from Python, and the smal… · loose L35, py_value L40, js_value L47, type_icon L52, lamp L63, art L74, split L80, pilot_gets L109, manifest_of_config L143, fmt_dt L155, fmt_date L160, dur L164, slug L175, copy L179, _bridge L184, _toast L205, _confirm L209, _go L215, setup L219
+- `session_guard.py` (220 lines): Quiet recovery when Anvil's server session has expired (APP_MAKER standard, 2026-11-14). · _now L32, _store L36, is_expired L50, _fields L59, _label L69, _save_fields L78, _restore_fields L91, reload_page L124, _reloaded_recently L137, _report L142, _on_error L159, check_now L167, _back L182, _on_visibility L193, start L200
+- `startup.py` (19 lines): The app starts here (anvil.yaml: startup module). One server call to learn who is signed in (Anvil'… · 
+- `state.py` (196 lines): App-wide client state and small helpers every form uses. · me L23, set_me L27, is_admin L31, toast L36, call L45, call_quiet L55, set_attr L63, store_get L73, store_set L78, theme L82, set_theme L86, plural L90, initials L94, short_date L106, month_year L114, ago L121, feedback L136, control L146, focus L154, set_control_attr L159, heading L168, live L174, focus_key L179, refocus L186
 
 **JavaScript** (function index)
 - `theme/assets/rp-bot.js` (185 lines): RP.SerialArduino L7, RP.SerialArduino.prototype.connect L8, RP.SerialArduino.prototype.send L20, RP.SerialArduino.prototype.read L24, RP.SerialArduino.prototype.line L38, RP.SerialArduino.prototype.hello L47, self._done L51, RP.SerialArduino.prototype.close L55, claim L66, RP.botPlan L69, RP.BotRunner L75, log L79, status L80, self.running L81, self.peers L82, self.start L86, self.stop L156, self.state L165, RP.showStream L168, RP.miniSim L176
