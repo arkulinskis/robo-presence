@@ -45,4 +45,6 @@ class RobotCard(RobotCardTemplate):
             chips.append({"icon": "gauge", "text": state.plural(r["sensors"], "sensor")})
         if r.get("battery") is not None:
             chips.append({"icon": "battery", "text": "%d%%" % r["battery"]})
+        if r.get("visit"):  # house rules: "Paused until 14:30" / "Closed now"
+            chips.insert(0, {"icon": "lock", "text": r["visit"]})
         self.chips.items = chips

@@ -41,6 +41,14 @@
               </div>
               <anvil-component type="RepeatingPanel" name="pilots_panel" prop:item_template="Robo_Presence.Items.Chip" prop:role='["bt-pilots"]'></anvil-component>
             </div>
+            <div class="ui-card ui-stack bt-privacy">
+              <h3>Privacy</h3>
+              <anvil-component type="Label" name="privacy_text" prop:role='["fine-print"]'></anvil-component>
+              <div class="ui-row">
+                <anvil-component type="Button" name="privacy_button" prop:text="Privacy: no visits for 30 min" prop:role='["btn", "btn-lg", "ic-pause"]'></anvil-component>
+                <anvil-component type="Button" name="resume_button" prop:text="Resume visits" prop:role='["btn", "btn-primary", "btn-lg", "ic-play"]'></anvil-component>
+              </div>
+            </div>
             <div class="ui-card ui-stack">
               <h3>Parts</h3>
               <anvil-component type="RepeatingPanel" name="parts_panel" prop:item_template="Robo_Presence.Items.BotPart" prop:role='["bt-parts"]'></anvil-component>

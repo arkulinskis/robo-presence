@@ -41,9 +41,16 @@ class Drive(DriveTemplate):
             if self.me:
                 d = anvil.server.call("get_robot", a[1])
                 r = d.get("robot") if d.get("ok") else None
-            self._sim({"id": r["id"], "name": r["name"], "color": r["color"], "manifest": r["manifest"]} if r else SIM)
+            if r is None:
+                b = anvil.server.call("build_get", a[1])  # a public build sheet: anyone can try its parts
+                r = b.get("build") if b.get("ok") else None
+            self._sim({"id": r["id"] if r.get("role") else None, "name": r["name"], "color": r["color"],
+                       "manifest": r["manifest"]} if r else SIM)
         else:
             d = anvil.server.call("drive_open", a[0])
+            if not d.get("ok") and d.get("closed"):
+                self._closed(d.get("robot") or {}, d.get("error") or "")
+                return
             if not d.get("ok"):
                 state.toast(d.get("error") or "That robot can't be driven.", "error")
                 router.go("garage")
@@ -103,6 +110,20 @@ class Drive(DriveTemplate):
         state.set_control_attr(self.guest_name, "autocomplete", "name")
         self.start_button.text = "Start watching" if viewer else "Start driving"
         self.sim_link.visible = False
+        if p.get("closed"):  # house rules: outside visiting hours, or a privacy pause
+            self.guest_text.text = self.guest_text.text + " " + p["closed"]
+            self.guest_form.visible = False
+            self.sim_link.visible = True
+        self._done()
+
+    def _closed(self, robot, message):
+        """House rules say no visits right now (HouseRules.py): say so kindly instead of starting the cockpit."""
+        self.guest_part.visible = True
+        self.guest_art.show_robot(robot.get("color") or "orange", eyes_on=False, tilt=-20)
+        self.guest_title.text = "Not visiting hours"
+        self.guest_text.text = message
+        self.guest_form.visible = False
+        self.sim_link.visible = True
         self._done()
 
     def _done(self):

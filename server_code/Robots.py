@@ -18,7 +18,7 @@ from anvil.tables import app_tables
 import anvil.tables as tables
 
 from . import common as C
-from . import DemoData, Parts
+from . import DemoData, HouseRules, Parts
 
 ONLINE_S = 15            # a robot that called in during the last 15 seconds is online
 CODE_HOURS = 24          # install codes work for a day
@@ -185,7 +185,8 @@ def card(r, role):
             "online": is_online(r), "last_seen": C.iso(r["last_seen"]), "paired": bool(r["token_hash"] or r["tab_token_hash"]),
             "board": (r["config"] or {}).get("board", "pi"), "model": C.text(info.get("model"), 60),
             "controls": [c["type"] for c in m.get("controls", [])], "sensors": len(m.get("sensors", [])),
-            "battery": battery, "owner": C.name_of(r["owner"]) if role != "owner" else None, "notes": r["notes"] or ""}
+            "battery": battery, "owner": C.name_of(r["owner"]) if role != "owner" else None, "notes": r["notes"] or "",
+            "visit": None if r["is_demo"] else HouseRules.status(r)["short"]}
 
 
 @anvil.server.callable(require_user=True)
@@ -230,6 +231,7 @@ def detail(r, role):
         "sessions": [_session(s) for s in app_tables.sessions.search(tables.order_by("created", ascending=False), robot=r)[:40]
                      if owner or (me is not None and s["user"] == me)],
         "api_origin": anvil.server.get_api_origin(),
+        "visit_status": HouseRules.status(r),
     })
     if owner:
         code = r["install_code"]
@@ -246,7 +248,20 @@ def detail(r, role):
                           "uses": p["uses"] or 0, "last_used": C.iso(p["last_used"]),
                           "active": C.iso(p["expires"]) > C.iso(C.now())}
                          for p in app_tables.passes.search(tables.order_by("created", ascending=False), robot=r)]
+        out["house"] = HouseRules.view(r)
+    if owner or role == "demo":
+        out["sheet"] = sheet_of(r)
     return out
+
+
+def sheet_of(r):
+    """The robot's public build sheet settings (optional column robots.build_sheet; showroom robots are always public)."""
+    try:
+        v = r["build_sheet"]
+    except Exception:
+        v = None
+    v = v if isinstance(v, dict) else {}
+    return {"public": bool(v.get("public")) or bool(r["is_demo"]), "story": v.get("story") or ""}
 
 
 @anvil.server.callable(require_user=True)
@@ -287,16 +302,25 @@ def create_robot(name, preset="pi", color="orange"):
         return C.fail("That's %d robots already. Delete one first." % MAX_ROBOTS)
     if C.rate_limited("create_robot", 10, 3600):
         return C.fail("That's a lot of new robots in one hour. Try again later.")
+    r = new_robot_row(me, name, preset, color)
+    return C.ok(robot=detail(r, "owner"))
+
+
+def new_robot_row(me, name, preset="pi", color="orange", config=None, note=None):
+    """Add a robot for `me` (callers check the name, the robot limit and rate limits). config: parts to start with
+    (Builds.build_clone copies a public build); else the preset's starting parts."""
     preset = preset if preset in Parts.BOARDS else "pi"
-    cfg = Parts.clean(Parts.preset(preset, name))[0]
+    cfg = Parts.clean(config)[0] if config else None
+    if not cfg:
+        cfg = Parts.clean(Parts.preset(preset, name))[0]
     cfg["rev"] = 1
     r = app_tables.robots.add_row(owner=me, name=name, color=color if color in COLORS else "orange", notes="", preset=preset,
                                   config=cfg, config_rev=1, manifest=None, info={}, telemetry={}, created=C.now(),
                                   install_code=new_code(), install_code_expires=C.now() + dt.timedelta(hours=CODE_HOURS),
                                   is_demo=False)
-    add_event(r, "info", "Robot created with the %s setup." % {"pi": "Raspberry Pi", "pi_arduino": "Pi + Arduino",
-                                                                "browser": "phone or laptop"}[preset])
-    return C.ok(robot=detail(r, "owner"))
+    add_event(r, "info", note or "Robot created with the %s setup." % {"pi": "Raspberry Pi", "pi_arduino": "Pi + Arduino",
+                                                                        "browser": "phone or laptop"}[preset])
+    return r
 
 
 @anvil.server.callable(require_user=True)

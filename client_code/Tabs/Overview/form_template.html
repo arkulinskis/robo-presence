@@ -30,6 +30,16 @@
           </span>
         </div>
       </div>
+      <div class="ui-card ui-stack" anvil:name="sheet_card">
+        <div class="ui-row between"><h3>Public build sheet</h3><anvil-component type="Label" name="sheet_badge" prop:role='["badge"]'></anvil-component></div>
+        <p class="muted small">Show other makers how this robot is built: its brain, camera and parts with drivers and pins, plus your story. They can try it in the simulator or copy it into their garage. Never shown: the camera, the robot's address, its log, your email.</p>
+        <anvil-component type="CheckBox" name="sheet_public" prop:text="Share this robot's build sheet publicly"></anvil-component>
+        <label class="ui-field"><span>Your story <em>(what it's for, what you learned, the chassis you used)</em></span><anvil-component type="TextArea" name="story_box" prop:height="90"></anvil-component></label>
+        <div class="ui-row between">
+          <anvil-component type="Button" name="sheet_button" prop:text="Save build sheet" prop:role='["btn", "btn-primary", "ic-check"]'></anvil-component>
+          <a class="ui-btn" href="#builds" anvil:name="sheet_link"><i class="ic ic-external"></i>View it</a>
+        </div>
+      </div>
     </div>
   </div>
 </div>

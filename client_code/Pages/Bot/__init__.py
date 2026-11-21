@@ -39,6 +39,7 @@ class Bot(BotTemplate):
         self.arduino_box.visible = any(x["p"].get("driver") == "arduino" for x in plan)
         self._show_cam()
         self._status()
+        self._privacy()
         window.RP_BOT = rp.js_value({})
         window.RP_BOT.state = self._state
 
@@ -75,6 +76,34 @@ class Bot(BotTemplate):
         self.start_button.visible = not on
         self.stop_button.visible = on
 
+    # ---- privacy pause (house rules): whoever is near the robot can stop visits from this screen
+    def _privacy(self):
+        st = self.R.get("visit_status") or {}
+        paused = bool((self.R.get("house") or {}).get("paused"))
+        self.privacy_button.visible = not paused
+        self.resume_button.visible = paused
+        if paused:
+            self.privacy_text.text = st.get("reason") or "Visits are paused."
+        elif st.get("open", True) is False:
+            self.privacy_text.text = st.get("reason") or "Closed for visits right now."
+        else:
+            self.privacy_text.text = "Need a private moment? This stops visits (and disconnects visitors) for 30 minutes. You, the owner, can still connect."
+
+    def _pause(self, minutes):
+        d = state.call("rules_pause", self.R["id"], minutes)
+        if d:
+            self.R = d["robot"]
+            self._privacy()
+            state.toast("Visits paused for 30 minutes." if minutes else "Visits resumed.", "ok")
+
+    @handle("privacy_button", "click")
+    def privacy_button_click(self, **event_args):
+        self._pause(30)
+
+    @handle("resume_button", "click")
+    def resume_button_click(self, **event_args):
+        self._pause(0)
+
     def _claim(self, *args):
         d = anvil.server.call("tab_claim", self.R["id"])
         if not d.get("ok"):
@@ -84,7 +113,8 @@ class Bot(BotTemplate):
     # ---- start / stop
     @handle("start_button", "click")
     def start_button_click(self, **event_args):
-        opts = rp.js_value({"camera": self.cam, "arduino": bool(self.arduino_box.visible and self.arduino_box.checked)})
+        opts = rp.js_value({"camera": self.cam, "arduino": bool(self.arduino_box.visible and self.arduino_box.checked),
+                            "chime": (self.R.get("house") or {}).get("chime", True) is not False})
         opts["claim"] = self._claim
         opts["onLog"] = self._log
         opts["onChange"] = self._status

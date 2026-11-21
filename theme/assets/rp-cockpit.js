@@ -26,6 +26,10 @@
     var keys = {}, held = {}, timers = [], rtt = null, pingN = 0, pings = {}, startedAt = 0, statSum = { rtt: [], fps: [], kbps: [] };
     var recorder = null, recChunks = [], recStart = 0, alive = true, gpIndex = null, gpPrev = [];
     var bolts = 0, talk = { down: false, src: null, said: false };
+    /* Lag guard (2026-11-20, live drives only): a laggy link (round trip over 300 ms or under 8 fps for 3 s) caps the
+       wheels at gear 1 until it has been fine for 5 s; a picture that stops changing for 1.5 s while you drive stops the
+       wheels (you'd be driving blind) until frames come back. G toggles it; the choice is remembered. */
+    var guard = { on: UI.store.get('lagguard', true) !== false, slow: false, bad: 0, good: 0, frozen: false, lastFrame: 0, frames: -1 };
 
     view.innerHTML = '<div class="ck" data-mode="' + mode + '">' +
       '<div class="ck-bar">' +
@@ -55,6 +59,7 @@
             '<div class="ck-onair" data-onair hidden>' + UI.icon('mic') + ' ON AIR</div>' +
             '<div class="ck-ticker" data-ticker></div>' +
             '<div class="ck-banner" data-banner hidden></div>' +
+            '<div class="ck-guard" data-guard role="status" hidden></div>' +
           '</div><div class="ck-flash" data-flash></div>' +
           '<div class="ck-overlay" data-overlay></div>' +
         '</div>' +
@@ -127,6 +132,7 @@
       if (split.pan || split.tilt) rows.push(['<kbd>←</kbd><kbd>↑</kbd><kbd>→</kbd><kbd>↓</kbd>', 'look'], ['<kbd>H</kbd>', 'head home']);
       if (canTalk()) rows.push(['<kbd>T</kbd>', 'hold: talk through the robot']);
       rows.push(['<kbd>Space</kbd>', 'emergency stop']);
+      if (mode === 'live' && split.drive) rows.push(['<kbd>G</kbd>', 'lag guard on / off']);
       split.others.forEach(function (c) { if (c.key) rows.push(['<kbd>' + esc(c.key.toUpperCase()) + '</kbd>', (c.type === 'button' ? 'hold: ' : '') + (c.label || c.id)]); });
       rows.push(['<kbd>P</kbd>', 'snapshot'], ['<kbd>F</kbd>', 'full screen']);
       return rows;
@@ -221,8 +227,10 @@
       pollGamepad();
       // wheels
       if (split.drive && driving()) {
-        var g = GEARS[gear], x = clamp(drive.pad[0] + drive.keys[0] + drive.pad2[0], -1, 1), y = clamp(drive.pad[1] + drive.keys[1] + drive.pad2[1], -1, 1);
+        checkFrozen();
+        var g = GEARS[guard.slow ? 0 : gear], x = clamp(drive.pad[0] + drive.keys[0] + drive.pad2[0], -1, 1), y = clamp(drive.pad[1] + drive.keys[1] + drive.pad2[1], -1, 1);
         x = Math.round(x * g * 100) / 100; y = Math.round(y * g * 100) / 100;
+        if (guard.frozen) { x = 0; y = 0; }
         if (x || y) { send({ t: 'drive', x: x, y: y, s: ++drive.seq }, true); drive.zeroes = 3; }
         else if (drive.zeroes > 0) { send({ t: 'drive', x: 0, y: 0, s: ++drive.seq }, drive.zeroes > 1); drive.zeroes--; }
         drive.sent = [x, y];
@@ -243,6 +251,48 @@
       if (split.tilt && typeof values[split.tilt.id] === 'number') head.tilt = head.sentTilt = values[split.tilt.id];
     }
     function stopAll() { send({ t: 'stop' }); drive.pad = [0, 0]; drive.keys = [0, 0]; log('Emergency stop.', 'stop'); RP.beep(220, 120, 0.04); }
+    /* ------------------------------------------------------------ lag guard */
+    function drawGuard() {
+      var el = Q('[data-guard]');
+      if (!el) return;
+      if (guard.frozen) { el.hidden = false; el.className = 'ck-guard bad'; el.textContent = 'Picture froze: wheels stopped for safety. They work again when the video comes back.'; }
+      else if (guard.slow) { el.hidden = false; el.className = 'ck-guard warn'; el.textContent = 'Laggy link: slow gear until it settles.'; }
+      else el.hidden = true;
+    }
+    function frameSeen() { guard.lastFrame = performance.now(); if (guard.frozen) { guard.frozen = false; log('Video is back: wheels unlocked.', 'ok'); drawGuard(); } }
+    if (video.requestVideoFrameCallback) {
+      var onFrame = function () { frameSeen(); if (alive) video.requestVideoFrameCallback(onFrame); };
+      video.requestVideoFrameCallback(onFrame);
+    }
+    function checkFrozen() {
+      if (mode !== 'live' || !guard.on || !link) return;
+      if (!video.requestVideoFrameCallback && video.getVideoPlaybackQuality) {
+        var n = video.getVideoPlaybackQuality().totalVideoFrames;
+        if (n !== guard.frames) { guard.frames = n; frameSeen(); }
+      }
+      if (!guard.lastFrame || guard.frozen) return;
+      var moving = drive.pad[0] || drive.pad[1] || drive.keys[0] || drive.keys[1] || drive.pad2[0] || drive.pad2[1];
+      if (moving && performance.now() - guard.lastFrame > 1500) {
+        guard.frozen = true;
+        send({ t: 'stop' });
+        log('Picture froze while driving: wheels stopped.', 'stop');
+        RP.beep(300, 160, 0.04);
+        drawGuard();
+      }
+    }
+    function checkLag(s) {
+      if (mode !== 'live' || !guard.on) return;
+      var laggy = (rtt != null && rtt > 300) || (s && s.fps != null && s.fps < 8 && video.videoWidth);
+      if (laggy) { guard.bad++; guard.good = 0; } else { guard.good++; guard.bad = 0; }
+      if (!guard.slow && guard.bad >= 3) { guard.slow = true; log('Laggy link: slow gear until it settles.', 'warn'); drawGuard(); }
+      else if (guard.slow && guard.good >= 5) { guard.slow = false; log('Link is fine again: your gear is back.', 'ok'); drawGuard(); }
+    }
+    function toggleGuard() {
+      guard.on = !guard.on; UI.store.set('lagguard', guard.on);
+      if (!guard.on) { guard.slow = false; guard.frozen = false; guard.bad = guard.good = 0; }
+      drawGuard();
+      log(guard.on ? 'Lag guard on: slow gear on a laggy link, stop if the picture freezes.' : 'Lag guard off.', 'info');
+    }
     function homeHead() {
       send({ t: 'home' });
       if (split.pan) head.pan = head.sentPan = split.pan.home || 0;
@@ -405,6 +455,7 @@
       if (e.repeat) return;
       if (code === 'Space') { e.preventDefault(); stopAll(); return; }
       if (k === 'h') { homeHead(); return; }
+      if (k === 'g' && mode === 'live') { toggleGuard(); return; }
       if (k === '1' || k === '2' || k === '3') { setGear(+k - 1); return; }
       if (k === 'p') { snapshot(); return; }
       if (k === 'f') { fullscreen(); return; }
@@ -479,7 +530,8 @@
         '<h3 style="margin-top:18px">Touch and mouse</h3><p class="muted">Left pad: drive (push further to go faster). Right pad: look around. Or drag the picture to aim the camera; double-click it to bring the head home.</p>' +
         '<h3>Gamepad</h3><p class="muted">Left stick drives, right stick looks. A = ' + esc((firstOf('button') || {}).label || 'first button') + ', B = emergency stop, X = ' + esc((firstOf('toggle') || {}).label || 'first switch') + ', Y = head home, LB / RB = gear.</p>' +
         (canTalk() ? '<h3>Talk</h3><p class="muted">Hold T or the round Talk button and speak: your voice comes out of the robot\'s speaker. The first time, your browser asks to use the microphone. Let go and the robot hears nothing.</p>' : '') +
-        '<h3>Safety</h3><p class="muted">The robot stops its wheels by itself when it hasn\'t heard from you for half a second, and whenever you leave. Space or the STOP button stops it at once.</p>');
+        '<h3>Safety</h3><p class="muted">The robot stops its wheels by itself when it hasn\'t heard from you for half a second, and whenever you leave. Space or the STOP button stops it at once.' +
+        (mode === 'live' ? ' Lag guard (G, now ' + (guard.on ? 'on' : 'off') + ') drops to slow gear on a laggy link and stops the wheels if the picture freezes.' : '') + '</p>');
     }
 
     /* ------------------------------------------------------------ stats */
@@ -495,7 +547,7 @@
     var statTimer = setInterval(function () {
       if (!link) return;
       pings[++pingN] = performance.now(); send({ t: 'ping', n: pingN, ts: Date.now() });
-      link.stats().then(function (s) { if (s.fps) statSum.fps.push(s.fps); if (s.kbps) statSum.kbps.push(s.kbps); drawStats(s); }).catch(function () {});
+      link.stats().then(function (s) { if (s.fps) statSum.fps.push(s.fps); if (s.kbps) statSum.kbps.push(s.kbps); drawStats(s); checkLag(s); }).catch(function () {});
     }, 1000);
 
     /* ------------------------------------------------------------ connecting */
@@ -510,14 +562,15 @@
       overlay.hidden = false;
       overlay.innerHTML = '<div><div class="art">' + RP.robotArt(robot.color, { eyes: 'off', tilt: -30, arms: true }) + '</div><h2>No connection</h2><p>' + esc(msg) + '</p>' +
         '<div class="ui-row" style="justify-content:center"><button class="ui-btn primary" data-act="retry">' + UI.icon('refresh') + 'Try again</button>' +
-        '<a class="ui-btn" href="#drive" style="background:#1b1e14;color:#ede7d6;border-color:#343a29">Drive the simulator</a></div></div>';
+        '<a class="ui-btn" href="#drive" style="background:#1b1e14;color:#ede7d6;border-color:#343a29">Drive the simulator</a></div>' +
+        (mode === 'live' ? '<p class="ck-checklink"><a href="#check">Check my connection</a>: is this network too strict for a direct link?</p>' : '') + '</div>';
     }
     function start() {
       if (!alive) return;
       showSteps(STEPS[0]);
       return Promise.resolve(opts.connect(function (s) { if (alive) showSteps(s); })).then(function (l) {
         if (!alive) { l.close(); return; }
-        link = l; startedAt = Date.now();
+        link = l; startedAt = Date.now(); guard.lastFrame = 0; guard.frozen = false; guard.slow = false; guard.bad = guard.good = 0;
         link.onmessage = onMessage;
         link.onclose = function (why) { if (!alive) return; talkUp(); link = null; showError(why === 'failed' ? 'The connection dropped. The robot may have lost its Wi-Fi.' : 'The connection closed.'); };
         video.srcObject = link.stream;
@@ -546,7 +599,7 @@
 
     drawSide();
     var ready = start();
-    window.RP_COCKPIT = { state: function () { return { values: values, sensors: sensors, seat: seat, me: me, rtt: rtt, link: !!link, manifest: manifest, gear: gear, head: { pan: head.pan, tilt: head.tilt }, bolts: bolts, log: logLines.map(function (l) { return l.text; }) }; },
+    window.RP_COCKPIT = { state: function () { return { values: values, sensors: sensors, seat: seat, me: me, rtt: rtt, link: !!link, manifest: manifest, gear: gear, head: { pan: head.pan, tilt: head.tilt }, bolts: bolts, guard: { on: guard.on, slow: guard.slow, frozen: guard.frozen }, log: logLines.map(function (l) { return l.text; }) }; },
       link: function () { return link; }, keys: keys, drive: drive, talk: talk, talkDown: talkDown, talkUp: talkUp };
     return {
       ready: ready,

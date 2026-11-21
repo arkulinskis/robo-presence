@@ -21,6 +21,9 @@ PAGES = {
     "drive": (None, "Drive"),
     "bot": ("user", "Robot mode"),
     "guide": (None, "Build guide"),
+    "check": (None, "Connection check"),
+    "builds": (None, "Robot builds"),
+    "build": (None, "Build sheet"),
     "profile": ("user", "Your profile"),
     "admin": ("admin", "Admin"),
 }
@@ -52,6 +55,15 @@ def _form(name):
     if name == "guide":
         from .Pages.Guide import Guide
         return Guide
+    if name == "check":
+        from .Pages.Check import Check
+        return Check
+    if name == "builds":
+        from .Pages.Builds import Builds
+        return Builds
+    if name == "build":
+        from .Pages.Build import Build
+        return Build
     if name == "profile":
         from .Pages.Profile import Profile
         return Profile

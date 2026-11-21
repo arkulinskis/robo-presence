@@ -199,7 +199,7 @@
       e.channel.onmessage = function (m) { self.core.handle(peer, m.data); };
     };
     pc.onconnectionstatechange = function () {
-      if (pc.connectionState === 'connected' && !sess.joined) { sess.joined = true; self.core.join(peer); self.log(offer.pilot + ' connected (' + offer.role + ').'); if (self.o.onChange) self.o.onChange(); }
+      if (pc.connectionState === 'connected' && !sess.joined) { sess.joined = true; if (self.o.chime !== false && RP.chime) RP.chime(); self.core.join(peer); self.log(offer.pilot + ' connected (' + offer.role + ').'); if (self.o.onChange) self.o.onChange(); }
       if (pc.connectionState === 'failed' || pc.connectionState === 'closed') sess.close();
     };
     var prev = null;
@@ -222,4 +222,63 @@
     return this.post('/bot/event', { kind: 'offline', text: 'Robot mode stopped in the browser.' }).catch(function () {});
   };
   RP.RobotHost = RobotHost;
+
+  /* ---------------------------------------------------------------- the connection check (#check, 2026-11-20) */
+  /* RP.netCheck({stun: ['stun:host:port', ...], relay: [iceServer, ...]}) -> Promise of
+       {webrtc, h264, stun: [{url, ok, ip, port}], publicIp, symmetric, udp, relay: {tried, ok, proto}, ms}
+     Gathers ICE candidates against each STUN server on its own: the same public port from two servers means an
+     easy NAT (direct connections work); different ports mean a strict ("symmetric") NAT that needs the relay. */
+  function parseCand(line) {
+    var f = String(line || '').replace(/^a=/, '').split(' ');
+    var i = f.indexOf('typ');
+    if (f.length < 8 || i < 0) return null;
+    return { proto: (f[2] || '').toLowerCase(), ip: f[4], port: +f[5], type: f[i + 1], rport: +(f[f.indexOf('rport') + 1] || 0),
+             tcptype: f.indexOf('tcptype') >= 0 ? f[f.indexOf('tcptype') + 1] : null };
+  }
+  function gather(iceServers, policy, ms) {
+    return new Promise(function (resolve) {
+      var out = [], pc;
+      try { pc = new RTCPeerConnection({ iceServers: iceServers, iceTransportPolicy: policy || 'all' }); }
+      catch (e) { resolve({ error: e.message, cands: [] }); return; }
+      var done = false, finish = function () { if (done) return; done = true; try { pc.close(); } catch (e) {} resolve({ cands: out }); };
+      pc.onicecandidate = function (e) { if (!e.candidate) { finish(); return; } var c = parseCand(e.candidate.candidate); if (c) out.push(c); };
+      pc.onicegatheringstatechange = function () { if (pc.iceGatheringState === 'complete') finish(); };
+      pc.createDataChannel('check');
+      pc.createOffer().then(function (o) { return pc.setLocalDescription(o); }).catch(finish);
+      setTimeout(finish, ms || 6000);
+    });
+  }
+  RP.netCheck = function (opts) {
+    opts = opts || {};
+    var t0 = performance.now();
+    var res = { webrtc: !!window.RTCPeerConnection, h264: null, stun: [], publicIp: null, symmetric: null, udp: false,
+                relay: { tried: false, ok: false, proto: null } };
+    if (!res.webrtc) return Promise.resolve(res);
+    try {
+      var caps = window.RTCRtpReceiver && RTCRtpReceiver.getCapabilities && RTCRtpReceiver.getCapabilities('video');
+      res.h264 = caps ? caps.codecs.some(function (c) { return /h264/i.test(c.mimeType); }) : null;
+    } catch (e) {}
+    var stun = (opts.stun || []).slice(0, 3);
+    // One connection asking every STUN server: an easy NAT gives one public address (the browser merges repeats);
+    // a symmetric NAT gives the same local socket a different public port per server.
+    return gather(stun.length ? [{ urls: stun }] : [], 'all', 6000).then(function (g) {
+      res.udp = g.cands.some(function (c) { return c.proto === 'udp' && c.type !== 'host'; });
+      var srflx = g.cands.filter(function (c) { return c.type === 'srflx' && c.ip.indexOf(':') < 0; });
+      res.stun = srflx.map(function (c) { return { ip: c.ip, port: c.port, rport: c.rport }; });
+      res.publicIp = srflx.length ? srflx[0].ip : null;
+      if (srflx.length && stun.length >= 2) {
+        var bySocket = {};
+        srflx.forEach(function (c) { var k = c.rport || 'x'; (bySocket[k] = bySocket[k] || {})[c.port] = 1; });
+        res.symmetric = Object.keys(bySocket).some(function (k) { return Object.keys(bySocket[k]).length > 1; });
+      }
+      var relay = opts.relay || [];
+      if (!relay.length) return;
+      res.relay.tried = true;
+      return gather(relay, 'relay', 7000).then(function (g) {
+        var r = g.cands.filter(function (c) { return c.type === 'relay'; });
+        res.relay.ok = r.length > 0;
+        res.relay.proto = r.length ? r.map(function (c) { return c.proto; }).filter(function (p, i, a) { return a.indexOf(p) === i; }).join(' + ') : null;
+      });
+    }).then(function () { res.ms = Math.round(performance.now() - t0); return res; });
+  };
 })();

@@ -120,5 +120,7 @@ def pass_info(token):
     if not pass_valid(p):
         return C.fail("This guest pass has expired. Ask the robot's owner for a new link.")
     r = p["robot"]
+    from . import HouseRules
     return C.ok(robot={"name": r["name"], "color": r["color"] or "orange", "owner": C.name_of(r["owner"]),
-                       "online": Robots.is_online(r)}, role=p["role"], label=p["label"], expires=C.iso(p["expires"]))
+                       "online": Robots.is_online(r)}, role=p["role"], label=p["label"], expires=C.iso(p["expires"]),
+                closed=HouseRules.blocked(r, p["role"]))

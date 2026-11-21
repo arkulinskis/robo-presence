@@ -19,7 +19,7 @@ import anvil.server
 from anvil.tables import app_tables
 
 from . import common as C
-from . import Parts, Robots
+from . import HouseRules, Parts, Robots
 
 MAX_BODY = 60000
 EVENT_KINDS = ("info", "warn", "error", "stop", "online", "offline", "drive", "config", "paired")
@@ -170,6 +170,7 @@ def bot_poll(**q):
             s["state"] = "delivered"
             offers.append({"session": s.get_id(), "sdp": s["offer"], "role": s["role"], "pilot": s["pilot_name"] or "Someone"})
     ended = []
+    closed = HouseRules.blocked(r, "visitor")  # a privacy pause started or the visiting hours ended: visitors leave
     for sid in (b.get("sessions") if isinstance(b.get("sessions"), list) else [])[:12]:
         s = C.row_by_id(app_tables.sessions, sid)
         if s is None or s["robot"] != r or s["state"] in ("ended", "timeout", "rejected"):
@@ -177,6 +178,9 @@ def bot_poll(**q):
         elif s["guest_pass"] is not None and C.iso(s["guest_pass"]["expires"]) < C.iso(stamp):
             s["state"] = "ended"
             ended.append(sid)  # a guest pass ran out mid-drive
+        elif closed and (s["guest_pass"] is not None or s["user"] != r["owner"]):
+            s["state"] = "ended"
+            ended.append(sid)
     out = {"ok": True, "offers": offers, "ended": ended, "next_ms": _next_ms(r), "config_rev": r["config_rev"] or 1,
            "ice_servers": Robots.ice_servers() if offers else None}
     try:

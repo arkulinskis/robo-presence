@@ -85,6 +85,7 @@
     };
     self.start = function () {
       var camMode = self.opts.camera || 'sim', useArd = !!self.opts.arduino;
+      if (RP.audioReady) RP.audioReady();  // Start was a click: unlock sound for the door chime and pilots' voices
       var plan = RP.botPlan(R), ard = null, world = null, canvas = null, stream = null, label = '';
       var specs = plan.map(function (x) {
         var s = Object.assign({}, x.p);
@@ -138,6 +139,7 @@
         core.on(function (ev) { if (ev.kind === 'log') log(ev.text, ev.level); if (ev.kind === 'peers') status(); });
         return Promise.resolve(self.opts.claim()).then(function (t) {
           var host = new RP.RobotHost({ api: R.api_origin, token: t.token, core: core, stream: stream, cameraLabel: label, talk: talk,
+            chime: self.opts.chime !== false,
             onLog: log, onChange: status, onConfig: function () { log('The parts changed in the website: press Stop and Start to load them.', 'warn'); } });
           self.run = { core: core, host: host, world: world, stream: stream, ard: ard, resend: resend, lock: null };
           return host.start();

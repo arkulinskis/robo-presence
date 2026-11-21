@@ -86,6 +86,13 @@
     await open('#guide/arduino', /Arduino/);
     await open('#drive', /STOP/, { root: '.dv-page', wait: 2500 });
     if (!$('.ck video, .ck canvas')) bad.push('#drive: no simulator picture');
+    await open('#check', /Check my connection/);
+    await open('#builds', /Robot builds/, { wait: 1500 });
+    const build = $$('.gr-card').map((a) => a.getAttribute('href')).filter((h) => h && h.indexOf('#build/') === 0)[0];
+    if (build) {
+      await open(build, /What the pilot gets/);
+      await open(build.replace('#build/', '#drive/sim/'), /STOP/, { root: '.dv-page', wait: 2000 });
+    } else bad.push('#builds: no build cards');
     await open('#auth', /Sign in/);
     await open('#auth/signup', /Create account/);
 

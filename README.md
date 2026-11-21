@@ -28,6 +28,12 @@ never sees the video or the controls. STUN (Google's by default) finds a direct 
 - **Build guide** (`#guide`): shopping list, power and wiring, Pi setup, install, Arduino, adding new parts (types,
   plugins, Arduino-reported parts), how the connection works, the protocol, troubleshooting.
 - **Guest passes** (`#drive/pass/<token>`): drive or watch someone's robot without an account until the pass runs out.
+- **Connection check** (`#check`): ten seconds of tests from this browser (WebRTC + H.264, server round trip, STUN
+  public address, easy vs strict/symmetric NAT, the relay for signed-in people) and one plain verdict with fixes;
+  "Copy report" (public address masked). Linked from the cockpit's "No connection" screen and the guide.
+- **Robot builds** (`#builds`, `#build/<id>`): public build sheets (brain, camera, every part with driver and pins,
+  what the pilot gets, the maker's story) plus the showroom; "Try it in the simulator" for anyone, "Build one like
+  this" copies the parts into a new robot of your own and opens its Install tab.
 
 **For members:**
 - **Garage** (`#garage`): your robots, robots shared with you, the simulator, and the Showroom (three demo robots with
@@ -35,7 +41,8 @@ never sees the video or the controls. STUN (Google's by default) finds a direct 
   phone or laptop), paint.
 - **Robot page** (`#robot/<id>/<tab>`):
   - *Overview*: live status lamp, what the robot reports (or what its parts describe while offline), live sensor
-    gauges, facts (model, code version, host, local IP, camera), name/paint/notes, unpair, delete.
+    gauges, facts (model, code version, host, local IP, camera), name/paint/notes, unpair, delete, and the
+    **public build sheet** switch + story (never shows the camera, address, log or email).
   - *Parts*: the builder. Brain, camera (source, size, fps, codec, flip, mic), every part with its driver, pins and
     options (wheels with speed/turn/trim/invert, servos with limits/home/speed/head axis, sliders, switches, hold
     buttons, voice with quick phrases, gauges, sonar with "pause forward under", plugin parts), add from a catalogue,
@@ -45,7 +52,10 @@ never sees the video or the controls. STUN (Google's by default) finds a direct 
     "waiting for the robot to call in" lamp, the Arduino bridge sketch with its CONFIG block generated from the parts
     (copy / download .ino), wiring + `robopresence test`.
   - *Sharing*: invite pilots (drive) and viewers (watch) by email; guest-pass links (1 h to 1 week, shown once, revocable;
-    revoking disconnects the guest).
+    revoking disconnects the guest). **House rules**: visiting hours (days + from/to, owner's time zone) and a
+    privacy pause (30 min / 2 h / 8 h / until resumed) that blocks pilots, viewers and guest passes and disconnects
+    visitors within seconds; owners always get in; a door chime on phone/laptop robots. Garage cards show "Paused" /
+    "Closed now".
   - *Log*: drives (who, when, how long, round trip, fps, kbps) and the robot's event log (online, offline, paired, parts,
     emergency stops, watchdog stops, obstacle pauses).
 - **Cockpit** (`#drive/<id>`): full-screen video with a HUD (pan and tilt scales, reticle, wheel bars, sonar warning,
@@ -53,12 +63,15 @@ never sees the video or the controls. STUN (Google's by default) finds a direct 
   WASD / arrows / Space (STOP) / H / 1-2-3 gears / part keys, gamepad (sticks, A/B/X/Y, bumpers), three gears, STOP,
   controls generated from the manifest (unknown part types get a fallback card), mission log, live RTT / fps / kbps /
   P2P-or-relay, snapshots (PNG), clip recording (MP4/WebM), full screen, driver's seat ("Take the wheel").
+  **Lag guard** (live, G toggles): slow gear while the link is laggy (round trip over 300 ms or under 8 fps), and the
+  wheels stop if the picture freezes for 1.5 s while you drive (driving blind), until the video comes back.
   **Push-to-talk**: hold T or the round Talk button and your voice comes out of the robot's speaker (owners and pilots,
   not viewers; the microphone is only asked for on the first press; "ON AIR" badge while held; Parts tab → Camera →
   "Push-to-talk" switches it off). A speaker button in the top bar lets you hear the robot's own microphone.
 - **Robot mode** (`#bot/<id>`): this browser tab becomes the robot (an old phone or laptop on the chassis): camera =
   the device's front/back camera or the simulated garage; parts simulated or run by an Arduino over Web Serial; keeps the
   screen awake; answers pilots over WebRTC exactly like a Pi, and plays pilots' push-to-talk voices on the device.
+  A big "Privacy: no visits for 30 min" button for whoever is near the robot, and the door chime when someone connects.
 
 **For admins** (`#admin`; your admin email (App Secret `admin_emails`) becomes an admin on first sign-in):
 - **Overview:** people, robots, online now, drives this week, new feedback.
@@ -110,7 +123,7 @@ What this project uses besides its own code. Generated by `APP_MAKER/tools/libra
 
 **Built into the browser:** Canvas 2D, Speech synthesis, Web Audio API, Camera, microphone and screen, MediaRecorder, WebRTC, Screen Wake Lock, localStorage, Clipboard, File downloads (Blob), Fullscreen.
 
-**Anvil platform:** Anvil, Anvil Data Tables, Anvil JS bridge (anvil.js), Anvil Secrets, Anvil Users, Anvil Google service, Anvil HTTP.
+**Anvil platform:** Anvil, Anvil Data Tables, Anvil Email, Anvil JS bridge (anvil.js), Anvil Secrets, Anvil Users, Anvil Google service, Anvil HTTP, Anvil timezones (anvil.tz).
 
 **Build and test tools (not shipped):** axe-core, Node.js, Headless Chrome (DevTools Protocol), PyYAML.
 

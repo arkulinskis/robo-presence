@@ -1,4 +1,44 @@
 <div class="rb-tab">
+  <div class="ui-card ui-stack hr-card">
+    <div class="ui-row between hr-head">
+      <h3>House rules</h3>
+      <anvil-component type="Label" name="house_status" prop:role='["badge", "hr-status"]'></anvil-component>
+    </div>
+    <p class="muted small">The robot lives in someone's home. Choose when pilots, viewers and guest passes may visit, and pause visits whenever you need a private moment. You can always drive it yourself.</p>
+    <div class="hr-grid">
+      <div class="ui-stack">
+        <anvil-component type="CheckBox" name="hours_on" prop:text="Only during visiting hours"></anvil-component>
+        <div class="ui-seg hr-days" role="group" aria-label="Visiting days">
+          <button type="button" anvil:name="day0" data-v="0" aria-pressed="false" anvil:on-dom:click="self.day_click">Mon</button>
+          <button type="button" anvil:name="day1" data-v="1" aria-pressed="false" anvil:on-dom:click="self.day_click">Tue</button>
+          <button type="button" anvil:name="day2" data-v="2" aria-pressed="false" anvil:on-dom:click="self.day_click">Wed</button>
+          <button type="button" anvil:name="day3" data-v="3" aria-pressed="false" anvil:on-dom:click="self.day_click">Thu</button>
+          <button type="button" anvil:name="day4" data-v="4" aria-pressed="false" anvil:on-dom:click="self.day_click">Fri</button>
+          <button type="button" anvil:name="day5" data-v="5" aria-pressed="false" anvil:on-dom:click="self.day_click">Sat</button>
+          <button type="button" anvil:name="day6" data-v="6" aria-pressed="false" anvil:on-dom:click="self.day_click">Sun</button>
+        </div>
+        <div class="rb-form-row hr-times">
+          <label class="ui-field"><span>From</span><anvil-component type="TextBox" name="start_box" prop:placeholder="09:00"></anvil-component></label>
+          <label class="ui-field"><span>Until</span><anvil-component type="TextBox" name="end_box" prop:placeholder="20:00"></anvil-component></label>
+        </div>
+        <anvil-component type="Label" name="tz_note" prop:role='["fine-print"]'></anvil-component>
+        <anvil-component type="CheckBox" name="chime_box" prop:text="Door chime: a phone or laptop robot plays a ding-dong when someone connects"></anvil-component>
+        <div><anvil-component type="Button" name="rules_button" prop:text="Save house rules" prop:role='["btn", "btn-primary", "ic-check"]'></anvil-component></div>
+      </div>
+      <div class="ui-stack hr-pause">
+        <h4>Privacy pause</h4>
+        <p class="muted small">Stops new visits and disconnects anyone visiting now (within a few seconds).</p>
+        <div class="ui-row hr-pause-btns">
+          <anvil-component type="Button" name="pause30" prop:text="30 min" prop:role='["btn", "btn-sm", "ic-pause"]'></anvil-component>
+          <anvil-component type="Button" name="pause120" prop:text="2 hours" prop:role='["btn", "btn-sm"]'></anvil-component>
+          <anvil-component type="Button" name="pause480" prop:text="8 hours" prop:role='["btn", "btn-sm"]'></anvil-component>
+          <anvil-component type="Button" name="pause_forever" prop:text="Until I resume" prop:role='["btn", "btn-sm"]'></anvil-component>
+        </div>
+        <anvil-component type="Label" name="pause_text" prop:role='["fine-print"]'></anvil-component>
+        <div><anvil-component type="Button" name="resume_button" prop:text="Resume visits" prop:role='["btn", "btn-primary", "ic-play"]'></anvil-component></div>
+      </div>
+    </div>
+  </div>
   <div class="rb-cols">
     <div>
       <div class="ui-card ui-stack">

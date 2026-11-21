@@ -14,7 +14,7 @@ import anvil.server
 from anvil.tables import app_tables
 
 from . import common as C
-from . import Robots, Sharing
+from . import HouseRules, Robots, Sharing
 
 OFFER_TTL_S = 40
 MAX_SDP = 30000
@@ -42,6 +42,9 @@ def drive_open(robot_id, pass_token=None):
     r, role, me, p = _resolve(robot_id, pass_token)
     if r is None:
         return C.fail(role)
+    closed = HouseRules.blocked(r, role)
+    if closed:
+        return dict(C.fail(closed), closed=True, robot={"name": r["name"], "color": r["color"] or "orange"})
     if not r["is_demo"]:
         r["wanted_until"] = C.now() + dt.timedelta(seconds=90)  # the robot checks in faster while someone is about to drive
     m = Robots.reported_manifest(r)
@@ -62,6 +65,9 @@ def drive_offer(robot_id, sdp, pass_token=None, pilot_name=None):
         return C.fail("Showroom robots run on the simulator. Open it from the garage.")
     if role not in ("owner", "pilot", "viewer"):
         return C.fail("You can't connect to this robot.")
+    closed = HouseRules.blocked(r, role)
+    if closed:
+        return dict(C.fail(closed), closed=True)
     if not isinstance(sdp, str) or "v=0" not in sdp[:20] or len(sdp) > MAX_SDP:
         return C.fail("The connection offer wasn't valid. Reload the page and try again.")
     if not Robots.is_online(r):
@@ -135,4 +141,36 @@ def drive_end(session_id, secret, stats=None):
         Robots.add_event(r, "drive", "%s %s for %s%s." % (s["pilot_name"] or "Someone", "drove" if s["role"] != "viewer" else "watched",
                                                          ("%d min" % round(mins)) if mins >= 1 else "%d s" % clean["duration_s"],
                                                          (", %d ms round trip" % clean["rtt_ms"]) if clean.get("rtt_ms") else ""))
+    return C.ok()
+
+
+# ---------------------------------------------------------------- the connection check (#check, 2026-11-20)
+@anvil.server.callable
+def net_check_info():
+    """Public: the servers the browser tests against on the #check page. Everyone gets the STUN servers (free, no
+    login); only signed-in people get the relay (TURN) logins, since the relay costs money. Guests learn whether the
+    app has a relay at all from the cached status, without triggering a new Cloudflare request."""
+    if C.rate_limited("net_check", 20, 600):
+        return C.fail("That's a lot of checks in a few minutes. Wait a little and try again.")
+    stun = []
+    for s in Robots.network()["ice_servers"]:
+        urls = s.get("urls") if isinstance(s, dict) else None
+        urls = [urls] if isinstance(urls, str) else urls if isinstance(urls, list) else []
+        stun += [u for u in urls if isinstance(u, str) and u.startswith("stun:")]
+    me = C.me()
+    if me is not None:
+        relay, status = Robots.turn_servers()
+        admin_turn = [s for s in Robots.network()["ice_servers"]
+                      if isinstance(s, dict) and any(str(u).startswith(("turn:", "turns:"))
+                                                     for u in ([s.get("urls")] if isinstance(s.get("urls"), str) else s.get("urls") or []))]
+        relay = admin_turn + relay
+    else:
+        relay = []
+        status = (C.get_setting("turn_cache") or {}).get("status") or "unknown"
+    return C.ok(stun=stun[:4], relay=relay, relay_status="ok" if (relay or status == "ok") else status, signed_in=me is not None)
+
+
+@anvil.server.callable
+def net_ping():
+    """Public: an empty call, so #check can time the round trip to the server."""
     return C.ok()

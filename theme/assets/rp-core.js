@@ -205,6 +205,22 @@
     var b = e.target.closest && e.target.closest('[data-copy]');
     if (b) { e.preventDefault(); RP.copy(b.getAttribute('data-copy'), b.getAttribute('data-copy-what')); }
   });
+  /* The door chime (house rules, 2026-11-20): a soft two-note ding-dong when someone connects to a browser robot.
+     RP.audioReady() on a click first, so the browser lets it play later without one. */
+  RP.audioReady = function () {
+    try { var A = RP._ac || (RP._ac = new (window.AudioContext || window.webkitAudioContext)()); if (A.resume) A.resume(); } catch (e) {}
+  };
+  RP.chime = function () {
+    try {
+      var A = RP._ac || (RP._ac = new (window.AudioContext || window.webkitAudioContext)());
+      [[784, 0], [622, 0.42]].forEach(function (n) {
+        var o = A.createOscillator(), g = A.createGain(), t = A.currentTime + n[1];
+        o.type = 'sine'; o.frequency.value = n[0];
+        g.gain.setValueAtTime(0.0001, t); g.gain.exponentialRampToValueAtTime(0.22, t + 0.02); g.gain.exponentialRampToValueAtTime(0.0001, t + 1.1);
+        o.connect(g); g.connect(A.destination); o.start(t); o.stop(t + 1.15);
+      });
+    } catch (e) {}
+  };
   RP.beep = function (freq, ms, vol) {
     try {
       var A = RP._ac || (RP._ac = new (window.AudioContext || window.webkitAudioContext)());

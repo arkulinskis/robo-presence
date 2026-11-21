@@ -1,0 +1,18 @@
+<anvil-form layout="Robo_Presence.Layouts.Shell">
+  <anvil-block slot="content">
+    <div class="ui-wrap">
+      <div class="ui-page-head"><div>
+        <h1>Robot builds</h1>
+        <p class="muted">How other makers built theirs: brain, camera, every part with its driver and pins. Try any build in the simulator, or copy it into your garage and install it.</p>
+      </div><a class="ui-btn primary" href="#guide/build"><i class="ic ic-wrench"></i>Build guide</a></div>
+      <anvil-component type="Label" name="loading" prop:role='["fine-print"]' prop:text="Loading builds..."></anvil-component>
+      <div class="gr-grid">
+        <anvil-component type="RepeatingPanel" name="builds_panel" prop:item_template="Robo_Presence.Items.BuildCard" prop:role='["contents"]'></anvil-component>
+      </div>
+      <div class="ui-card bd-share">
+        <h3>Share yours</h3>
+        <p class="muted small">Open your robot, then Overview, then "Public build sheet". It shows the parts and your story, never the camera, the robot's address or your email.</p>
+      </div>
+    </div>
+  </anvil-block>
+</anvil-form>

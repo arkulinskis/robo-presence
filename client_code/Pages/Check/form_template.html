@@ -1,0 +1,30 @@
+<anvil-form layout="Robo_Presence.Layouts.Shell">
+  <anvil-block slot="content">
+    <div class="ui-wrap ck-check">
+      <div class="ui-page-head"><div>
+        <h1>Connection check</h1>
+        <p class="muted">Will driving work from this network? Ten seconds of tests from this browser: WebRTC, the server, your router's NAT, and the relay. Nothing is recorded.</p>
+      </div></div>
+      <div class="nc-grid">
+        <div class="ui-card ui-stack rp-plate nc-run">
+          <anvil-component type="Label" name="verdict_title" prop:role='["nc-verdict"]' prop:text="Ready when you are"></anvil-component>
+          <anvil-component type="Label" name="verdict_text" prop:role='["fine-print"]' prop:text="Run it on the network you drive from (and, if you can, once on the robot's Wi-Fi with a phone)."></anvil-component>
+          <div class="ui-row">
+            <anvil-component type="Button" name="run_button" prop:text="Check my connection" prop:role='["btn", "btn-primary", "btn-lg", "ic-signal"]'></anvil-component>
+            <anvil-component type="Button" name="copy_button" prop:text="Copy report" prop:role='["btn", "ic-copy"]' prop:visible="false"></anvil-component>
+          </div>
+          <anvil-component type="Label" name="progress" prop:role='["fine-print"]'></anvil-component>
+          <anvil-component type="RepeatingPanel" name="rows_panel" prop:item_template="Robo_Presence.Items.CheckRow" prop:role='["nc-rows"]'></anvil-component>
+          <anvil-component type="Label" name="relay_note" prop:role='["fine-print"]' prop:visible="false"></anvil-component>
+        </div>
+        <div class="ui-card ui-stack nc-help">
+          <h3>What the results mean</h3>
+          <p class="small"><b>Direct (P2P)</b>: video and controls go straight between your browser and the robot. Fastest.</p>
+          <p class="small"><b>Strict network</b>: some routers, phone networks (4G/5G), offices and hotels hand out a new port for every server. Two strict networks can't meet directly, so drives go through a <b>relay</b> (a TURN server): it works, with a little more delay.</p>
+          <p class="small"><b>Both ends count</b>: the robot's Wi-Fi matters as much as yours. If either side is easy, a direct connection usually works.</p>
+          <p class="small">Stuck? See <a href="#guide/connection">how the connection works</a> and <a href="#guide/trouble">troubleshooting</a>, or try the <a href="#drive">simulator</a> meanwhile.</p>
+        </div>
+      </div>
+    </div>
+  </anvil-block>
+</anvil-form>

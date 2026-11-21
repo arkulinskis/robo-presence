@@ -15,6 +15,8 @@ class Overview(OverviewTemplate):
         state.set_control_attr(self.name_box, "aria-label", "Name")
         state.set_control_attr(self.notes_box, "maxlength", 500)
         state.set_control_attr(self.notes_box, "aria-label", "Notes")
+        state.set_control_attr(self.story_box, "maxlength", 1200)
+        state.set_control_attr(self.story_box, "aria-label", "Your story")
 
     def show_robot(self, page):
         self.page = page
@@ -42,6 +44,24 @@ class Overview(OverviewTemplate):
             self.paint.value = R.get("color") or "orange"
             self.notes_box.text = R.get("notes") or ""
             self.unpair_button.enabled = bool(R.get("paired"))
+        self.sheet_card.visible = page.owner()
+        if page.owner():
+            sheet = R.get("sheet") or {}
+            self.sheet_public.checked = bool(sheet.get("public"))
+            self.story_box.text = sheet.get("story") or ""
+            self.sheet_badge.text = "Public" if sheet.get("public") else "Private"
+            self.sheet_badge.role = ["badge", "badge-brand"] if sheet.get("public") else ["badge"]
+            self.sheet_link.visible = bool(sheet.get("public"))
+            state.set_attr(self.sheet_link, "href", router.href("build", R["id"]))
+
+    @handle("sheet_button", "click")
+    def sheet_button_click(self, **event_args):
+        R = self.page.R
+        d = state.call("sheet_save", R["id"], bool(self.sheet_public.checked), self.story_box.text or "")
+        if d:
+            self.page.set_robot(d["robot"])
+            state.toast("Build sheet is public: anyone with the link can see the parts." if self.sheet_public.checked
+                        else "Build sheet is private.", "ok")
 
     def show_gauges(self, R):
         sensors = rp.split(R.get("manifest"))["sensors"]

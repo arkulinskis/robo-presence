@@ -1,0 +1,46 @@
+<anvil-form layout="Robo_Presence.Layouts.Shell">
+  <anvil-block slot="content">
+    <div class="ui-wrap">
+      <p class="rb-back"><a href="#builds"><i class="ic ic-back"></i> All builds</a></p>
+      <div class="ui-empty" anvil:name="missing">
+        <i class="ic ic-lock"></i><h2>This build sheet isn't public</h2>
+        <p>Its owner may have made it private, or the robot was deleted. <a href="#builds">See the other builds</a>.</p>
+      </div>
+      <div anvil:name="main">
+        <div class="bd-hero ui-card rp-plate">
+          <div class="bd-art"><anvil-component type="Robo_Presence.Components.RobotArt" name="art" prop:tilt="6"></anvil-component></div>
+          <div class="ui-stack">
+            <anvil-component type="Label" name="title" prop:role='["page-title"]'></anvil-component>
+            <anvil-component type="Label" name="sub" prop:role='["fine-print"]'></anvil-component>
+            <anvil-component type="Label" name="story" prop:role='["bd-story"]'></anvil-component>
+            <div class="ui-row bd-actions">
+              <anvil-component type="Button" name="clone_button" prop:text="Build one like this" prop:role='["btn", "btn-primary", "ic-plus"]'></anvil-component>
+              <a class="ui-btn" href="#drive" anvil:name="sim_link"><i class="ic ic-joystick"></i>Try it in the simulator</a>
+              <anvil-component type="Button" name="share_button" prop:text="Copy link" prop:role='["btn", "ic-link"]'></anvil-component>
+            </div>
+            <anvil-component type="Label" name="mine_note" prop:role='["fine-print"]' prop:text="This is your robot. Change what's shown in its Overview tab." prop:visible="false"></anvil-component>
+          </div>
+        </div>
+        <div class="rb-cols">
+          <div>
+            <div class="ui-card">
+              <h3>Parts</h3>
+              <anvil-component type="RepeatingPanel" name="parts_panel" prop:item_template="Robo_Presence.Items.KvRow" prop:role='["rp-kv", "bd-parts"]'></anvil-component>
+            </div>
+          </div>
+          <div>
+            <div class="ui-card">
+              <h3>What the pilot gets</h3>
+              <anvil-component type="RepeatingPanel" name="gets_panel" prop:item_template="Robo_Presence.Items.GetRow" prop:role='["rb-gets"]'></anvil-component>
+            </div>
+            <div class="ui-card">
+              <h3>Brain and camera</h3>
+              <anvil-component type="RepeatingPanel" name="facts_panel" prop:item_template="Robo_Presence.Items.KvRow" prop:role='["rp-kv"]'></anvil-component>
+              <p class="small muted">Wiring for these parts: the <a href="#guide/build">build guide</a>. After "Build one like this", the new robot's Parts tab shows the full pin map and its Install tab the one-line installer.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </anvil-block>
+</anvil-form>

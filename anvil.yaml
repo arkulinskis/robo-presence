@@ -298,6 +298,16 @@ db_schema:
         width: 200
       name: is_demo
       type: bool
+    - admin_ui:
+        order: 19
+        width: 200
+      name: house_rules
+      type: simpleObject
+    - admin_ui:
+        order: 20
+        width: 200
+      name: build_sheet
+      type: simpleObject
     indexes: []
     server: full
     title: Robots
@@ -573,15 +583,15 @@ native_deps:
     <!-- Prepsto feedback panel: every "Submit feedback" link and button opens it (it is the only feedback channel). No floating button, no cookies, nothing loads until it is opened. Codes: APP_MAKER/prepsto-links.json -->
     <script src="https://prepsto.com/_/theme/widget.js" data-prepsto="jb924jc" data-button="false" data-label="Submit feedback" async></script>
     <link rel="stylesheet" href="_/theme/icons.css?v=a56bd8da46">
-    <link rel="stylesheet" href="_/theme/app.css?v=0740be7f40">
+    <link rel="stylesheet" href="_/theme/app.css?v=4ff532216a">
     <script src="_/theme/app-kit.js?v=c4a0a3b6a0"></script>
     <script src="_/theme/rp-kit.js?v=ade919b995"></script>
-    <script src="_/theme/rp-core.js?v=785b3964cb"></script>
+    <script src="_/theme/rp-core.js?v=3242cc2bf6"></script>
     <script src="_/theme/rp-sim.js?v=af66425d42"></script>
-    <script src="_/theme/rp-link.js?v=c9d1b6df80"></script>
+    <script src="_/theme/rp-link.js?v=9fe0139aa2"></script>
     <script src="_/theme/rp-builder.js?v=58e4a9146d"></script>
-    <script src="_/theme/rp-cockpit.js?v=a154577104"></script>
-    <script src="_/theme/rp-bot.js?v=95e786bd1a"></script>
+    <script src="_/theme/rp-cockpit.js?v=9b36157a47"></script>
+    <script src="_/theme/rp-bot.js?v=86c2f0047a"></script>
 package_name: Robo_Presence
 runtime_options:
   client_version: '3'
