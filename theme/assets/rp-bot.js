@@ -47,7 +47,7 @@
   RP.SerialArduino.prototype.hello = function () {
     var self = this;
     return new Promise(function (resolve, reject) {
-      var t = setTimeout(function () { reject(new Error('The Arduino didn\'t answer. Is the Robo Presence bridge sketch uploaded?')); }, 3500);
+      var t = setTimeout(function () { reject(new Error('The Arduino didn\'t answer. Is the Add a Robot bridge sketch uploaded?')); }, 3500);
       self._done = function () { clearTimeout(t); resolve(self.parts); };
       self.send('?');
     });

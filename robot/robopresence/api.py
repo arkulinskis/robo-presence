@@ -1,4 +1,4 @@
-"""The robot's calls to the Robo Presence server (server_code/BotApi.py): plain HTTPS + JSON, standard library only."""
+"""The robot's calls to the Add a Robot server (server_code/BotApi.py): plain HTTPS + JSON, standard library only."""
 import asyncio
 import json
 import urllib.error

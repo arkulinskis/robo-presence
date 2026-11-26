@@ -228,7 +228,7 @@ def bot_event(**q):
 
 
 INSTALL = r"""#!/usr/bin/env bash
-# Robo Presence: robot installer (bootstrap). It downloads the robot code and runs robot/install.sh.
+# Add a Robot: robot installer (bootstrap). It downloads the robot code and runs robot/install.sh.
 # Read the full installer first if you like: https://github.com/arkulinskis/robo-presence/blob/master/robot/install.sh
 set -euo pipefail
 RP_SERVER='__SERVER__'
@@ -240,7 +240,7 @@ fi
 command -v curl >/dev/null || { apt-get update -qq && apt-get install -y -qq curl; }
 TMP="$(mktemp -d)"
 trap 'rm -rf "$TMP"' EXIT
-echo "==> Downloading the Robo Presence robot code"
+echo "==> Downloading the Add a Robot robot code"
 curl -fsSL "$RP_SOURCE" | tar -xz -C "$TMP"
 SRC="$(find "$TMP" -maxdepth 2 -type d -name robot | head -n1)"
 [ -n "$SRC" ] || { echo "Couldn't find the robot code in the download."; exit 1; }
@@ -249,7 +249,7 @@ bash "$SRC/install.sh" --server "$RP_SERVER" --code "$RP_CODE" --source "$SRC"
 
 INSTALL_FAIL = """#!/usr/bin/env bash
 echo ""
-echo "  Robo Presence: __MSG__"
+echo "  Add a Robot: __MSG__"
 echo ""
 exit 1
 """

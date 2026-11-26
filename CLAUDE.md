@@ -1,5 +1,5 @@
 <!-- app-standard -->
-# Robo Presence
+# Add a Robot
 
 Before changing anything here, read **APP_MAP.md**: the code map (every page, server function, table and who calls
 what, with line numbers) and how each kind of change is made. Then open only the files it points to.

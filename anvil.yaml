@@ -522,40 +522,40 @@ metadata:
   description: Build a camera robot on wheels with a Raspberry Pi, an Arduino or an old phone, install it with one command,
     and drive it live from any browser over WebRTC.
   logo_img: asset:icon-512.png
-  title: 'Robo Presence: DIY telepresence robot in your browser'
-name: Robo Presence
+  title: 'Add a Robot: DIY telepresence robot in your browser'
+name: Add a Robot
 native_deps:
   head_html: |
-    <script src="_/theme/legal-kit.js?v=d1763e516f"></script>
+    <script src="_/theme/legal-kit.js?v=3ffbd9c686"></script>
     <!-- seo:start (APP_MAKER/seo: edit seo/apps/robopresence.json and run seo.py, not here) -->
-    <link rel="canonical" href="https://robo-presence.anvil.app/">
+    <link rel="canonical" href="https://addarobot.com/">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="keywords" content="telepresence robot, Raspberry Pi robot, DIY telepresence robot, WebRTC robot control, remote control robot browser, Arduino robot car, Raspberry Pi camera robot, robot simulator, pan tilt camera robot">
     <meta name="author" content="Arkvital">
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Robo Presence">
-    <meta property="og:title" content="Robo Presence: DIY telepresence robot in your browser">
+    <meta property="og:site_name" content="Add a Robot">
+    <meta property="og:title" content="Add a Robot: DIY telepresence robot in your browser">
     <meta property="og:description" content="Build a camera robot on wheels with a Raspberry Pi, an Arduino or an old phone, install it with one command, and drive it live from any browser over WebRTC.">
     <meta property="og:locale" content="en_CA">
-    <meta property="og:url" content="https://robo-presence.anvil.app/">
-    <meta property="og:image" content="https://robo-presence.anvil.app/_/theme/og-image.png">
+    <meta property="og:url" content="https://addarobot.com/">
+    <meta property="og:image" content="https://addarobot.com/_/theme/og-image.png">
     <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Robo Presence: Build a camera robot. Drive it from anywhere.">
+    <meta property="og:image:alt" content="Add a Robot: Build a camera robot. Drive it from anywhere.">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Robo Presence: DIY telepresence robot in your browser">
+    <meta name="twitter:title" content="Add a Robot: DIY telepresence robot in your browser">
     <meta name="twitter:description" content="Build a camera robot on wheels with a Raspberry Pi, an Arduino or an old phone, install it with one command, and drive it live from any browser over WebRTC.">
-    <meta name="twitter:image" content="https://robo-presence.anvil.app/_/theme/og-image.png">
-    <link rel="alternate" type="text/plain" title="Robo Presence for AI assistants" href="https://robo-presence.anvil.app/llms.txt">
-    <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Service", "@id": "https://robo-presence.anvil.app/#app", "name": "Robo Presence", "url": "https://robo-presence.anvil.app/", "description": "Build a camera robot on wheels with a Raspberry Pi, an Arduino or an old phone, install it with one command, and drive it live from any browser over WebRTC.", "image": "https://robo-presence.anvil.app/_/theme/og-image.png", "serviceType": "Build a camera robot. Drive it from anywhere.", "provider": {"@id": "https://arkvital.com/#org"}, "areaServed": "Worldwide", "availableChannel": {"@type": "ServiceChannel", "serviceUrl": "https://robo-presence.anvil.app/", "name": "Web browser", "availableLanguage": "en"}, "audience": {"@type": "Audience", "audienceType": "Makers, and families who want a robot to visit through"}}, {"@type": "WebSite", "@id": "https://robo-presence.anvil.app/#site", "url": "https://robo-presence.anvil.app/", "name": "Robo Presence", "publisher": {"@id": "https://arkvital.com/#org"}}, {"@type": "Organization", "@id": "https://arkvital.com/#org", "name": "Arkvital", "url": "https://arkvital.com", "email": "arkvital@outlook.com", "address": {"@type": "PostalAddress", "addressLocality": "Montreal", "addressRegion": "QC", "addressCountry": "CA"}}]}</script>
+    <meta name="twitter:image" content="https://addarobot.com/_/theme/og-image.png">
+    <link rel="alternate" type="text/plain" title="Add a Robot for AI assistants" href="https://addarobot.com/llms.txt">
+    <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Service", "@id": "https://addarobot.com/#app", "name": "Add a Robot", "url": "https://addarobot.com/", "description": "Build a camera robot on wheels with a Raspberry Pi, an Arduino or an old phone, install it with one command, and drive it live from any browser over WebRTC.", "image": "https://addarobot.com/_/theme/og-image.png", "serviceType": "Build a camera robot. Drive it from anywhere.", "provider": {"@id": "https://arkvital.com/#org"}, "areaServed": "Worldwide", "availableChannel": {"@type": "ServiceChannel", "serviceUrl": "https://addarobot.com/", "name": "Web browser", "availableLanguage": "en"}, "audience": {"@type": "Audience", "audienceType": "Makers, and families who want a robot to visit through"}}, {"@type": "WebSite", "@id": "https://addarobot.com/#site", "url": "https://addarobot.com/", "name": "Add a Robot", "publisher": {"@id": "https://arkvital.com/#org"}}, {"@type": "Organization", "@id": "https://arkvital.com/#org", "name": "Arkvital", "url": "https://arkvital.com", "email": "arkvital@outlook.com", "address": {"@type": "PostalAddress", "addressLocality": "Montreal", "addressRegion": "QC", "addressCountry": "CA"}}]}</script>
     <noscript><div class="seo-noscript">
-    <h1>Robo Presence: DIY telepresence robot in your browser</h1>
+    <h1>Add a Robot: DIY telepresence robot in your browser</h1>
     <p>Build a camera robot on wheels with a Raspberry Pi, an Arduino or an old phone, install it with one command, and drive it live from any browser over WebRTC.</p>
-    <p>Robo Presence helps you build a home-made camera robot on wheels from a Raspberry Pi, a Pi with an Arduino, or an old phone, install its software with one command, and drive it live from any browser with low-latency video, a joystick and a pan-tilt head.</p>
+    <p>Add a Robot helps you build a home-made camera robot on wheels from a Raspberry Pi, a Pi with an Arduino, or an old phone, install its software with one command, and drive it live from any browser with low-latency video, a joystick and a pan-tilt head.</p>
     <p>The cockpit builds its controls from the parts the robot reports. Video and controls go peer to peer over WebRTC, and the robot checks in over HTTPS, so no router ports need opening. A built-in simulator lets you try driving before you build.</p>
     <p>Who it's for: Makers, and families who want a robot to visit through</p>
     <h2>What it does</h2><ul><li>Live WebRTC video and controls, peer to peer</li><li>One-line installer for Raspberry Pi robots</li><li>Parts builder: wheels, servos, sonar, switches, voice and more</li><li>Arduino bridge sketch generated from your parts</li><li>Use an old phone or laptop as the robot</li><li>Share drive or watch access, or send a time-limited guest pass</li><li>A 3D garage simulator to practise driving</li><li>Step-by-step build guide with shopping list and wiring</li></ul>
     <h2>Questions</h2><h3>What hardware do I need?</h3><p>A Raspberry Pi with a camera and a motor driver, optionally an Arduino, or simply an old phone or laptop on a chassis. The build guide has a shopping list and wiring.</p><h3>Do I need to open ports on my router?</h3><p>No. The robot checks in over HTTPS, and video and controls travel peer to peer over WebRTC.</p><h3>Can I try it without building a robot?</h3><p>Yes. The simulator drives a virtual robot in a small 3D garage with the same cockpit.</p><h3>Can someone drive my robot without an account?</h3><p>Yes, with a guest pass link that lasts from one hour to one week and can be revoked at any time.</p>
-    <p><a href="https://robo-presence.anvil.app/about">About Robo Presence</a> &middot; <a href="https://robo-presence.anvil.app/llms.txt">Robo Presence for AI assistants</a> &middot; Made by <a href="https://arkvital.com">Arkvital</a>, Montreal, Canada. Robo Presence needs JavaScript in your browser.</p>
+    <p><a href="https://addarobot.com/about">About Add a Robot</a> &middot; <a href="https://addarobot.com/llms.txt">Add a Robot for AI assistants</a> &middot; Made by <a href="https://arkvital.com">Arkvital</a>, Montreal, Canada. Add a Robot needs JavaScript in your browser.</p>
     </div></noscript>
     <!-- seo:end -->
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">

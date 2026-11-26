@@ -295,7 +295,7 @@ html.ui-modal-open { overflow: hidden; }
 
 
 
-/* ===== Robo Presence skin: the workshop-hardware look of the JavaScript version on top of the template core ===== */
+/* ===== Add a Robot skin: the workshop-hardware look of the JavaScript version on top of the template core ===== */
 .ui h1, .ui h2, .ui h3, .ui h4 { line-height: 1.1; letter-spacing: .01em; font-weight: 400; }
 .ui h3, .ui h4 { font-family: var(--font-body); font-weight: 700; letter-spacing: 0; line-height: 1.25; }
 .ui a { color: var(--c-link); }

@@ -26,5 +26,5 @@ class Landing(LandingTemplate):
         """Swap the video's cover for YouTube's player (privacy-enhanced); nothing loads from YouTube before this click."""
         self.dom_nodes["yt_frame"].innerHTML = (
             '<iframe src="https://www.youtube-nocookie.com/embed/' + YT_VIDEO + '?autoplay=1&rel=0&playsinline=1" '
-            'title="Robo Presence video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen '
+            'title="Add a Robot video" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen '
             'referrerpolicy="strict-origin-when-cross-origin"></iframe>')

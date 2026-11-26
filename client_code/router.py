@@ -28,7 +28,7 @@ PAGES = {
     "admin": ("admin", "Admin"),
 }
 NAV = [("garage", "Garage", "robot", "user"), ("drive", "Test drive", "joystick", None), ("guide", "Guide", "book", None)]
-APP_NAME = "Robo Presence"
+APP_NAME = "Add a Robot"
 _r: dict = {"after": "", "listening": False, "page": None}
 
 

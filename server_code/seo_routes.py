@@ -14,8 +14,8 @@ except ImportError:  # seo.py imports this file outside Anvil to render previews
     anvil = None
 
 SEO = {
- "name": "Robo Presence",
- "title": "Robo Presence: DIY telepresence robot in your browser",
+ "name": "Add a Robot",
+ "title": "Add a Robot: DIY telepresence robot in your browser",
  "tagline": "Build a camera robot. Drive it from anywhere.",
  "description": "Build a camera robot on wheels with a Raspberry Pi, an Arduino or an old phone, install it with one command, and drive it live from any browser over WebRTC.",
  "keywords": [
@@ -33,7 +33,7 @@ SEO = {
  "category": "UtilitiesApplication",
  "audience": "Makers, and families who want a robot to visit through",
  "about": [
-  "Robo Presence helps you build a home-made camera robot on wheels from a Raspberry Pi, a Pi with an Arduino, or an old phone, install its software with one command, and drive it live from any browser with low-latency video, a joystick and a pan-tilt head.",
+  "Add a Robot helps you build a home-made camera robot on wheels from a Raspberry Pi, a Pi with an Arduino, or an old phone, install its software with one command, and drive it live from any browser with low-latency video, a joystick and a pan-tilt head.",
   "The cockpit builds its controls from the parts the robot reports. Video and controls go peer to peer over WebRTC, and the robot checks in over HTTPS, so no router ports need opening. A built-in simulator lets you try driving before you build."
  ],
  "features": [
@@ -64,7 +64,7 @@ SEO = {
    "Yes, with a guest pass link that lasts from one hour to one week and can be revoked at any time."
   ]
  ],
- "site": "https://robo-presence.anvil.app",
+ "site": "https://addarobot.com",
  "updated": "2026-11-16",
  "icon": "icon-512.png",
  "colors": {

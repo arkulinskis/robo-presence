@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Robo Presence robot installer, for Raspberry Pi OS (Bookworm or newer, 64-bit recommended).
+# Add a Robot robot installer, for Raspberry Pi OS (Bookworm or newer, 64-bit recommended).
 #
 # Usually started by the one-line command from the robot's Install tab on the website:
 #     curl -fsSL 'https://<your app>/_/api/install?c=ABCD2345' | sudo bash
@@ -74,7 +74,7 @@ done
 
 cat > /usr/local/bin/robopresence <<'HELPER'
 #!/usr/bin/env bash
-# Robo Presence helper: robopresence status | logs | restart | stop | test [--wheels] | info | update | pair CODE
+# Add a Robot helper: robopresence status | logs | restart | stop | test [--wheels] | info | update | pair CODE
 APP=/opt/robopresence; ETC=/etc/robopresence
 run() { PYTHONPATH="$APP/robot" "$APP/venv/bin/python" -m robopresence --config "$ETC/robot.json" "$@"; }
 case "${1:-help}" in
@@ -106,7 +106,7 @@ fi
 say "Starting the robopresence service"
 cat > /etc/systemd/system/robopresence.service <<UNIT
 [Unit]
-Description=Robo Presence robot
+Description=Add a Robot robot
 After=network-online.target
 Wants=network-online.target
 

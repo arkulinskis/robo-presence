@@ -1,7 +1,7 @@
-# Robo Presence robot code
+# Add a Robot robot code
 
 The program that runs on the robot (a Raspberry Pi, optionally with an Arduino), streams its camera and obeys the
-cockpit in the Robo Presence website over WebRTC.
+cockpit in the Add a Robot website over WebRTC.
 
 ## Install
 

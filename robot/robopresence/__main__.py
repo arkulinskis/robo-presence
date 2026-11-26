@@ -1,4 +1,4 @@
-"""Robo Presence robot program.
+"""Add a Robot robot program.
 
     python -m robopresence claim --server https://<app>/_/api --code ABCD-2345    pair with the website (once)
     python -m robopresence run [--sim]          call in, wait for pilots, drive (the systemd service runs this)
@@ -270,7 +270,7 @@ def cmd_test(args):
             run_for(0.2)
         elif p.type == "say":
             print("  %-10s speaking" % p.id)
-            p.say("Robo Presence test. All systems go.")
+            p.say("Add a Robot test. All systems go.")
         elif p.type == "drive" and args.wheels:
             print("  %-10s forward, back, left, right (lift the robot off the floor!)" % p.id)
             for x, y in ((0, 0.5), (0, -0.5), (-0.6, 0), (0.6, 0)):
@@ -288,7 +288,7 @@ def cmd_test(args):
 
 def cmd_info(args):
     conf = read_json(args.config) or {}
-    print("Robo Presence robot code %s" % __version__)
+    print("Add a Robot robot code %s" % __version__)
     print("Config: %s (%s)" % (args.config, "paired as %s with %s" % (conf.get("name"), conf.get("server")) if conf.get("token") else "not paired"))
     cfg = read_json(cache_path(args.config))
     if cfg:
@@ -298,7 +298,7 @@ def cmd_info(args):
 
 
 def main(argv=None):
-    ap = argparse.ArgumentParser(prog="robopresence", description="Robo Presence robot")
+    ap = argparse.ArgumentParser(prog="robopresence", description="Add a Robot robot")
     ap.add_argument("--config", default=os.environ.get("ROBOPRESENCE_CONFIG", DEFAULT_CONFIG))
     ap.add_argument("-v", "--verbose", action="store_true")
     sub = ap.add_subparsers(dest="cmd")

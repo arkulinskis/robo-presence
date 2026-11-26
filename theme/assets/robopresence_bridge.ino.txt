@@ -1,4 +1,4 @@
-// Robo Presence bridge for Arduino (Uno, Nano, Mega, Leonardo...). Upload it with the Arduino IDE.
+// Add a Robot bridge for Arduino (Uno, Nano, Mega, Leonardo...). Upload it with the Arduino IDE.
 // The Raspberry Pi on the robot talks to it over USB at 115200 baud and the Arduino runs the motors, servos,
 // switches and sensors. When the Pi asks "?", the Arduino lists its parts, so the website's cockpit adjusts.
 // Protocol: robot/robopresence/arduino.py.  Safety: the wheels stop by themselves 700 ms after the last command.
@@ -102,7 +102,7 @@ void setup() {
   }
   for (int i = 0; i < nSwitches; i++) { pinMode(SWITCHES[i].pin, OUTPUT); digitalWrite(SWITCHES[i].pin, LOW); }
   if (SONAR_TRIG >= 0) { pinMode(SONAR_TRIG, OUTPUT); pinMode(SONAR_ECHO, INPUT); }
-  Serial.println(F("# Robo Presence bridge ready"));
+  Serial.println(F("# Add a Robot bridge ready"));
 }
 
 void hello() {

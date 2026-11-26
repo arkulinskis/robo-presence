@@ -1,4 +1,4 @@
-# Robo Presence
+# Add a Robot
 
 Build a home-made camera robot on wheels (Raspberry Pi, Pi + Arduino, or an old phone), install its brain with one
 command, and drive it live from any browser: low-latency WebRTC video, a joystick, a pan-tilt head, and controls that
@@ -6,7 +6,7 @@ adapt to whatever parts the robot reports. For makers, and for families who want
 garage-built 80s robot: khaki and olive, safety-orange keys, stencil headings. Built on [Anvil](https://anvil.works).
 
 - **App repo:** github.com/arkulinskis/robo-presence (branch `master`). Anvil pulls `master`.
-- **Live:** https://robo-presence.anvil.app
+- **Live:** https://addarobot.com
 - **Robot code:** [`robot/`](robot/) in this repo (Python + aiortc, the installer, the Arduino sketch, a plugin example).
 
 ## How it works

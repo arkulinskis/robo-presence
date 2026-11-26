@@ -23,7 +23,7 @@ class Build(BuildTemplate):
             return
         B = self.B = d["build"]
         self.main.visible = True
-        window.document.title = "%s: build sheet · Robo Presence" % B["name"]
+        window.document.title = "%s: build sheet · Add a Robot" % B["name"]
         self.art.show_robot(B.get("color"), pan=14, tilt=6, eyes_on=True, arms=True)
         self.title.text = B["name"]
         state.heading(self.title, 1)

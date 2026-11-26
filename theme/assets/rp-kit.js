@@ -1,4 +1,4 @@
-/* rp-kit.js: the small window.UI helpers Robo Presence's JavaScript engines (rp-*.js: cockpit, simulator, WebRTC links,
+/* rp-kit.js: the small window.UI helpers Add a Robot's JavaScript engines (rp-*.js: cockpit, simulator, WebRTC links,
    parts builder, robot mode) were written against, now that the app itself is Python Forms. Loaded after app-kit.js
    (which has UI.esc, UI.store, UI.icon, UI.ICONS, light/dark).
 

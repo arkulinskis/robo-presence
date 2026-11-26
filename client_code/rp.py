@@ -1,4 +1,4 @@
-"""Robo Presence's JavaScript engines (theme/assets/rp-*.js, window.RP) seen from Python, and the small robot helpers the
+"""Add a Robot's JavaScript engines (theme/assets/rp-*.js, window.RP) seen from Python, and the small robot helpers the
 pages share.
 
 The engines: rp-core.js (robot picture, lamps, gauges, manifest split, copy/download), rp-sim.js (RobotCore + the 3D

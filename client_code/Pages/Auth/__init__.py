@@ -5,7 +5,7 @@ from anvil import *
 from ._anvil_designer import AuthTemplate
 from ... import auth, legal, router, state
 
-HEADINGS = {"login": ("Welcome back", "Sign in to continue to Robo Presence.", "Sign in"),
+HEADINGS = {"login": ("Welcome back", "Sign in to continue to Add a Robot.", "Sign in"),
             "signup": ("Create your account", "It's free and takes a few seconds.", "Create account"),
             "reset": ("Reset your password", "We'll email you a link to choose a new password.", "Send the link")}
 EMAIL = re.compile(r"^\S+@\S+\.\S+$")
@@ -114,7 +114,7 @@ class Auth(AuthTemplate):
             self._mode = "login"
             self._draw(r["message"], False)
         else:
-            state.toast("Welcome to Robo Presence!" if mode == "signup" else "Welcome back!", "ok")
+            state.toast("Welcome to Add a Robot!" if mode == "signup" else "Welcome back!", "ok")
             router.after_sign_in()
 
     @handle("google_button", "click")
@@ -125,7 +125,7 @@ class Auth(AuthTemplate):
         if not r["ok"]:
             self._say(r["error"])
             return
-        state.toast("Welcome to Robo Presence!" if self._mode == "signup" else "Welcome back!", "ok")
+        state.toast("Welcome to Add a Robot!" if self._mode == "signup" else "Welcome back!", "ok")
         router.after_sign_in()
 
     @handle("", "show")

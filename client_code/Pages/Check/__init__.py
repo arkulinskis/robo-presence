@@ -94,7 +94,7 @@ class Check(CheckTemplate):
         # the verdict
         relay_ok = bool(relay.get("ok"))
         if not res.get("webrtc"):
-            title, text = "This browser can't drive", "Open Robo Presence in a recent Chrome, Edge, Firefox or Safari."
+            title, text = "This browser can't drive", "Open Add a Robot in a recent Chrome, Edge, Firefox or Safari."
         elif not stun_ok and not relay_ok:
             title, text = "Driving will probably fail here", "This network blocks the paths live video needs. Try another Wi-Fi or your phone's hotspot."
         elif sym and not relay_ok:
@@ -109,7 +109,7 @@ class Check(CheckTemplate):
         self.verdict_title.text = title
         self.verdict_text.text = text
         self.relay_note.visible = False
-        self.report = "Robo Presence connection check (%s)\n%s: %s\n" % (str(window.Date().toISOString())[:16].replace("T", " "), title, text) + \
+        self.report = "Add a Robot connection check (%s)\n%s: %s\n" % (str(window.Date().toISOString())[:16].replace("T", " "), title, text) + \
             "\n".join("- %s. %s" % (x["title"], x["text"]) for x in rows) + \
             "\nPublic address: %s · check took %s ms" % (_mask(res.get("publicIp")), res.get("ms"))
         self.copy_button.visible = True

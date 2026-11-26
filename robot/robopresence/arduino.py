@@ -61,7 +61,7 @@ class Arduino:
             time.sleep(0.05)
         if self._hello is not None:
             self._hello = None
-            raise RuntimeError("the Arduino on %s didn't answer. Is the Robo Presence bridge sketch uploaded?" % self.port)
+            raise RuntimeError("the Arduino on %s didn't answer. Is the Add a Robot bridge sketch uploaded?" % self.port)
         return self.parts
 
     def _reader(self):

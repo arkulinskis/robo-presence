@@ -20,7 +20,7 @@ class Shell(ShellTemplate):
 
     def __init__(self, **properties):
         super().__init__(**properties)
-        self.copyright_label.text = "© %d Robo Presence" % datetime.date.today().year
+        self.copyright_label.text = "© %d Add a Robot" % datetime.date.today().year
         self._outside = anvil.js.report_exceptions(self._close_menu_outside)
         self._keys = anvil.js.report_exceptions(self._key)
         self.refresh("")
