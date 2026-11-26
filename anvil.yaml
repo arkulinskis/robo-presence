@@ -519,10 +519,9 @@ db_schema:
     server: full
     title: Users
 metadata:
-  description: Build a camera robot on wheels with a Raspberry Pi, an Arduino or an old phone, install it with one command,
-    and drive it live from any browser over WebRTC.
-  logo_img: asset:icon-512.png
-  title: 'Add a Robot: DIY telepresence robot in your browser'
+  description: "Build a camera robot on wheels with a Raspberry Pi, an Arduino or an old phone, install it with one command, and drive it live from any browser over WebRTC."
+  logo_img: "asset:icon-512.png"
+  title: "Add a Robot: DIY telepresence robot in your browser"
 name: Add a Robot
 native_deps:
   head_html: |
