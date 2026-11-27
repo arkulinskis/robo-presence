@@ -19,11 +19,22 @@ from anvil.js import window
 
 from . import state
 
-_s = {"status": None}
+_s = {"status": None, "who": None}
+
+
+def _who():
+    """Who the cached status belongs to: a sign-in or sign-out (state.me() changes) refetches it on its own."""
+    try:
+        m = state.me()
+        return (m or {}).get("id") or (m or {}).get("email") if m else None
+    except Exception:
+        return None
 
 
 def status(refresh=False):
-    if refresh or _s["status"] is None:
+    who = _who()
+    if refresh or _s["status"] is None or who != _s["who"]:
+        _s["who"] = who
         try:
             _s["status"] = anvil.server.call("lifetime_status")
         except Exception as e:   # never block the app because of the gate

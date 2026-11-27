@@ -21,11 +21,11 @@
     await until(() => $$('.au-card input').length >= 2, '#auth');
     await sleep(300);
     const inputs = () => $$('.au-card input[type=text], .au-card input[type=email], .au-card input[type=password]').filter((i) => i.offsetParent);
-    const pw = 'Hb-local-admin-Kq7-2026';
+    const pw = 'Rp-smoke-adm-93Kx-7q';
     type(inputs()[0], 'admin@example.com'); type(inputs()[1], pw);
     $$('.anvil-role-btn-block button').find((b) => /Sign in/.test(b.textContent)).click();
     await sleep(3000);
-    if (location.hash === '#auth' || location.hash === '') {  // no account yet in this local database: create it
+    if (location.hash.indexOf('#auth') === 0 || location.hash === '') {  // no account yet in this local database: create it
       $$('.ui-seg button').find((b) => /Create account/.test(b.textContent)).click();
       await sleep(500);
       const i = inputs(); type(i[0], 'Local Admin'); type(i[1], 'admin@example.com'); type(i[2], pw);
@@ -33,7 +33,7 @@
       $$('.anvil-role-btn-block button').find((b) => /Create account/.test(b.textContent)).click();
     }
     // apps land on different pages after sign-in (#home, #notebook, #books ...): any page but #auth counts
-    await until(() => location.hash && location.hash !== '#auth' && window.UI_READY, 'signed in as admin', 40000);
+    await until(() => location.hash && location.hash.indexOf('#auth') !== 0 && window.UI_READY, 'signed in as admin', 40000);
     window.UI_READY = false; location.hash = '#admin/overview';
     const btn = await until(() => $$('button').find((b) => /Lifetime sales/.test(b.textContent) && b.offsetParent), 'the Lifetime sales button on #admin', 40000);
     ok(true, 'admin has the Lifetime sales button');

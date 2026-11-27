@@ -174,7 +174,7 @@ def main():
     g = L.admin_lifetime_grant("buyer@example.com", "friend")
     check(g["ok"] and L.unlocked(buyer), "granted unlocks")
     check(L.admin_lifetime_action(g["row"]["id"], "revoke")["ok"] and not L.unlocked(buyer), "revoke locks")
-    check(L.within_cap(buyer, "scans", 999), "no cap configured = no limit")
+    check(L.within_cap(buyer, "__no_such_cap__", 999), "no cap configured = no limit")
     L.admin_lifetime_settings({"off": True})
     check(not L.gate_on() and L.unlocked(buyer), "off switch frees everything")
     as_user(buyer)
