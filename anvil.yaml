@@ -147,6 +147,63 @@ db_schema:
     indexes: []
     server: full
     title: Feedback
+  lifetime_purchases:
+    client: none
+    columns:
+    - admin_ui:
+        order: 0
+        width: 200
+      name: user
+      target: users
+      type: link_single
+    - admin_ui:
+        order: 1
+        width: 220
+      name: email
+      type: string
+    - admin_ui:
+        order: 2
+        width: 110
+      name: status
+      type: string
+    - admin_ui:
+        order: 3
+        width: 90
+      name: amount
+      type: number
+    - admin_ui:
+        order: 4
+        width: 70
+      name: currency
+      type: string
+    - admin_ui:
+        order: 5
+        width: 200
+      name: session
+      type: string
+    - admin_ui:
+        order: 6
+        width: 200
+      name: payment_intent
+      type: string
+    - admin_ui:
+        order: 7
+        width: 180
+      name: created
+      type: datetime
+    - admin_ui:
+        order: 8
+        width: 180
+      name: updated
+      type: datetime
+    - admin_ui:
+        order: 9
+        width: 220
+      name: note
+      type: string
+    indexes: []
+    server: full
+    title: Lifetime purchases
   passes:
     client: none
     columns:
@@ -519,9 +576,10 @@ db_schema:
     server: full
     title: Users
 metadata:
-  description: "Build a camera robot on wheels with a Raspberry Pi, an Arduino or an old phone, install it with one command, and drive it live from any browser over WebRTC."
-  logo_img: "asset:icon-512.png"
-  title: "Add a Robot: DIY telepresence robot in your browser"
+  description: Build a camera robot on wheels with a Raspberry Pi, an Arduino or an old phone, install it with one command,
+    and drive it live from any browser over WebRTC.
+  logo_img: asset:icon-512.png
+  title: 'Add a Robot: DIY telepresence robot in your browser'
 name: Add a Robot
 native_deps:
   head_html: |
@@ -582,15 +640,15 @@ native_deps:
     <!-- Prepsto feedback panel: every "Submit feedback" link and button opens it (it is the only feedback channel). No floating button, no cookies, nothing loads until it is opened. Codes: APP_MAKER/prepsto-links.json -->
     <script src="https://prepsto.com/_/theme/widget.js" data-prepsto="jb924jc" data-button="false" data-label="Submit feedback" async></script>
     <link rel="stylesheet" href="_/theme/icons.css?v=a56bd8da46">
-    <link rel="stylesheet" href="_/theme/app.css?v=4ff532216a">
+    <link rel="stylesheet" href="_/theme/app.css?v=317ad0904e">
     <script src="_/theme/app-kit.js?v=c4a0a3b6a0"></script>
-    <script src="_/theme/rp-kit.js?v=ade919b995"></script>
+    <script src="_/theme/rp-kit.js?v=fbd9a10363"></script>
     <script src="_/theme/rp-core.js?v=3242cc2bf6"></script>
     <script src="_/theme/rp-sim.js?v=af66425d42"></script>
     <script src="_/theme/rp-link.js?v=9fe0139aa2"></script>
     <script src="_/theme/rp-builder.js?v=58e4a9146d"></script>
     <script src="_/theme/rp-cockpit.js?v=9b36157a47"></script>
-    <script src="_/theme/rp-bot.js?v=86c2f0047a"></script>
+    <script src="_/theme/rp-bot.js?v=f254616829"></script>
 package_name: Robo_Presence
 runtime_options:
   client_version: '3'

@@ -1,0 +1,20 @@
+<div class="ui lifetime-sales">
+  <h2 class="dlg-h">Lifetime sales</h2>
+  <div class="ui-stack">
+    <anvil-component type="Label" name="gate_label" prop:bold="true"></anvil-component>
+    <anvil-component type="Label" name="setup_label" prop:role='["fine-print"]'></anvil-component>
+    <anvil-component type="CheckBox" name="off_box" prop:text="Keep everything free, even with the Stripe key set"></anvil-component>
+    <anvil-component type="CheckBox" name="capture_box" prop:text="Unlock only after I capture the payment (stricter; buyers wait for you)"></anvil-component>
+    <anvil-component type="Label" name="counts_label" prop:role='["fine-print"]'></anvil-component>
+    <div class="ui-row">
+      <anvil-component type="TextBox" name="grant_box" prop:placeholder="Give free lifetime access: their email"></anvil-component>
+      <anvil-component type="Button" name="grant_button" prop:text="Give" prop:role='["btn"]'></anvil-component>
+    </div>
+    <anvil-component type="Label" name="message" prop:role='["msg-error"]' prop:visible="false"></anvil-component>
+    <anvil-component type="ColumnPanel" name="rows_panel"></anvil-component>
+    <anvil-component type="Label" name="empty_label" prop:text="No purchases yet." prop:role='["fine-print"]' prop:visible="false"></anvil-component>
+    <div class="ui-row end">
+      <anvil-component type="Button" name="close_button" prop:text="Close" prop:role='["btn", "btn-ghost"]'></anvil-component>
+    </div>
+  </div>
+</div>

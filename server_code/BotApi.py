@@ -171,6 +171,10 @@ def bot_poll(**q):
             offers.append({"session": s.get_id(), "sdp": s["offer"], "role": s["role"], "pilot": s["pilot_name"] or "Someone"})
     ended = []
     closed = HouseRules.blocked(r, "visitor")  # a privacy pause started or the visiting hours ended: visitors leave
+    limit = None
+    if b.get("sessions"):
+        from . import Drive
+        limit = Drive.session_limit_s(r)  # lifetime access: free owners' drives end after FREE_SESSION_MINUTES
     for sid in (b.get("sessions") if isinstance(b.get("sessions"), list) else [])[:12]:
         s = C.row_by_id(app_tables.sessions, sid)
         if s is None or s["robot"] != r or s["state"] in ("ended", "timeout", "rejected"):
@@ -181,6 +185,9 @@ def bot_poll(**q):
         elif closed and (s["guest_pass"] is not None or s["user"] != r["owner"]):
             s["state"] = "ended"
             ended.append(sid)
+        elif limit is not None and s["created"] and (stamp - s["created"]).total_seconds() > limit:
+            s["state"] = "ended"
+            ended.append(sid)  # the free drive length is over
     out = {"ok": True, "offers": offers, "ended": ended, "next_ms": _next_ms(r), "config_rev": r["config_rev"] or 1,
            "ice_servers": Robots.ice_servers() if offers else None}
     try:

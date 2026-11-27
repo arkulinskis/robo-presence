@@ -96,6 +96,20 @@ Feedback goes through Prepsto ("Submit feedback" in the footer and menu). Privac
   its own 700 ms wheel watchdog, and a CONFIG block the website fills in.
 - `robot/plugins/example_claw.py`: how to add a part the code doesn't know.
 
+## Lifetime access ($34)
+
+Off until the App Secret `stripe_secret_key` is set: until then everything is free and drives have no time limit.
+Setup: `APP_MAKER/money/lifetime/STRIPE_SETUP.md`. Shared code: `server_code/Lifetime.py`, `client_code/lifetime.py`,
+`Dialogs/LifetimeOffer`, `Dialogs/LifetimeSales`; this app's wording and caps: `server_code/lifetime_config.py`.
+
+- **Free:** the whole app, with live drives of up to 15 minutes (`FREE_SESSION_MINUTES`). The robot owner's status
+  counts, so guests on a free owner's robot get 15 minutes too.
+- **Lifetime ($34):** drives of any length, fair use 50 hours a month per owner (`CAPS["drive_hours"]`).
+- Server: `Drive.session_limit_s` (BotApi.bot_poll ends longer drives through the robot's existing `ended` list, so
+  no robot code changes), `Drive.within_hours` in `drive_offer` (sums `sessions.stats.duration_s` this month, direct
+  and relayed drives alike: the app doesn't record which ones used the TURN relay). The Drive page shows a toast to
+  free owners. Buying: Profile -> Lifetime access (once the gate is on). Admin -> Overview -> Lifetime sales.
+
 ## Setting it up in Anvil (once)
 
 1. In the Anvil editor: **Create app → Clone from GitHub**, and paste `https://github.com/arkulinskis/robo-presence`.

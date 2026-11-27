@@ -15,4 +15,6 @@ rp.setup()
 state.set_me(anvil.server.call("get_me"))
 if state.me():
     legal.refresh_soon()
+from . import lifetime  # $34 lifetime gate: free until the App Secret stripe_secret_key is set
+lifetime.handle_return()
 router.start()

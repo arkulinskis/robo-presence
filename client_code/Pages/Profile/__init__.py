@@ -1,7 +1,7 @@
 from anvil import *
 
 from ._anvil_designer import ProfileTemplate
-from ... import auth, router, state
+from ... import auth, lifetime, router, state
 
 
 class Profile(ProfileTemplate):
@@ -20,6 +20,10 @@ class Profile(ProfileTemplate):
         self.email_line.text = (me.get("email") or "") + (" · member since " + joined if joined else "")
         self.name_box.text = me.get("name") or ""
         self.admin_link.visible = bool(me.get("is_admin"))
+        self.lifetime_link.visible = lifetime.gate_on()   # only once the Stripe key is set
+
+    def lifetime_click(self, event):
+        lifetime.offer()
 
     def _show_theme(self):
         t = state.theme()

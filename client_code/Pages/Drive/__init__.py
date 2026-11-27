@@ -55,6 +55,10 @@ class Drive(DriveTemplate):
                 state.toast(d.get("error") or "That robot can't be driven.", "error")
                 router.go("garage")
                 return
+            if d.get("limit_min") and d.get("role") == "owner":   # lifetime gate on and the owner hasn't bought it
+                from ... import lifetime
+                state.toast("Free drives last %d minutes. Lifetime access (%s) removes the limit: Profile, Lifetime access."
+                            % (d["limit_min"], "$%s" % lifetime.status().get("price", 34)))
             self._live(d, None, None)
 
     def _ready(self, **event_args):

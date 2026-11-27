@@ -1,0 +1,19 @@
+<div class="ui lifetime-offer">
+  <h2 class="dlg-h"><anvil-component type="Label" name="title_label" prop:text="Lifetime access"></anvil-component></h2>
+  <div class="ui-stack">
+    <anvil-component type="Label" name="feature_label" prop:role='["fine-print"]' prop:visible="false"></anvil-component>
+    <anvil-component type="Label" name="price_label" prop:role='["stat-num"]'></anvil-component>
+    <anvil-component type="Label" name="price_note" prop:text="One payment. No subscription. Yours for the life of the product." prop:role='["fine-print"]'></anvil-component>
+    <anvil-component type="Label" name="paid_head" prop:text="What you unlock" prop:bold="true"></anvil-component>
+    <anvil-component type="Label" name="paid_list"></anvil-component>
+    <anvil-component type="Label" name="free_head" prop:text="Free for everyone" prop:bold="true"></anvil-component>
+    <anvil-component type="Label" name="free_list" prop:role='["fine-print"]'></anvil-component>
+    <anvil-component type="Label" name="message" prop:role='["msg-error"]' prop:visible="false"></anvil-component>
+    <anvil-component type="Label" name="test_note" prop:text="Test mode: pay with card 4242 4242 4242 4242, any future date, any CVC." prop:role='["fine-print"]' prop:visible="false"></anvil-component>
+    <div class="ui-row end">
+      <anvil-component type="Button" name="close_button" prop:text="Not now" prop:role='["btn", "btn-ghost"]'></anvil-component>
+      <anvil-component type="Button" name="buy_button" prop:text="Get lifetime access" prop:role='["btn", "btn-primary"]'></anvil-component>
+    </div>
+    <anvil-component type="Label" name="secure_note" prop:text="Secure checkout by Stripe. Your card is checked first and charged within a few days." prop:role='["fine-print"]'></anvil-component>
+  </div>
+</div>

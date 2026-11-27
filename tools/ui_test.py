@@ -127,7 +127,7 @@ def main():
     out = pathlib.Path(tempfile.mkdtemp(prefix=KEY + "-ui-"))
     failed = False
     only = args[args.index("--only") + 1] if "--only" in args else None  # e.g. --only a11y.js
-    for script, window in (("smoke.js", "1280,1000"), ("smoke.js", "390,844"), ("a11y.js", "1280,1000"),
+    for script, window in (("smoke.js", "1280,1000"), ("smoke.js", "390,844"), ("lifetime.js", "1280,1000"), ("a11y.js", "1280,1000"),
                            ("design.js", "1280,1000"), ("design.js", "390,844")):
         if (only and script != only) or (not only and script != "smoke.js"):  # the smoke test by default; others with --only
             continue

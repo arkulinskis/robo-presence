@@ -14,10 +14,36 @@ import anvil.server
 from anvil.tables import app_tables
 
 from . import common as C
-from . import HouseRules, Robots, Sharing
+from . import HouseRules, Lifetime, Robots, Sharing
 
 OFFER_TTL_S = 40
 MAX_SDP = 30000
+
+
+# ---------------------------------------------------------------- lifetime access ($34; nothing changes while the gate is off)
+def session_limit_s(r):
+    """Seconds one drive on this robot may last, or None for no limit: free owners get FREE_SESSION_MINUTES."""
+    if r is None or r["is_demo"] or not Lifetime.gate_on() or Lifetime.unlocked(r["owner"]):
+        return None
+    return 60 * int(Lifetime.cfg("FREE_SESSION_MINUTES", 15))
+
+
+def drive_hours_this_month(owner):
+    """Hours of finished drives on this person's robots this calendar month (from drive_end's duration_s)."""
+    now, total = C.now(), 0.0
+    for r in app_tables.robots.search(owner=owner, is_demo=False):
+        for s in app_tables.sessions.search(robot=r):
+            c = s["created"]
+            if c and c.year == now.year and c.month == now.month:
+                total += float((s["stats"] or {}).get("duration_s") or 0)
+    return total / 3600.0
+
+
+def within_hours(r):
+    """The lifetime fair-use cap (CAPS["drive_hours"]) on the robot owner's drives this month."""
+    if not Lifetime.gate_on():
+        return True
+    return Lifetime.within_cap(r["owner"], "drive_hours", drive_hours_this_month(r["owner"]))
 
 
 def _resolve(robot_id, pass_token):
@@ -53,7 +79,7 @@ def drive_open(robot_id, pass_token=None):
                        "owner": C.name_of(r["owner"]), "last_seen": C.iso(r["last_seen"])},
                 role=role, ice_servers=Robots.ice_servers(),
                 pilot=C.name_of(me) if me is not None else (p["label"] if p is not None else "Guest"),
-                guest=p is not None)
+                guest=p is not None, limit_min=(session_limit_s(r) or 0) // 60 or None)
 
 
 @anvil.server.callable
@@ -72,6 +98,9 @@ def drive_offer(robot_id, sdp, pass_token=None, pilot_name=None):
         return C.fail("The connection offer wasn't valid. Reload the page and try again.")
     if not Robots.is_online(r):
         return C.fail("%s is offline. Switch it on, or check its Wi-Fi." % r["name"])
+    if not within_hours(r):
+        return C.fail("%s has used this month's %d hours of live drives (fair use). Drives open again on the 1st."
+                      % (r["name"], Lifetime.cfg("CAPS", {}).get("drive_hours", 0)))
     if C.rate_limited("drive_offer", 30, 600):
         return C.fail("Too many connection attempts. Wait a few minutes and try again.")
     stamp = C.now()

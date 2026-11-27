@@ -62,6 +62,11 @@ class Admin(AdminTemplate):
                            (self.idle_box, "Check-in when idle (ms)"), (self.source_box, "Robot code download")):
             state.set_control_attr(box, "aria-label", label)
 
+    @handle("lifetime_button", "click")
+    def lifetime_button_click(self, **event_args):
+        from ...Dialogs.LifetimeSales import LifetimeSales
+        alert(LifetimeSales(), buttons=[], role="app-dialog", large=True)
+
     @handle("net_reset", "click")
     def net_reset_click(self, **event_args):
         n = self._net
